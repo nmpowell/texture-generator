@@ -56,6 +56,19 @@ PALETTES = {
 }
 
 
+def _brush_angle_radians(brush_angle: float | None) -> float | None:
+    """Validate degrees and return the equivalent direction in radians."""
+    numeric_types = (int, float, np.integer, np.floating)
+    if brush_angle is None:
+        return None
+    if isinstance(brush_angle, bool) or not isinstance(brush_angle, numeric_types):
+        raise ValueError("brush_angle must be a finite number of degrees")
+    angle = float(brush_angle)
+    if not np.isfinite(angle):
+        raise ValueError("brush_angle must be a finite number of degrees")
+    return float(np.deg2rad(angle % 360.0))
+
+
 def _pick_palette(rng: np.random.Generator) -> np.ndarray:
     """Choose a base metal colour and jitter each channel by +/-0.03.
 
@@ -471,11 +484,14 @@ def _brushed(
     base: np.ndarray,
     *,
     irid: dict | None = None,
+    brush_angle: float | None = None,
 ) -> np.ndarray:
-    """Linear brushed finish in a randomly rotated frame."""
+    """Render a linear brushed finish; ``brush_angle`` is in radians."""
     h, w = shape
     aspect = h / max(w, 1)
     angle = float(rng.uniform(0.0, 2.0 * np.pi))
+    if brush_angle is not None:
+        angle = brush_angle
     x, y = grid_coords((h, w))
     ru, rv = rotate((x, y), -angle, (0.5, aspect * 0.5))
 
@@ -1199,8 +1215,12 @@ def _filmed(
     base: np.ndarray,
     variant: str,
     spec: dict,
+    *,
+    brush_angle: float | None = None,
 ) -> np.ndarray:
     """Sheet metal under a transparent interference film.
+
+    ``brush_angle`` controls the brushed features in radians.
 
     The film tints the **reflection** -- the specular lobe and the broad
     reflected-environment term -- and leaves the diffuse body alone, because
@@ -1215,6 +1235,8 @@ def _filmed(
     gloss = _FILM_GLOSS.get(variant, "satin")
 
     angle = float(rng.uniform(0.0, 2.0 * np.pi))
+    if brush_angle is not None:
+        angle = brush_angle
     x, y = grid_coords((h, w))
     ru, rv = rotate((x, y), -angle, (0.5, aspect * 0.5))
     f_across = _streak_freq(h, aspect, rng)
@@ -1312,6 +1334,7 @@ def generate(
     variant: str = "brushed",
     film=None,
     *,
+    brush_angle: float | None = None,
     iridescence: float = 0.0,
     source_angular_radius: float = SUN_ANGULAR_RADIUS_DEG,
     groove_pitch_um: tuple[float, float] = GROOVE_PITCH_UM,
@@ -1330,6 +1353,10 @@ def generate(
             variant's preset, a system name (``"oxide"``, ``"oil"``,
             ``"titania"``), or a dict overriding ``system``, ``nm`` or
             ``field``.
+        brush_angle: brushed direction in clockwise image-coordinate degrees,
+            where 0 is horizontal and 90 is vertical. Finite values wrap modulo
+            360. ``None`` retains the seeded random direction. This option is
+            supported only for the ``brushed`` variant.
         iridescence: weight of the groove-diffraction rainbow inside the
             scratches. **Defaults to 0**, which is off: the grooved finishes then
             render exactly as they always did, down to the byte. Applies to
@@ -1345,6 +1372,9 @@ def generate(
     """
     if variant not in VARIANTS:
         raise ValueError(f"unknown metal variant {variant!r}; choose from {VARIANTS}")
+    if brush_angle is not None and variant != "brushed":
+        raise ValueError("brush_angle is supported only for the brushed metal variant")
+    angle_radians = _brush_angle_radians(brush_angle)
     base = _pick_palette(rng)
     h, w = int(shape[0]), int(shape[1])
 
@@ -1363,6 +1393,15 @@ def generate(
     # Short-circuit before anything below can draw from rng: the classic
     # finishes must consume exactly the random stream they always did.
     if film is None:
+        if variant == "brushed":
+            return _brushed((h, w), rng, base, irid=irid, brush_angle=angle_radians)
         return _BUILDERS[variant]((h, w), rng, base, irid=irid)
 
-    return _filmed((h, w), rng, base, variant, _film_spec(variant, film))
+    return _filmed(
+        (h, w),
+        rng,
+        base,
+        variant,
+        _film_spec(variant, film),
+        brush_angle=angle_radians,
+    )

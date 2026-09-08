@@ -16,7 +16,7 @@ on the dependency versions and platform. The saved floating-point array is
   "python": "3.14.7",
   "platform": "darwin",
   "architecture": "arm64",
-  "texture-generator": "0.3.0",
+  "texture-generator": "0.4.0",
   "numpy": "2.5.2",
   "pillow": "12.3.0"
 }
@@ -201,6 +201,32 @@ their displayed brightness is not a physical unit.
 384 x 384 · RGB
 
 ![Brushed metal / oil film](images/metal-custom-film.png)
+
+## Brushing direction
+
+### Metal / brushed — brush angle 0°
+
+384 x 256 · RGB
+
+![Metal / brushed — brush angle 0°](images/metal-brush-angle-0.png)
+
+### Metal / brushed — brush angle 45°
+
+384 x 256 · RGB
+
+![Metal / brushed — brush angle 45°](images/metal-brush-angle-45.png)
+
+### Metal / brushed — brush angle 90°
+
+384 x 256 · RGB
+
+![Metal / brushed — brush angle 90°](images/metal-brush-angle-90.png)
+
+### Metal / brushed — brush angle 135°
+
+384 x 256 · RGB
+
+![Metal / brushed — brush angle 135°](images/metal-brush-angle-135.png)
 
 ## Paper measurements
 

@@ -3,7 +3,7 @@
     "python": "3.14.7",
     "platform": "darwin",
     "architecture": "arm64",
-    "texture-generator": "0.3.0",
+    "texture-generator": "0.4.0",
     "numpy": "2.5.2",
     "pillow": "12.3.0"
   },
@@ -451,6 +451,86 @@
         }
       },
       "sha256": "9c616aa9fce328090458f8fb10e308ed813cc65f2702d3d59c190379d2ac1ea1"
+    },
+    {
+      "path": "images/metal-brush-angle-0.png",
+      "title": "Metal / brushed \u2014 brush angle 0\u00b0",
+      "section": "Brushing direction",
+      "width": 384,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": [
+          384,
+          256
+        ],
+        "seed": 42,
+        "variant": "brushed",
+        "brush_angle": 0
+      },
+      "sha256": "c486b2a7457c823d2274693969b27d5f8f7484c97c68cba8b09f7fe16fc48459"
+    },
+    {
+      "path": "images/metal-brush-angle-45.png",
+      "title": "Metal / brushed \u2014 brush angle 45\u00b0",
+      "section": "Brushing direction",
+      "width": 384,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": [
+          384,
+          256
+        ],
+        "seed": 42,
+        "variant": "brushed",
+        "brush_angle": 45
+      },
+      "sha256": "fb7192cfc57dac9162441ea3d88d30fd3ab3ea42fd497fffde14349bf7f6f4b2"
+    },
+    {
+      "path": "images/metal-brush-angle-90.png",
+      "title": "Metal / brushed \u2014 brush angle 90\u00b0",
+      "section": "Brushing direction",
+      "width": 384,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": [
+          384,
+          256
+        ],
+        "seed": 42,
+        "variant": "brushed",
+        "brush_angle": 90
+      },
+      "sha256": "a377422b838b9a40a071df1affb3829b23c77fc8158d04de840c2a79e5c2665a"
+    },
+    {
+      "path": "images/metal-brush-angle-135.png",
+      "title": "Metal / brushed \u2014 brush angle 135\u00b0",
+      "section": "Brushing direction",
+      "width": 384,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": [
+          384,
+          256
+        ],
+        "seed": 42,
+        "variant": "brushed",
+        "brush_angle": 135
+      },
+      "sha256": "55eb276ca7515cfe9f33615250fc74c00c5d95848006c1975c318f8d3cf44c6b"
     },
     {
       "path": "images/paper-measured.png",

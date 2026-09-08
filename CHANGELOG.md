@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-08
+
 ### Added
 
+- `brush_angle` for the Python API and `--brush-angle` for the metal command,
+  requiring the explicit `brushed` variant. Finite angles are degrees clockwise
+  in image coordinates; omission preserves the existing random direction and
+  seeded renders. Includes film support, CLI batch/JSON support and angle examples.
 - README previews of all 18 material variants and an executable Python workflow
   notebook, with separate PNGs, a complete Markdown results gallery and recipes.
 - Optional notebook tools in the `examples` dependency group.

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "texture-generator"
-version = "0.3.0"
+version = "0.4.0"
 description = "Procedural generator for random but realistic material textures (metal, plastic, wood, paper) as PNGs or numpy arrays"
 readme = "README.md"
 license = "Apache-2.0"

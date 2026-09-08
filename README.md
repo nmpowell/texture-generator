@@ -50,6 +50,30 @@ Arrays contain RGB values in `[0, 1]`. The
 [API reference](https://github.com/nmpowell/texture-generator/blob/main/docs/reference.md#python-api)
 covers all public functions and material parameters.
 
+## Brushing direction
+
+From version 0.4.0, set `brush_angle` for the `brushed` metal variant. Angles are
+degrees clockwise in image coordinates: `0` is horizontal, `90` is vertical,
+and `45` runs from top left to bottom right. Finite angles wrap at 360 degrees.
+
+```python
+image = generate("metal", size=(640, 480), seed=42, variant="brushed", brush_angle=90)
+image.save("vertical-brushing.png")
+```
+
+The same keyword works with `generate_array()`, and can be combined with a metal
+`film` override. It controls grooves, scratches, directional shading, sheen and
+glints, plus groove diffraction on unfilmed metal. The light itself keeps its
+direction. Omit `brush_angle` or use `None` to retain the random direction and
+existing seeded output. An explicit angle requires `material="metal"` and
+`variant="brushed"`.
+
+These examples share seed 42 and a size of 384 × 256 pixels:
+
+| 0° — horizontal | 45° | 90° — vertical | 135° |
+| --- | --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/metal-brush-angle-0.png" alt="Horizontal brushed metal, 0 degrees" width="160" height="107"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/metal-brush-angle-45.png" alt="Diagonal brushed metal, 45 degrees clockwise" width="160" height="107"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/metal-brush-angle-90.png" alt="Vertical brushed metal, 90 degrees" width="160" height="107"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/metal-brush-angle-135.png" alt="Diagonal brushed metal, 135 degrees clockwise" width="160" height="107"> |
+
 ## Command line
 
 ```bash
@@ -57,12 +81,16 @@ texture-gen wood --variant board --size 640x480 --seed 42 -o wood.png
 texture-gen list
 texture-gen sheet --size 128 --seed 7 -o materials.png
 texture-gen wood --help
+texture-gen metal --variant brushed --brush-angle 90 --seed 42 -o vertical-brushing.png
 ```
 
 `python -m texture_generators` runs the same CLI. It also supports batches,
 JSON reports, shell completion and browser galleries for comparing seeds and
 parameters. See the
 [CLI reference](https://github.com/nmpowell/texture-generator/blob/main/docs/reference.md#cli).
+
+`--brush-angle` is available on `metal` and requires `--variant brushed`.
+It also works with `--count`; JSON reports include the angle when it is supplied.
 
 ## Materials
 

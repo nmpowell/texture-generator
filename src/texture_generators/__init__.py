@@ -130,6 +130,10 @@ def generate_array(
     Same contract as :func:`generate` but without the PIL conversion, for
     callers that want the raw pixels.
 
+    For brushed metal, ``brush_angle`` selects the direction in clockwise
+    image-coordinate degrees: 0 is horizontal and 90 is vertical. Finite values
+    wrap modulo 360; ``None`` retains the seeded random direction.
+
     Args:
         material: one of :data:`MATERIALS` (``metal``, ``plastic``, ``wood``,
             ``paper``).
@@ -142,6 +146,12 @@ def generate_array(
         ValueError: on an unknown material or variant.
     """
     mod = _module(material)
+    if params.get("brush_angle") is not None and (
+        material != "metal" or variant != "brushed"
+    ):
+        raise ValueError(
+            "brush_angle requires material='metal' and explicit variant='brushed'"
+        )
     h, w = _parse_size(size)
     rng = np.random.default_rng(seed)
 
@@ -169,6 +179,10 @@ def generate(
     **params,
 ) -> Image.Image:
     """Generate a texture and return it as a PIL RGB image.
+
+    For brushed metal, ``brush_angle`` selects the direction in clockwise
+    image-coordinate degrees: 0 is horizontal and 90 is vertical. Finite values
+    wrap modulo 360; ``None`` retains the seeded random direction.
 
     Args:
         material: one of :data:`MATERIALS` (``metal``, ``plastic``, ``wood``,
