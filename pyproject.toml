@@ -45,6 +45,12 @@ dev = [
     "setuptools>=77.0.3",
     "twine>=6.1",
 ]
+examples = [
+    "ipykernel>=6.30",
+    "jupyterlab>=4.4",
+    "nbclient>=0.10",
+    "nbformat>=5.10",
+]
 
 [tool.setuptools]
 include-package-data = false

@@ -88,6 +88,65 @@ for changes and
 [GitHub issues](https://github.com/nmpowell/texture-generator/issues)
 to report a bug.
 
+## Examples
+
+Every variant below is rendered at **384 × 384 pixels with seed 42** and an
+explicit variant name. The
+[full results gallery](https://github.com/nmpowell/texture-generator/blob/main/examples/results.md)
+includes the notebook's outputs and links to each PNG; the
+[recipe manifest](https://github.com/nmpowell/texture-generator/blob/main/examples/manifest.json)
+records how they were generated.
+
+### Metal
+
+| Brushed | Radial | Polished | Heat tinted |
+| --- | --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-brushed.png" alt="Brushed metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-radial.png" alt="Radial metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-polished.png" alt="Polished metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-heat_tinted.png" alt="Heat tinted metal texture" width="160" height="160"> |
+| **Oil film** | **Anodised titanium** | **Engine turned** |  |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-oil_film.png" alt="Oil film metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-anodised_titanium.png" alt="Anodised titanium metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-engine_turned.png" alt="Engine turned metal texture" width="160" height="160"> |  |
+
+### Plastic
+
+| Glossy | Matte | Textured |
+| --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/plastic-glossy.png" alt="Glossy plastic texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/plastic-matte.png" alt="Matte plastic texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/plastic-textured.png" alt="Textured plastic texture" width="160" height="160"> |
+
+### Wood
+
+| Board | Planks |
+| --- | --- |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/wood-board.png" alt="Board wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/wood-planks.png" alt="Planks wood texture" width="160" height="160"> |
+
+### Paper
+
+| White | Kraft | Recycled |
+| --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/paper-white.png" alt="White paper texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/paper-kraft.png" alt="Kraft paper texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/paper-recycled.png" alt="Recycled paper texture" width="160" height="160"> |
+| **Newsprint** | **Laid** | **Coated** |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/paper-newsprint.png" alt="Newsprint paper texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/paper-laid.png" alt="Laid paper texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/paper-coated.png" alt="Coated paper texture" width="160" height="160"> |
+
+### Run the notebook
+
+Open the
+[workflow notebook](https://github.com/nmpowell/texture-generator/blob/main/examples/texture_generator_workflow.ipynb)
+to work through the importable Python API, save images and arrays as PNGs, and
+build a contact sheet. Preview the standalone
+[wood image](https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/wood-board.png),
+[metal array saved as an image](https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/metal-array.png)
+and [contact sheet](https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/contact-sheet.png).
+
+From the repository root, install the optional notebook tools and launch JupyterLab:
+
+```bash
+uv sync --group examples
+uv run --group examples jupyter lab examples/texture_generator_workflow.ipynb
+```
+
+Choose **Run → Run All Cells**. The notebook writes the separate PNGs to
+`examples/images/`, records their recipes in `examples/manifest.json`, and
+regenerates `examples/results.md`. Notebook tools live in the optional
+`examples` dependency group.
+
 ## Development
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then:

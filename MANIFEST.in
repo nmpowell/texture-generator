@@ -1,3 +1,5 @@
 include CHANGELOG.md uv.lock .python-version
 recursive-include docs *.md
 recursive-include tests *.py
+recursive-include examples *.ipynb *.md *.json *.png *.npy
+prune examples/.ipynb_checkpoints

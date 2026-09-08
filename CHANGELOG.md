@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README previews of all 18 material variants and an executable Python workflow
+  notebook, with separate PNGs, a complete Markdown results gallery and recipes.
+- Optional notebook tools in the `examples` dependency group.
+
 ## [0.3.0] - 2026-09-08
 
 ### Added

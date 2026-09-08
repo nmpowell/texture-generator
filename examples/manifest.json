@@ -1,0 +1,522 @@
+{
+  "environment": {
+    "python": "3.14.7",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "texture-generator": "0.3.0",
+    "numpy": "2.5.2",
+    "pillow": "12.3.0"
+  },
+  "images": [
+    {
+      "path": "images/wood-board.png",
+      "title": "Wood / board \u2014 Pillow quickstart",
+      "section": "Pillow image",
+      "width": 640,
+      "height": 480,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": [
+          640,
+          480
+        ],
+        "seed": 42,
+        "variant": "board"
+      },
+      "sha256": "5d1cbca88d5490886d741cb9ae6c8afb82248d7a3f8d54d3eb22da314344b3fe"
+    },
+    {
+      "path": "images/metal-array.png",
+      "title": "Metal / brushed \u2014 NumPy array as a PNG",
+      "section": "NumPy array",
+      "width": 256,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate_array",
+        "material": "metal",
+        "size": 256,
+        "seed": 7,
+        "variant": "brushed",
+        "conversion": "to_image",
+        "array_path": "data/metal-brushed.npy"
+      },
+      "sha256": "0f085f4cf01ac6fb999eb5bb4bf53b95ae1a3fe070a37417c026090c17622b6c"
+    },
+    {
+      "path": "images/variants/metal-brushed.png",
+      "title": "metal / brushed",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "brushed"
+      },
+      "sha256": "09b9c6c6abb53c3db530597e0008fe881b6e50637977f20dc52069479e40f361"
+    },
+    {
+      "path": "images/variants/metal-radial.png",
+      "title": "metal / radial",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "radial"
+      },
+      "sha256": "4609bfc72de6dcab41650ad4070443a99da59fdfde1f649ac98140f0591083c7"
+    },
+    {
+      "path": "images/variants/metal-polished.png",
+      "title": "metal / polished",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "polished"
+      },
+      "sha256": "c9cd38d0a2d9cda6d49eb9864cb144f611a2cda3d9e1941a847f314821e32ea9"
+    },
+    {
+      "path": "images/variants/metal-heat_tinted.png",
+      "title": "metal / heat_tinted",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "heat_tinted"
+      },
+      "sha256": "d473aed4f9dcb28dd974472af396b0b0e3012759ed64a51754bcfd40b5d3e054"
+    },
+    {
+      "path": "images/variants/metal-oil_film.png",
+      "title": "metal / oil_film",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "oil_film"
+      },
+      "sha256": "623a27c8f4eaa5fbd105a7a5d41e9c2af62c2c225b4cfe8389f9396c34fadbe1"
+    },
+    {
+      "path": "images/variants/metal-anodised_titanium.png",
+      "title": "metal / anodised_titanium",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "anodised_titanium"
+      },
+      "sha256": "72301471f8888fc67bc4bf5d06a758b8b5df46f1bf893060a66eec08930a3f79"
+    },
+    {
+      "path": "images/variants/metal-engine_turned.png",
+      "title": "metal / engine_turned",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "engine_turned"
+      },
+      "sha256": "f56f19bd837fe5e71aa4d304c86d818677073c180a005eacf9725c56310a5de1"
+    },
+    {
+      "path": "images/variants/plastic-glossy.png",
+      "title": "plastic / glossy",
+      "section": "All variants \u2014 plastic",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "plastic",
+        "size": 384,
+        "seed": 42,
+        "variant": "glossy"
+      },
+      "sha256": "6d89bf43762d7366f7927e28a4fb87f2953a9d04c23cf48465ebb797a60666ec"
+    },
+    {
+      "path": "images/variants/plastic-matte.png",
+      "title": "plastic / matte",
+      "section": "All variants \u2014 plastic",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "plastic",
+        "size": 384,
+        "seed": 42,
+        "variant": "matte"
+      },
+      "sha256": "8e368bda1cf7ea7a52761f9d2839a26b003255f8b36a40c595e38aa003364006"
+    },
+    {
+      "path": "images/variants/plastic-textured.png",
+      "title": "plastic / textured",
+      "section": "All variants \u2014 plastic",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "plastic",
+        "size": 384,
+        "seed": 42,
+        "variant": "textured"
+      },
+      "sha256": "902da494b7c13b34f19a8008287f3543e886a12a23d47dc135f4bc18d3587505"
+    },
+    {
+      "path": "images/variants/wood-board.png",
+      "title": "wood / board",
+      "section": "All variants \u2014 wood",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 384,
+        "seed": 42,
+        "variant": "board"
+      },
+      "sha256": "cc073268a503b2519070207ce9245e296b7f1f128b76d31f18771f3dcb5c9723"
+    },
+    {
+      "path": "images/variants/wood-planks.png",
+      "title": "wood / planks",
+      "section": "All variants \u2014 wood",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 384,
+        "seed": 42,
+        "variant": "planks"
+      },
+      "sha256": "b15c2e3bb265c7981b69b18589727cdfbf2dbe8badb49fb952cb7ac141097df1"
+    },
+    {
+      "path": "images/variants/paper-white.png",
+      "title": "paper / white",
+      "section": "All variants \u2014 paper",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "paper",
+        "size": 384,
+        "seed": 42,
+        "variant": "white"
+      },
+      "sha256": "9b29e0710ed6be39541336308f020a8f3c30e430348ad2bc379e2b3f66d6ba82"
+    },
+    {
+      "path": "images/variants/paper-kraft.png",
+      "title": "paper / kraft",
+      "section": "All variants \u2014 paper",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "paper",
+        "size": 384,
+        "seed": 42,
+        "variant": "kraft"
+      },
+      "sha256": "595081a871acef0aafe63bd5a6aa4e31f2a94d44ceb63bb7099009347524629d"
+    },
+    {
+      "path": "images/variants/paper-recycled.png",
+      "title": "paper / recycled",
+      "section": "All variants \u2014 paper",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "paper",
+        "size": 384,
+        "seed": 42,
+        "variant": "recycled"
+      },
+      "sha256": "f05cbf6e60135cf4fc4d843d12b4c3efb10ba63cc36c12ed31c9c305bcc7c915"
+    },
+    {
+      "path": "images/variants/paper-newsprint.png",
+      "title": "paper / newsprint",
+      "section": "All variants \u2014 paper",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "paper",
+        "size": 384,
+        "seed": 42,
+        "variant": "newsprint"
+      },
+      "sha256": "edb4f09ad2e1f0584f0a140ef09b8740a706f91be5f34dc118d72bf519a757b5"
+    },
+    {
+      "path": "images/variants/paper-laid.png",
+      "title": "paper / laid",
+      "section": "All variants \u2014 paper",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "paper",
+        "size": 384,
+        "seed": 42,
+        "variant": "laid"
+      },
+      "sha256": "d4ee7d54bdcc2ce3295a519e0a87c50be5c10130b6fe364e9855e60248506adc"
+    },
+    {
+      "path": "images/variants/paper-coated.png",
+      "title": "paper / coated",
+      "section": "All variants \u2014 paper",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "paper",
+        "size": 384,
+        "seed": 42,
+        "variant": "coated"
+      },
+      "sha256": "bca6523653529a4dd0e6ef39911b2b35e9484a9aaab080e2161ad600be6e9295"
+    },
+    {
+      "path": "images/plastic-seed-12.png",
+      "title": "Plastic / matte \u2014 seed 12",
+      "section": "Reproducible seeds",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "plastic",
+        "size": 384,
+        "seed": 12,
+        "variant": "matte"
+      },
+      "sha256": "1daa69c1fef900bf8f7b3ff14aeafd66f3df79206e359d4c0a63eef7e0227a86"
+    },
+    {
+      "path": "images/plastic-seed-13.png",
+      "title": "Plastic / matte \u2014 seed 13",
+      "section": "Reproducible seeds",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "plastic",
+        "size": 384,
+        "seed": 13,
+        "variant": "matte"
+      },
+      "sha256": "86413ac8ebce55015c55b7159f1a6285bc1737bd79c54a70e5c75c07521ee958"
+    },
+    {
+      "path": "images/metal-automatic.png",
+      "title": "Metal / brushed \u2014 seed-selected variant",
+      "section": "Automatic variant selection",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 23,
+        "variant": null,
+        "resolved_variant": "brushed"
+      },
+      "sha256": "a1ec2077935c108ba9e6e4acec25477e094514ae547ba27088d5d148bcb956cb"
+    },
+    {
+      "path": "images/walnut-none.png",
+      "title": "Walnut / quartersawn \u2014 finish none",
+      "section": "Material controls",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 384,
+        "seed": 17,
+        "variant": "board",
+        "species": "walnut",
+        "finish": "none",
+        "cut": "quartersawn",
+        "figure": "plain",
+        "mm_across": 180,
+        "knots": 0,
+        "sapwood": 0
+      },
+      "sha256": "03dd56ed04f5ae4f85f80dcda9a12d637c2bd5d126d1c96922cef3bcb6db2af4"
+    },
+    {
+      "path": "images/walnut-oil.png",
+      "title": "Walnut / quartersawn \u2014 finish oil",
+      "section": "Material controls",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 384,
+        "seed": 17,
+        "variant": "board",
+        "species": "walnut",
+        "finish": "oil",
+        "cut": "quartersawn",
+        "figure": "plain",
+        "mm_across": 180,
+        "knots": 0,
+        "sapwood": 0
+      },
+      "sha256": "653e3588c1974d00180d142c0c5fce075a3ed391ff51ef192c087bc7c4b6ef77"
+    },
+    {
+      "path": "images/metal-custom-film.png",
+      "title": "Brushed metal / oil film",
+      "section": "Material controls",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 17,
+        "variant": "brushed",
+        "film": {
+          "system": "oil",
+          "nm": [
+            120,
+            800
+          ],
+          "field": "spill"
+        }
+      },
+      "sha256": "9c616aa9fce328090458f8fb10e308ed813cc65f2702d3d59c190379d2ac1ea1"
+    },
+    {
+      "path": "images/paper-measured.png",
+      "title": "Paper / laid \u2014 measurement example",
+      "section": "Paper measurements",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate_array",
+        "material": "paper",
+        "size": 384,
+        "seed": 7,
+        "variant": "laid",
+        "mm_across": 30,
+        "creases": 0.0,
+        "conversion": "to_image",
+        "measurements": [
+          "mass",
+          "formation"
+        ]
+      },
+      "sha256": "a117c1e9106564eb9dc57d7823a16773478706cb808e410efe25b9ee02f875dc"
+    },
+    {
+      "path": "images/paper-mass.png",
+      "title": "Paper / mass \u2014 normalised greyscale preview",
+      "section": "Paper measurements",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "derived_from": "images/paper-measured.png",
+        "field": "mass",
+        "conversion": "min-max normalisation, greyscale to RGB"
+      },
+      "sha256": "6c8bb5052a10203db0229524949fe8bbfc108fdcd9334f384304c17d85ff312b"
+    },
+    {
+      "path": "images/paper-formation.png",
+      "title": "Paper / formation \u2014 normalised greyscale preview",
+      "section": "Paper measurements",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "derived_from": "images/paper-measured.png",
+        "field": "formation",
+        "conversion": "min-max normalisation, greyscale to RGB"
+      },
+      "sha256": "c6a09fca3729d9214a85ffca5372625f6f912c82beefef928704865cb55af73f"
+    },
+    {
+      "path": "images/contact-sheet.png",
+      "title": "All materials \u2014 labelled contact sheet",
+      "section": "Contact sheet",
+      "width": 798,
+      "height": 1066,
+      "mode": "RGB",
+      "recipe": {
+        "function": "sample_sheet",
+        "size": 192,
+        "seed": 7,
+        "columns": 4
+      },
+      "sha256": "c03e64100892a75fed2773eacc03279deeea8c81918bc6ab04286ae5639271b2"
+    }
+  ]
+}
