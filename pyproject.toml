@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "texture-generator"
+version = "0.3.0"
+description = "Procedural generator for random but realistic material textures (metal, plastic, wood, paper) as PNGs or numpy arrays"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.14"
+authors = [{ name = "Nick Powell" }]
+keywords = ["procedural", "texture", "noise", "material", "pbr", "numpy"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Typing :: Typed",
+]
+dependencies = [
+    "click>=8.1",
+    "numpy>=2.0",
+    "pillow>=10.0",
+]
+
+[project.scripts]
+texture-gen = "texture_generators.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/nmpowell/texture-generator"
+Issues = "https://github.com/nmpowell/texture-generator/issues"
+Changelog = "https://github.com/nmpowell/texture-generator/releases"
+
+[dependency-groups]
+dev = [
+    "build>=1.2",
+    "mypy>=1.8",
+    "pytest>=8",
+    "ruff>=0.14",
+    "setuptools>=77.0.3",
+    "twine>=6.1",
+]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["texture_generators", "texture_generators.*"]
+
+[tool.setuptools.package-data]
+texture_generators = ["py.typed"]
+
+[tool.pytest.ini_options]
+minversion = "8"
+testpaths = ["tests"]
+addopts = "-ra --import-mode=importlib --strict-markers --strict-config"
+xfail_strict = true
+
+[tool.ruff]
+line-length = 88
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["texture_generators"]
+
+[tool.mypy]
+# Run mypy with the project's supported Python interpreter.
+packages = ["texture_generators"]
+mypy_path = "src"
+ignore_missing_imports = true
+warn_unused_configs = true
+warn_redundant_casts = true

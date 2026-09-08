@@ -1,0 +1,55 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.10"
+          enable-cache: true
+      - name: Check release tag matches the package version
+        if: github.event_name == 'release'
+        run: |
+          version="$(uv version --short)"
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$version" != "$tag" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match version $version" >&2
+            exit 1
+          fi
+      - run: uv sync --locked
+      - run: uv run --locked pytest
+      - run: uv run --locked ruff check .
+      - run: uv run --locked ruff format --check .
+      - run: uv build --no-sources
+      - run: uv run --locked twine check --strict dist/*
+      - name: Install and exercise both distributions outside the checkout
+        run: |
+          unset PYTHONPATH PYTHONHOME
+          cd "$RUNNER_TEMP"
+          for artifact in "$GITHUB_WORKSPACE"/dist/*.whl "$GITHUB_WORKSPACE"/dist/*.tar.gz; do
+            artifact_env="$RUNNER_TEMP/$(basename "$artifact").venv"
+            uv venv --python 3.14 "$artifact_env"
+            uv pip install --python "$artifact_env/bin/python" "$artifact"
+            "$artifact_env/bin/python" -c 'from importlib.metadata import version; from texture_generators import __version__, generate, generate_array; assert __version__ == version("texture-generator"); image = generate("wood", size=(640, 480), seed=42, variant="board"); assert (image.mode, image.size) == ("RGB", (640, 480)); assert generate_array("plastic", size=16, seed=7).shape == (16, 16, 3)'
+            "$artifact_env/bin/texture-gen" wood --size 48x32 --seed 42 -o artifact-smoke.png
+            "$artifact_env/bin/python" -m texture_generators list --json
+          done
+      - name: Keep the validated distributions for publishing
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
