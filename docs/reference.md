@@ -79,6 +79,13 @@ listing the valid names. The package ships `py.typed` (PEP 561), so type
 checkers use the public API's annotations; mypy over the package's own
 internals is not yet clean (see *Development*).
 
+For brushed metal, `generate()` and `generate_array()` accept `brush_angle` in
+degrees clockwise in image coordinates: 0 is horizontal, 90 is vertical, and
+45 runs from top left to bottom right. A supplied angle requires the explicit
+arguments `material="metal"`, `variant="brushed"`; other combinations raise
+`ValueError`. `None` or omission retains the random direction. See
+[brushing direction](#brushing-direction) for the full contract.
+
 ## CLI
 
 `texture-gen` is a [Click](https://click.palletsprojects.com/) command group:
@@ -127,6 +134,16 @@ file, combining it with `--count > 1` is rejected, as is `-o` together with
 `--outdir`, and `all` and `samples` have no `-o` at all — they write many files,
 so use `--outdir`.
 
+The `metal` command also accepts `--brush-angle FLOAT`, with explicit
+`--variant brushed`. The angle applies to every image in a `--count` batch.
+Non-finite values, other variants or an omitted variant are usage errors
+(exit status 2). Other commands do not accept this option.
+
+```bash
+texture-gen metal --variant brushed --brush-angle 90 --size 640x480 --seed 42 -o vertical.png
+texture-gen metal --variant brushed --brush-angle 45 --seed 42 --count 3 --outdir diagonal --json
+```
+
 ### JSON output
 
 Every command takes `--json`, which replaces the plain path lines with a
@@ -157,6 +174,10 @@ the original command supplied `--variant`. If it was omitted, leave it off;
 if it was supplied, pass the same variant again. An omitted `--variant`
 consumes the seed's first random draw. The JSON report does not record whether
 the variant was explicit, so keep the original command alongside the report.
+
+When `--brush-angle` is supplied, each `written` entry also contains a numeric
+`brush_angle` in degrees. Pass that value back with `--variant brushed` to
+reproduce the direction. The key is absent when the option was omitted.
 
 `all` reports the same shape with one entry per pair; `sheet` reports one entry
 with `"kind": "sheet"`; `samples` reports `{"run_dir": …, "index": …, "count":
@@ -280,6 +301,7 @@ effect.
 | Paper | `out` | `dict`, or `None` | Defaults to `None`. A supplied dictionary receives `(H, W)` arrays named `mass` (fibre coverage) and `formation` (normalised formation field) for measurement. It does not change the returned image or pixels. |
 | Metal | `film` | `None`, `True`, a system-name `str`, or a `dict` | `None` uses the selected variant's film preset, if any. `True` selects that preset, falling back to `heat_tinted` for a plain variant. Strings choose `oxide`, `oil` or `titania`; a dictionary overrides `system`, `nm` (a two-float thickness range in nanometres) and/or `field` (`weld`, `spill`, `patch`). |
 | Metal | `iridescence` | `float` | Defaults to 0.0 (off). Positive values weight groove diffraction on unfilmed `brushed`, `radial` and `engine_turned` textures. |
+| Metal / brushed | `brush_angle` | Finite `float` in degrees, or `None` | Clockwise in image coordinates: 0 horizontal, 90 vertical. Values wrap at 360 degrees. Requires the explicit `brushed` variant, including when combined with `film`. Omitted/`None` preserves the existing random direction and seeded pixels. |
 | Metal | `source_angular_radius` | `float`, degrees | Defaults to 0.53. Controls the light-source width for groove diffraction; a wider source suppresses its colour. |
 | Metal | `groove_pitch_um` | Two floats `(lo, hi)`, with `0 < lo <= hi` | Defaults to `(1.0, 30.0)` micrometres. Bounds the groove spacing used for diffraction. |
 
@@ -306,6 +328,40 @@ paper = generate(
 )
 ```
 
+### Brushing direction
+
+```python
+image = generate("metal", size=(640, 480), seed=42, variant="brushed", brush_angle=90)
+pixels = generate_array(
+    "metal", size=256, seed=42, variant="brushed", brush_angle=45, iridescence=0.5
+)
+filmed = generate(
+    "metal", size=256, seed=42, variant="brushed", brush_angle=0, film="oil"
+)
+```
+
+`brush_angle` uses degrees; the generator converts to radians internally.
+Negative and multi-turn values wrap at 360 degrees (for example, -90 and 270
+choose the same angle). NaN, infinity and non-numeric values are rejected.
+The option is for an explicitly selected brushed-metal texture, not a whole
+`sample_sheet()` or another material/variant.
+
+The chosen direction is shared by the groove fields, their breaks and roughness,
+scratch strokes, anisotropic shading, optional groove diffraction, the
+perpendicular sheen band and glints. With a `film` override, the underlying
+brushed surface uses that direction too. Groove diffraction remains an unfilmed
+metal effect. The angle does not set the light direction or directly set the
+reflected-room geometry and film-thickness patterns.
+
+Omitting the angle (or passing `None`) preserves existing seeded renders.
+An explicit angle still consumes the original random-angle draw. Rotating the
+noise domain can change its lattice size and subsequent random draws, so changing
+the angle can also change fine detail and other seeded properties. The same
+angle and arguments reproduce the same pixels in the same environment.
+
+The [workflow notebook](../examples/texture_generator_workflow.ipynb) and
+[results gallery](../examples/results.md) show 0°, 45°, 90° and 135° examples.
+
 ### Metal film and diffraction parameters
 
 The [metal generator](../src/texture_generators/materials/metal.py) accepts
@@ -327,7 +383,7 @@ generate("metal", variant="engine_turned", seed=42, iridescence=0.8).save(
 `radial` and `engine_turned`. `source_angular_radius` is in degrees: wider
 sources wash out the rainbow. `groove_pitch_um=(lo, hi)` controls the
 sub-pixel grating pitch in micrometres. These parameters belong to the Python
-API; the CLI material commands expose the common rendering options.
+API; the metal CLI additionally exposes `--brush-angle` for the brushing direction.
 
 ## How wood works
 

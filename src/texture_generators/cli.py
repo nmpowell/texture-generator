@@ -22,6 +22,7 @@ variant appears in the CLI — and in its help — without editing this module.
 from __future__ import annotations
 
 import json
+import math
 import secrets
 from pathlib import Path
 from typing import Any
@@ -122,6 +123,15 @@ json_option = click.option(
 )
 
 
+def _finite_float(
+    ctx: click.Context, param: click.Parameter, value: float | None
+) -> float | None:
+    """Reject non-finite floats during Click parameter validation."""
+    if value is not None and not math.isfinite(value):
+        raise click.BadParameter("must be finite", ctx=ctx, param=param)
+    return value
+
+
 def _default_name(material: str, variant: str | None, seed: int | None) -> str:
     """Build ``<material>[-<variant>][-<seed>].png``."""
     parts = [material]
@@ -159,13 +169,15 @@ def _one_destination(out: Path | None, outdir: Path | None) -> None:
         )
 
 
-def _record(path: Path, img: Image.Image, **fields: Any) -> dict[str, str | int | None]:
+def _record(
+    path: Path, img: Image.Image, **fields: Any
+) -> dict[str, str | int | float | None]:
     """One ``written`` entry: the path, the given fields, then the pixel size."""
     width, height = img.size
     return {"path": str(path), **fields, "width": width, "height": height}
 
 
-def _emit(records: list[dict[str, str | int | None]], as_json: bool) -> None:
+def _emit(records: list[dict[str, str | int | float | None]], as_json: bool) -> None:
     """Report what was written, as JSON or as one path per line."""
     if as_json:
         click.echo(json.dumps({"written": records}, indent=2))
@@ -198,6 +210,19 @@ def _material_command(material: str) -> click.Command:
     """Build the subcommand for one material, from that material's variants."""
     variants = list(MATERIALS[material].VARIANTS)
 
+    def brush_angle_option(function: Any) -> Any:
+        if material != "metal":
+            return function
+        return click.option(
+            "--brush-angle",
+            type=float,
+            callback=_finite_float,
+            default=None,
+            metavar="FLOAT",
+            help="finite degrees clockwise (0 horizontal, 90 vertical); "
+            "requires explicit --variant brushed.",
+        )(function)
+
     @click.command(
         name=material,
         short_help=f"Render a {material} texture.",
@@ -227,6 +252,7 @@ def _material_command(material: str) -> click.Command:
     @out_option
     @outdir_option
     @json_option
+    @brush_angle_option
     def command(
         size: int | tuple[int, int],
         seed: int | None,
@@ -235,23 +261,34 @@ def _material_command(material: str) -> click.Command:
         out: Path | None,
         outdir: Path | None,
         as_json: bool,
+        brush_angle: float | None = None,
     ) -> None:
         _one_destination(out, outdir)
+        if brush_angle is not None and variant != "brushed":
+            raise click.UsageError("--brush-angle requires explicit --variant brushed")
         if out is not None and count > 1:
             raise click.UsageError(
                 "--out names a single file; use --outdir with --count"
             )
         records = []
+        angle_field = {"brush_angle": brush_angle} if brush_angle is not None else {}
         for index in range(count):
             seed_i = _seed_for(seed, index)
             # Name the variant before rendering, so an omitted --variant is
             # reported and filed as the variant the seed actually picks.
             resolved = resolve_variant(material, seed_i, variant)
-            img = generate(material, size, seed=seed_i, variant=variant)
+            img = generate(material, size, seed=seed_i, variant=variant, **angle_field)
             path = _resolve_path(out, outdir, _default_name(material, resolved, seed_i))
             _save(img, path)
             records.append(
-                _record(path, img, material=material, variant=resolved, seed=seed_i)
+                _record(
+                    path,
+                    img,
+                    material=material,
+                    variant=resolved,
+                    seed=seed_i,
+                    **angle_field,
+                )
             )
         _emit(records, as_json)
 
