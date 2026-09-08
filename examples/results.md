@@ -16,7 +16,7 @@ on the dependency versions and platform. The saved floating-point array is
   "python": "3.14.7",
   "platform": "darwin",
   "architecture": "arm64",
-  "texture-generator": "0.3.0",
+  "texture-generator": "0.4.0",
   "numpy": "2.5.2",
   "pillow": "12.3.0"
 }
