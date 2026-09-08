@@ -512,8 +512,7 @@ See the [README development instructions](../README.md#development) for the
 locked environment, tests, linting and formatting. Ruff is the formatter.
 
 mypy is configured but is not yet clean over the package internals; its output
-is informational, not a passing release gate. Run it on Python 3.12 or later,
-because numpy's stubs use 3.12 syntax:
+is informational, not a passing release gate. Run it on Python 3.14 or later:
 
 ```bash
 uv run mypy

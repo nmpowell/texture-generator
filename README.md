@@ -7,7 +7,7 @@ without models, downloaded assets or network access.
 
 ## Installation
 
-Requires Python 3.10 or later.
+Requires Python 3.14 or later.
 
 ```bash
 pip install texture-generator

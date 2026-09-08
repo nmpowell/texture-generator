@@ -122,10 +122,7 @@ def test_material_protocol() -> None:
     assert Material is materials.Material
     assert all(isinstance(module, Material) for module in MATERIALS.values())
     assert not isinstance(object(), Material)
-    if sys.version_info >= (3, 13):
-        assert {"VARIANTS", "generate"} <= typing.get_protocol_members(Material)
-    else:
-        assert Material._is_protocol
+    assert {"VARIANTS", "generate"} <= typing.get_protocol_members(Material)
 
 
 def test_console_script_renders(tmp_path: Path) -> None:

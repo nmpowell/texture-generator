@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-08
+
 ### Added
 
 - Public package documentation, complete material parameter reference, and
@@ -25,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use Apache-2.0 licensing, setuptools and a literal version in `pyproject.toml`.
   The public `__version__` reads installed distribution metadata.
 - Use Ruff for formatting and keep development dependencies in `uv.lock`.
+- Require Python 3.14 or later.
 
 ### Fixed
 

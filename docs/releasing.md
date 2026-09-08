@@ -27,7 +27,8 @@ settings) with these exact values:
 | Environment name | `release` |
 
 The workflow field is the filename, not the workflow's display name or its full
-path. The file is [`.github/workflows/publish.yml`](../.github/workflows/publish.yml).
+path. The file is
+[`.github/workflows/publish.yml`](https://github.com/nmpowell/texture-generator/blob/main/.github/workflows/publish.yml).
 Trusted Publishing uses the publishing job's `id-token: write` permission;
 no PyPI password or long-lived upload token belongs in repository secrets.
 
@@ -91,7 +92,7 @@ without the checkout. These smoke checks supplement the full test suite.
 
 Commit and push the version, changelog and lockfile changes before creating the
 release. Create a GitHub Release targeting that exact commit, with a tag matching
-`project.version` (for example, `0.2.0` for `version = "0.2.0"`), write release
+`project.version` (for example, `0.3.0` for `version = "0.3.0"`), write release
 notes, then publish the release. The workflow checks tag/version agreement and
 must pass its checks before uploading. Pushing a bare tag does not publish.
 

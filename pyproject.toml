@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "texture-generator"
-version = "0.2.0"
+version = "0.3.0"
 description = "Procedural generator for random but realistic material textures (metal, plastic, wood, paper) as PNGs or numpy arrays"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 authors = [{ name = "Nick Powell" }]
 keywords = ["procedural", "texture", "noise", "material", "pbr", "numpy"]
 classifiers = [
@@ -17,10 +17,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Multimedia :: Graphics",
     "Topic :: Scientific/Engineering :: Image Processing",
@@ -78,7 +74,7 @@ ignore = ["E501"]
 known-first-party = ["texture_generators"]
 
 [tool.mypy]
-# No python_version pin: numpy's stubs use 3.12+ syntax, so run mypy on 3.12+.
+# Run mypy with the project's supported Python interpreter.
 packages = ["texture_generators"]
 mypy_path = "src"
 ignore_missing_imports = true
