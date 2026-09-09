@@ -12,7 +12,7 @@ import tarfile
 import tempfile
 import typing
 import zipfile
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 import numpy as np
@@ -122,7 +122,13 @@ def test_material_protocol() -> None:
     assert Material is materials.Material
     assert all(isinstance(module, Material) for module in MATERIALS.values())
     assert not isinstance(object(), Material)
-    assert {"VARIANTS", "generate"} <= typing.get_protocol_members(Material)
+
+    variants_getter = Material.VARIANTS.fget
+    generate_getter = Material.generate.fget
+    assert variants_getter is not None
+    assert generate_getter is not None
+    assert typing.get_type_hints(variants_getter)["return"] == Sequence[str]
+    assert typing.get_type_hints(generate_getter)["return"] == Callable[..., np.ndarray]
 
 
 def test_console_script_renders(tmp_path: Path) -> None:

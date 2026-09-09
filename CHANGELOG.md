@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Python 3.12 and 3.13 support alongside 3.14, with a CI matrix covering the
+  full test suite with locked and minimum runtime dependencies, plus clean
+  installation of both built distributions. Runtime requirements, generator
+  algorithms and the public API are unchanged.
+
+### Fixed
+
+- CLI tests accept Click's supported error-message punctuation variations while
+  retaining rejection checks. Completion smoke generates Zsh source through the
+  subprocess hook without requiring a particular local Bash version.
+
 ## [0.4.0] - 2026-09-08
 
 ### Added

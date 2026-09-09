@@ -7,7 +7,8 @@ without models, downloaded assets or network access.
 
 ## Installation
 
-Requires Python 3.14 or later.
+Requires Python 3.12 or later. CI covers Python 3.12, 3.13 and 3.14 with locked
+dependencies and the lowest compatible NumPy/Pillow wheels and Click release.
 
 ```bash
 pip install texture-generator
@@ -189,6 +190,12 @@ uv run ruff format --check .
 ```
 
 `uv sync --locked` installs the project editable and uses the committed lockfile.
+The `.python-version` file selects Python 3.14 for development; pass
+`--python 3.12` or `--python 3.13` to `uv sync` and `uv run` to use an older
+supported interpreter. See the [release guide](https://github.com/nmpowell/texture-generator/blob/main/docs/releasing.md) for
+commands to check locked and minimum runtime dependencies on all three versions
+in separate environments. Minimum checks preserve the locked development tools
+and leave `uv.lock` unchanged.
 Use `uv run ruff format .` to apply formatting. The tests exercise rendering,
 determinism, material physics, the CLI and built-package contents. Internal mypy
 checks have existing findings and are informational; see the

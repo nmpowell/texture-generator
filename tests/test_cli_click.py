@@ -477,14 +477,15 @@ def test_module_entry_point(tmp_path: Path) -> None:
 
 
 def test_shell_completion() -> None:
-    """Click's completion hook is wired up under the script's own name."""
+    """The completion hook emits Zsh source without invoking a local shell."""
     result = subprocess.run(
         [sys.executable, "-m", "texture_generators"],
-        env={**os.environ, "_TEXTURE_GEN_COMPLETE": "bash_source"},
+        env={**os.environ, "_TEXTURE_GEN_COMPLETE": "zsh_source"},
         capture_output=True,
         text=True,
         check=False,
     )
     assert result.returncode == 0, result.stderr
-    assert result.stdout.strip()
-    assert "complete" in result.stdout or "_texture_gen" in result.stdout
+    assert "#compdef texture-gen" in result.stdout
+    assert "_texture_gen_completion" in result.stdout
+    assert "compdef _texture_gen_completion texture-gen" in result.stdout

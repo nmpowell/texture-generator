@@ -11,6 +11,55 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+        dependencies: [locked, minimum]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.10"
+          enable-cache: true
+      - name: Install Python ${{ matrix.python-version }} and locked dependencies
+        run: uv sync --locked --python "${{ matrix.python-version }}"
+      - name: Confirm the requested Python is active
+        run: |
+          .venv/bin/python -c \
+            'import sys; assert sys.version_info[:2] == tuple(map(int, "${{ matrix.python-version }}".split("."))), sys.version'
+      - name: Install lowest compatible runtime wheels
+        if: matrix.dependencies == 'minimum'
+        run: |
+          uv pip install --python .venv/bin/python --reinstall \
+            --resolution lowest-direct --only-binary numpy --only-binary pillow \
+            -r pyproject.toml
+      - name: Record resolved dependency versions
+        run: uv pip list --python .venv/bin/python
+      - name: Check installed dependencies
+        run: uv pip check --python .venv/bin/python
+      - name: Run tests on Python ${{ matrix.python-version }} with ${{ matrix.dependencies }} dependencies
+        run: .venv/bin/python -m pytest
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.10"
+          enable-cache: true
+      - name: Install Python 3.14 and locked dependencies
+        run: uv sync --locked --python 3.14
+      - run: uv run --locked --python 3.14 ruff check .
+      - run: uv run --locked --python 3.14 ruff format --check .
+
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -28,28 +77,49 @@ jobs:
             echo "Tag $GITHUB_REF_NAME does not match version $version" >&2
             exit 1
           fi
-      - run: uv sync --locked
-      - run: uv run --locked pytest
-      - run: uv run --locked ruff check .
-      - run: uv run --locked ruff format --check .
-      - run: uv build --no-sources
-      - run: uv run --locked twine check --strict dist/*
-      - name: Install and exercise both distributions outside the checkout
-        run: |
-          unset PYTHONPATH PYTHONHOME
-          cd "$RUNNER_TEMP"
-          for artifact in "$GITHUB_WORKSPACE"/dist/*.whl "$GITHUB_WORKSPACE"/dist/*.tar.gz; do
-            artifact_env="$RUNNER_TEMP/$(basename "$artifact").venv"
-            uv venv --python 3.14 "$artifact_env"
-            uv pip install --python "$artifact_env/bin/python" "$artifact"
-            "$artifact_env/bin/python" -c 'from importlib.metadata import version; from texture_generators import __version__, generate, generate_array; assert __version__ == version("texture-generator"); image = generate("wood", size=(640, 480), seed=42, variant="board"); assert (image.mode, image.size) == ("RGB", (640, 480)); assert generate_array("plastic", size=16, seed=7).shape == (16, 16, 3)'
-            "$artifact_env/bin/texture-gen" wood --size 48x32 --seed 42 -o artifact-smoke.png
-            "$artifact_env/bin/python" -m texture_generators list --json
-          done
-      - name: Keep the validated distributions for publishing
+      - name: Build wheel and source distribution
+        run: uv build --no-sources --python 3.14
+      - name: Check distribution metadata
+        run: uv run --locked --python 3.14 twine check --strict dist/*
+      - name: Keep the distributions for validation and publishing
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: dist
           path: dist/
           if-no-files-found: error
           retention-days: 7
+
+  artifact-smoke:
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.10"
+          enable-cache: true
+      - name: Download the distributions built once on Python 3.14
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist
+          path: ${{ runner.temp }}/dist
+      - name: Install and exercise both distributions on Python ${{ matrix.python-version }}
+        shell: bash
+        run: |
+          set -eu
+          unset PYTHONPATH PYTHONHOME
+          cd "$RUNNER_TEMP"
+          for artifact in dist/*.whl dist/*.tar.gz; do
+            artifact_env="$RUNNER_TEMP/$(basename "$artifact").venv"
+            uv venv --python "${{ matrix.python-version }}" "$artifact_env"
+            uv pip install --python "$artifact_env/bin/python" "$artifact"
+            "$artifact_env/bin/python" -c 'from importlib.metadata import version; from texture_generators import __version__, generate, generate_array; assert __version__ == version("texture-generator"); image = generate("wood", size=(640, 480), seed=42, variant="board"); assert (image.mode, image.size) == ("RGB", (640, 480)); assert generate_array("plastic", size=16, seed=7).shape == (16, 16, 3)'
+            "$artifact_env/bin/texture-gen" wood --size 48x32 --seed 42 -o artifact-smoke.png
+            "$artifact_env/bin/python" -m texture_generators list --json
+            samples_out="$RUNNER_TEMP/samples-${{ matrix.python-version }}-$(basename "$artifact")"
+            "$artifact_env/bin/texture-gen" samples --only plastic/matte --count 2 --size 16 --no-sweeps --jobs 2 --outdir "$samples_out"
+            uv pip check --python "$artifact_env/bin/python"
+          done

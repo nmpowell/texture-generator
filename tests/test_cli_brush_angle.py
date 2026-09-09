@@ -173,4 +173,5 @@ def test_brush_angle_is_unavailable_outside_metal(command: str) -> None:
     result = CliRunner().invoke(main, [command, "--brush-angle", "90"])
 
     assert result.exit_code == 2, result.output
-    assert "No such option '--brush-angle'" in result.output
+    assert "No such option" in result.output
+    assert "--brush-angle" in result.output

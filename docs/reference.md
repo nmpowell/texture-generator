@@ -197,6 +197,12 @@ eval "$(_TEXTURE_GEN_COMPLETE=zsh_source texture-gen)"
 _TEXTURE_GEN_COMPLETE=fish_source texture-gen | source
 ```
 
+Bash completion requires Bash 4.4 or later; macOS's bundled Bash 3.2 is too old.
+With Click 8.1, generating Bash completion also checks the `bash` executable on
+`PATH`. Use a supported Bash installation on `PATH`, or use Zsh completion.
+The test suite generates Zsh source through the subprocess completion hook;
+that generation does not require a Zsh executable or invoke a local shell.
+
 ### Regenerating the visual-review set
 
 The `samples` subcommand is the fast eyeball loop for algorithm work:
@@ -556,6 +562,10 @@ schemas, the usage-error exit codes (bad size, `-o` with `--count` or
 `--outdir`, unknown variant) and clean errors for an unwritable output path,
 render determinism, `python -m texture_generators` parity, and shell-completion
 generation.
+CI runs the full suite on Python 3.12, 3.13 and 3.14 with both locked and minimum
+runtime dependencies. The [release guide](releasing.md#prepare-and-check-the-artifacts)
+gives the commands. Parallel full-suite runs require separate
+project copies because packaging tests build in the project root.
 Paper additionally gets the physical checks — coverage, worm-like-chain curl,
 spectral field statistics, LIC orientation and kernel length, per-variant RMS
 slope against its measured target, and `laid`'s wire pitch as an FFT line —
@@ -568,7 +578,8 @@ See the [README development instructions](../README.md#development) for the
 locked environment, tests, linting and formatting. Ruff is the formatter.
 
 mypy is configured but is not yet clean over the package internals; its output
-is informational, not a passing release gate. Run it on Python 3.14 or later:
+is informational, not a passing release gate. Run it in the development
+environment:
 
 ```bash
 uv run mypy
