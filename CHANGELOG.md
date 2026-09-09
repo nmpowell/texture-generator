@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-09-09
+
 ### Added
 
 - Python 3.12 and 3.13 support alongside 3.14, with a CI matrix covering the
@@ -19,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI tests accept Click's supported error-message punctuation variations while
   retaining rejection checks. Completion smoke generates Zsh source through the
   subprocess hook without requiring a particular local Bash version.
+
+### Changed
+
+- The README now discloses the project's AI-generated content, personal use and
+  experimental purpose.
 
 ## [0.4.0] - 2026-09-08
 
