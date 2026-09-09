@@ -5,6 +5,8 @@ as Pillow images or NumPy arrays. Choose a size and seed to create a reproducibl
 texture, then save it as a PNG. Generation runs locally using NumPy and Pillow,
 without models, downloaded assets or network access.
 
+> ⚠️ Much of this is AI-generated, and not formally reviewed by hand or eye. It's published chiefly for myself: for my own reference, use, and for experimentation with the whole open-source publishing process. I also *use* this code: I dogfood it. It works, for me. I also write tests, and run them to check that it works, and does what it says.
+
 ## Installation
 
 Requires Python 3.12 or later. CI covers Python 3.12, 3.13 and 3.14 with locked
