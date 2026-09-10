@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This is documentation and examples only; the generator, public API and rendered
   output for existing recipes are unchanged.
 
+### Fixed
+
+- Two inaccurate statements in the technical reference's wood section: cherry is
+  diffuse-porous, not semi-ring-porous, and the per-species CIELAB figures are
+  typical published values rather than measurements of these grades, as
+  `materials/wood.py` already records. Documentation only.
+
 ## [0.5.0] - 2026-09-09
 
 ### Added
