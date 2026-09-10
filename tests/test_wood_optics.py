@@ -1,31 +1,118 @@
-"""Tests for the W1 shading-core package of the wood-optics change.
+"""Tests for the wood-optics rendering change: coat, refraction, rays, physical
+relief and linear-light compositing, plus the shared shading-core machinery
+they are built on.
 
-Covers the design doc's ("wood-optics-design.md", section 4) numbered
-validation rows that belong to the shared shading core rather than to
-``materials/wood.py``: row 1 (axial sign), row 2 (coat/fibre separation,
-the ``shade``-only half), row 4 (zero coverage / equal IOR, the
-``shade``-only half -- the wood-specific ``FINISHES`` half is W3's), row 7
-(analytic height), row 8 (fibre peak locus), row 9 (Snell), row 10 (ray
-isolation), plus the band-limited-fbm behaviour introduced by D6 (no
-numbered row of its own).
+Each test is named for the row of the finished-wood validation matrix
+(the material-development tests that go with a Marschner-style fibre-lobe
+model: axial sign, coat/fibre separation, pore pooling and so on) that it
+stands in for, and checks it against an oracle
+independent of the implementation -- a hand-derived literal, a closed-form
+formula, or an exact invariant -- never by calling the code under test to
+produce its own "expected" answer. Rows covered here, and what stands in for
+a measured reference in a fixed-view, 2-D texture generator:
 
-Untestable here, per the design doc's own list (section 4, last
-paragraph): reciprocity (the view is fixed), the white-furnace check (no
-integrator; ``conserve_energy``'s mean test is the analogue), Snell across
-total internal reflection (only air-to-coat is modelled here), grazing
-bump vs displacement (there is no displacement), angular hold-out and
-reference convergence (no measured data or estimator), and Beer
-monotonicity (no film-thickness field -- see design doc D6/5.4).
+* **Axial sign** (`test_fibre_lobe_is_invariant_to_the_director_sign`) -- a
+  fibre direction has no arrowhead, so reversing every director in the field
+  must render bit for bit unchanged.
+* **Coat/fibre separation** (`test_surface_lobe_ignores_the_fibre_dip_while_the_fibre_lobe_follows_it`,
+  `test_coat_height_equal_to_the_substrate_changes_nothing`) -- the surface
+  (Blinn-Phong) lobes must not see the fibre tangent's out-of-plane dip, and a
+  coat that exactly follows the substrate must shade identically to no coat.
+* **Figure reversal** (`test_figure_still_moves_when_the_albedo_is_flat`) --
+  curly figure has to live in the reflection: strip a curly board's albedo to
+  its own flat mean and the luster still has to move and its across-grain
+  peak still has to shift as the light swings.
+* **Zero coverage / layer removal / equal IOR**
+  (`test_fibre_ior_below_one_is_refused`,
+  `test_finish_none_recovers_the_bare_board_exactly`) -- the bare ``"none"``
+  finish must be the true zero-coverage case (no film, no tint, no Lab
+  shift, no refractive boundary), and an out-of-range index is refused
+  outright rather than silently misbehaving downstream.
+* **Pore pooling** (`test_film_fills_a_pore_no_deeper_than_its_build`) -- a
+  finish film pools in a pore but never deeper than the film it built, and
+  self-levels the coat surface smoother than the substrate underneath it.
+* **Beer analogue** (`test_finish_state_is_ordered_by_film_build`) -- no
+  measured film-thickness/absorption field exists here (see "untestable"
+  below), so the testable analogue is that the fitted finish state -- film
+  build, fibre tint -- is internally ordered and every tint stays neutral
+  energy.
+* **Analytic height** (`test_normals_follow_physical_slopes_at_any_sampling`)
+  -- a plane and a sinusoid sampled at two different pitches must give the
+  same normal, matching the calculus derivative exactly, because the
+  gradient is taken in the height field's own physical units and not per
+  texel.
+* **Fibre peak locus** (`test_refraction_moves_the_fibre_peak_toward_the_surface`)
+  -- refracting the light into the coat has to move the fibre lobe's peak dip
+  to exactly where ``tan(dip) = s_x / (1 + s_z)`` places it, for the
+  refracted unit light ``s``.
+* **Snell** (`test_grazing_light_refracts_without_nan`) -- the refraction
+  construction must stay finite and unit-length as the light grazes the
+  horizon.
+* **Ray isolation** (`test_ray_population_changes_only_the_flecks`) -- mixing
+  in a ray lobe must change the render only where the ray weight is nonzero.
+* **Mip sweep** (`test_a_small_render_matches_a_downsampled_large_one`) -- a
+  small direct render and a large render box-downsampled to the same size in
+  linear light must agree in mean and in contrast; this stands in for the
+  matrix's reference-convergence check with a self-consistency one instead
+  (see "untestable" below).
+* **Linear colour** (`test_wood_shades_in_linear_light`) -- a flat, lobe-less
+  board must round-trip to its own albedo, and a two-slope height ramp's
+  bright/dark contrast, decoded back to linear radiance, must match the
+  underlying Lambertian dot products rather than their gamma-compressed
+  shadow.
+* **Analytic deformation** (`test_analytic_shear_transports_the_axis_by_the_inverse_jacobian`)
+  -- for a warp with a closed-form Jacobian, the fibre tangent's in-plane
+  direction must equal ``normalize(J_f^-1 e_u)`` computed straight from that
+  Jacobian, not from the code under test.
+
+Plus the band-limited-fbm behaviour introduced for physical relief
+(`test_band_limited_fbm_drops_octaves_the_grid_cannot_carry`, no matrix
+row of its own) and the cross-cutting defaults-are-inert acceptance
+check (`test_shade_defaults_are_bit_identical_with_the_new_parameters`).
+
+**Untestable here**, and why a fixed-view 2-D texture generator cannot
+validate them: reciprocity (the view is fixed at +z, so there is no second
+viewing angle to swap with the light); the white-furnace check (there is no
+integrator to converge to unit reflectance under uniform illumination --
+``conserve_energy``'s mean-preservation test is the nearest analogue); Snell
+across total internal reflection (only the air-to-coat boundary is modelled,
+never the denser-to-rarer direction that can totally internally reflect);
+grazing bump vs. displacement parallax (there is no true displacement to
+compare a bump against); angular hold-out and reference-path convergence
+(there is no measured BRDF data or Monte Carlo estimator to hold against);
+and Beer-law film absorption monotonicity (there is no film-thickness or
+absorption-coefficient field -- the fitted CIELAB finish deltas and the
+per-finish fibre tint are declared as an appearance approximation instead,
+not a physical stand-in for one, and the film-build ordering above is the
+closest testable analogue).
 """
 
 from __future__ import annotations
 
+import dataclasses
+
 import numpy as np
 import pytest
 
+from texture_generators.core.colour import linear_to_srgb, srgb_to_linear
 from texture_generators.core.fields import height_to_normal
 from texture_generators.core.noise import fbm_at
 from texture_generators.core.shading import shade
+from texture_generators.materials import wood
+
+LUMA = np.asarray([0.2126, 0.7152, 0.0722], dtype=np.float32)
+
+
+def _luminance(img: np.ndarray) -> np.ndarray:
+    return (img @ LUMA).astype(np.float32)
+
+
+def _box_downsample_linear(img: np.ndarray, factor: int) -> np.ndarray:
+    """Box-downsample an sRGB image by ``factor``, averaging in linear light."""
+    lin = srgb_to_linear(img)
+    h, w, c = lin.shape
+    down = lin.reshape(h // factor, factor, w // factor, factor, c).mean(axis=(1, 3))
+    return linear_to_srgb(down)
 
 
 def _box_blur_3px(a: np.ndarray) -> np.ndarray:
@@ -467,3 +554,360 @@ def test_shade_defaults_are_bit_identical_with_the_new_parameters() -> None:
         ),
         fbm_at(x, y, np.random.default_rng(7), freq=(3.0, 5.0), octaves=4),
     )
+
+
+def test_a_small_render_matches_a_downsampled_large_one() -> None:
+    """A direct small render must agree with a box-downsampled large one.
+
+    Real anatomy looks the same whatever the sampling grid: a 500 px photo of
+    a board and a 2000 px photo of the same board, box-downsampled in linear
+    light, show the same mean colour and very nearly the same contrast. A
+    height or albedo layer that is authored *at* the grid pitch -- rather
+    than carrying physical content the grid merely resolves less of -- fails
+    this, because the direct small render keeps re-drawing that content at its
+    own coarse pitch instead of losing it the way a real downsample would.
+
+    Seeds 4 and 9 (rather than the first two) are the regression guard here:
+    the mip artifact this test targets is real but seed-dependent through the
+    board's own random cut/fleck/knot draws (measured directly against
+    ``main`` before this package: ratios from 1.09 to 1.55 across ten seeds,
+    all biased above 1.0), and seeds 0/1 happen to land inside the [0.75,
+    1.33] band on the unmodified code (1.09, 1.26) -- which would make the
+    test pass vacuously before the fix it exists to guard.
+    """
+    for seed in (4, 9):
+        rng_small = np.random.default_rng(seed)
+        small = wood.generate(
+            (256, 256),
+            rng_small,
+            "board",
+            species="oak",
+            finish="oil",
+            colour_variation=0.0,
+            knots=0.0,
+            sapwood=0.0,
+            mm_across=200.0,
+        )
+        rng_large = np.random.default_rng(seed)
+        large = wood.generate(
+            (1024, 1024),
+            rng_large,
+            "board",
+            species="oak",
+            finish="oil",
+            colour_variation=0.0,
+            knots=0.0,
+            sapwood=0.0,
+            mm_across=200.0,
+        )
+        down = _box_downsample_linear(large, 4)
+
+        mean_err = np.abs(
+            small.reshape(-1, 3).mean(axis=0) - down.reshape(-1, 3).mean(axis=0)
+        )
+        assert float(mean_err.max()) * 255.0 < 3.0, (seed, mean_err * 255.0)
+
+        small_std = float(_luminance(small).std())
+        down_std = float(_luminance(down).std())
+        ratio = small_std / max(down_std, 1e-9)
+        assert 0.75 <= ratio <= 1.33, (seed, small_std, down_std, ratio)
+
+
+def test_wood_shades_in_linear_light() -> None:
+    """``_shade_fields`` must composite in linear light, not display sRGB.
+
+    Two independent checks. A flat, lobe-less board must render back to (very
+    nearly) the albedo it was given: a spatially constant lighting field
+    normalises to exactly 1 whichever space the multiply happens in, so this
+    half holds either way and is not the discriminating one. The
+    discriminating half is the diffuse contrast of a two-slope height ramp:
+    its bright/dark ratio, decoded back to linear radiance, has to match the
+    ratio of the underlying Lambertian dot products -- computed here straight
+    from the light and normal geometry, independently of ``shade`` -- not the
+    gamma-compressed ratio a display-space multiply produces.
+    """
+    size = 24
+    px_per_mm = 4.0
+    light_dir = (-0.5, -0.55, 0.78)
+
+    # --- Part 1: flat board, no lobes, normal_strength=0 -> exact albedo ---
+    albedo = np.full((size, size, 3), (0.62, 0.35, 0.20), dtype=np.float32)
+    flat_fields = wood.BoardFields(
+        albedo=albedo,
+        height=np.zeros((size, size), dtype=np.float32),
+        coat_height=np.zeros((size, size), dtype=np.float32),
+        tangent=np.zeros((size, size, 3), dtype=np.float32),
+        ray_tangent=np.zeros((size, size, 3), dtype=np.float32),
+        ray_weight=np.zeros((size, size), dtype=np.float32),
+        coat_gloss=np.zeros((size, size), dtype=np.float32),
+        fibre_lustre=np.zeros((size, size), dtype=np.float32),
+    )
+    out_flat = wood._shade_fields(
+        flat_fields,
+        finish="none",
+        rng=np.random.default_rng(0),
+        params={"normal_strength": 0.0, "specular": 0.0},
+        px_per_mm=px_per_mm,
+        light_dir=light_dir,
+    )
+    err_255 = np.abs(out_flat.astype(np.float64) - albedo.astype(np.float64)) * 255.0
+    assert float(err_255.max()) < 1.0, float(err_255.max())
+
+    # --- Part 2: two-slope ramp, symmetric contrast in linear light -------
+    m = 0.35  # dimensionless slope, mm of rise per mm of run
+    x_mm = (np.arange(size, dtype=np.float32) / np.float32(px_per_mm))[None, :]
+    top_band = np.arange(size)[:, None] < size // 2
+    slope = np.where(top_band, np.float32(m), np.float32(-m)).astype(np.float32)
+    height = (slope * x_mm).astype(np.float32)
+    ramp_fields = wood.BoardFields(
+        albedo=albedo,
+        height=height,
+        coat_height=height,
+        tangent=np.zeros((size, size, 3), dtype=np.float32),
+        ray_tangent=np.zeros((size, size, 3), dtype=np.float32),
+        ray_weight=np.zeros((size, size), dtype=np.float32),
+        coat_gloss=np.zeros((size, size), dtype=np.float32),
+        fibre_lustre=np.zeros((size, size), dtype=np.float32),
+    )
+    out_ramp = wood._shade_fields(
+        ramp_fields,
+        finish="none",
+        rng=np.random.default_rng(0),
+        params={"normal_strength": 1.0, "specular": 0.0},
+        px_per_mm=px_per_mm,
+        light_dir=light_dir,
+    )
+
+    # Interior windows a few rows/columns clear of the band boundary (row
+    # size//2) and the non-periodic array edges, where the height field is
+    # exactly linear and the analytic normal below is exact.
+    top = out_ramp[3 : size // 2 - 3, 3:-3, :]
+    bottom = out_ramp[size // 2 + 3 : -3, 3:-3, :]
+
+    def _analytic_ndl(dhdx: float) -> float:
+        n = np.asarray([-1.0 * dhdx, 0.0, 1.0], dtype=np.float64)
+        n = n / np.linalg.norm(n)
+        light = np.asarray(light_dir, dtype=np.float64)
+        light = light / np.linalg.norm(light)
+        return float(np.clip(np.dot(n, light), 0.0, 1.0)), float(n[2])
+
+    ambient = 0.62  # the constant _shade_fields itself passes to shade()
+    ndl_top, nz_top = _analytic_ndl(m)
+    ndl_bot, nz_bot = _analytic_ndl(-m)
+    lit_top = ambient * (0.85 + 0.15 * nz_top) + (1.0 - ambient) * ndl_top
+    lit_bot = ambient * (0.85 + 0.15 * nz_bot) + (1.0 - ambient) * ndl_bot
+    expected_ratio = lit_top / lit_bot
+
+    albedo_linear = float(srgb_to_linear(albedo[0, 0, 0:1])[0])
+    top_lit = srgb_to_linear(top).astype(np.float64) / albedo_linear
+    bottom_lit = srgb_to_linear(bottom).astype(np.float64) / albedo_linear
+    measured_ratio = float(top_lit.mean() / bottom_lit.mean())
+
+    assert abs(measured_ratio - expected_ratio) < 0.01, (measured_ratio, expected_ratio)
+
+
+def test_finish_none_recovers_the_bare_board_exactly() -> None:
+    """The bare ``"none"`` finish must be the true zero-coverage case.
+
+    Every one of the new finish properties has to collapse to "no coat"
+    for ``finish="none"``: no film, no fibre tint, and no Lab shift -- the
+    board this finish describes was never coated at all.
+    """
+    none = wood.FINISHES["none"]
+    assert none["film_um"] == (0.0, 0.0)
+    assert none["fibre_tint"] == (1.0, 1.0, 1.0)
+    assert none["ior"] == 1.0
+
+    lab = np.asarray(wood.SPECIES["oak"]["lab"], dtype=np.float64)
+    delta = np.asarray(
+        [np.mean(none["dl"]), np.mean(none["dc"]), np.mean(none["db"])],
+        dtype=np.float64,
+    )
+    assert np.array_equal(wood._finish_lab(lab, delta), lab)
+
+    fields = wood._board_fields(
+        (64, 64),
+        np.random.default_rng(3),
+        "oak",
+        finish="none",
+        knot_p=0.0,
+        sap_p=0.0,
+    )
+    assert np.array_equal(fields.coat_height, fields.height)
+
+
+def test_film_fills_a_pore_no_deeper_than_its_build() -> None:
+    """A film pools in a pore, but never deeper than the film it built.
+
+    ``coat_height`` is the substrate levelled by however much film sits above
+    it, so the film's own contribution must stay within [0, film_max] -- and,
+    because a film self-levels, the resulting coat surface has to be at least
+    as smooth (lower gradient RMS) as the wood underneath it.
+    """
+    _film_lo, film_hi = wood.FINISHES["polyurethane"]["film_um"]
+    film_max_mm = film_hi / 1000.0
+
+    fields = wood._board_fields(
+        (192, 192),
+        np.random.default_rng(1),
+        "oak",
+        finish="polyurethane",
+        knot_p=0.0,
+        sap_p=0.0,
+    )
+    delta = (fields.coat_height - fields.height).astype(np.float64)
+    assert float(delta.min()) >= -1e-6
+    assert float(delta.max()) <= film_max_mm + 1e-6
+
+    def _gradient_rms(h: np.ndarray) -> float:
+        gy, gx = np.gradient(h.astype(np.float64))
+        return float(np.sqrt((gx * gx + gy * gy).mean()))
+
+    assert _gradient_rms(fields.coat_height) <= _gradient_rms(fields.height)
+
+
+def test_finish_state_is_ordered_by_film_build() -> None:
+    """Film build orders the finishes, and every fibre tint stays neutral energy.
+
+    No thickness/absorption field exists here (a Beer-Lambert film term is
+    deferred), so the Beer-film-
+    absorption claim's testable analogue is the monotonic ordering of the
+    fitted finish state across the finishes it applies to: no coat is
+    thinner than bare wood, and the film thickens oil < acrylic <
+    polyurethane.
+    """
+
+    def _film_mid(name: str) -> float:
+        lo, hi = wood.FINISHES[name]["film_um"]
+        return (lo + hi) / 2.0
+
+    assert _film_mid("none") <= _film_mid("oil")
+    assert _film_mid("oil") < _film_mid("acrylic") < _film_mid("polyurethane")
+
+    # ``_fibre_colour`` normalises each finish's raw ``fibre_tint`` to unit
+    # luminance: a constant, sub-unity *linear* albedo isolates that
+    # normalisation without any channel clipping (a tint component can run
+    # above 1.0 before normalisation, which a white albedo would clip and
+    # break this check), so the output luminance must come back as exactly
+    # ``sqrt(albedo)`` -- the tint's own luminance contributes a factor of 1.
+    albedo_linear = np.full((1, 1, 3), 0.3, dtype=np.float32)
+    expected_luma = float(np.sqrt(0.3))
+    for name in wood.FINISHES:
+        tint = wood._fibre_colour(albedo_linear, name)[0, 0]
+        luma = float(0.2126 * tint[0] + 0.7152 * tint[1] + 0.0722 * tint[2])
+        assert abs(luma - expected_luma) < 1e-4, (name, luma)
+    assert wood.FINISHES["none"]["fibre_tint"] == (1.0, 1.0, 1.0)
+
+
+def test_figure_still_moves_when_the_albedo_is_flat() -> None:
+    """Curly figure has to live in the reflection, not the pigment.
+
+    Replace a curly board's albedo with its own flat mean colour -- so the
+    render's only remaining source of variation is the fibre-tangent field --
+    and the across-grain luster still has to move with the light: adjacent
+    light azimuths must differ by a visible amount, and the peak of the
+    across-grain luminance profile has to shift rather than sit still, which a
+    flat-print (pigment-only) figure could never do.
+    """
+    size = 192
+    px_per_mm = size / 225.0
+    finish = "polyurethane"  # the strongest fibre lobe of the four (SPECULAR)
+    fields = wood._board_fields(
+        (size, size),
+        np.random.default_rng(1),
+        "maple",
+        finish=finish,
+        figure="curly",
+        knot_p=0.0,
+        sap_p=0.0,
+        px_per_mm=px_per_mm,
+    )
+    flat_mean = fields.albedo.reshape(-1, 3).mean(axis=0)
+    flat_albedo = np.broadcast_to(flat_mean, fields.albedo.shape).astype(np.float32)
+    flat_fields = dataclasses.replace(fields, albedo=flat_albedo)
+
+    azimuths = np.linspace(0.0, 2.0 * np.pi, 6, endpoint=False)
+    # A low elevation swings the fibre lobe's dip term further per degree of
+    # azimuth than a near-overhead light does.
+    elevation = np.deg2rad(25.0)
+    profiles = []
+    for az in azimuths:
+        light_dir = (
+            float(np.cos(az) * np.cos(elevation)),
+            float(np.sin(az) * np.cos(elevation)),
+            float(np.sin(elevation)),
+        )
+        out = wood._shade_fields(
+            flat_fields,
+            finish=finish,
+            rng=np.random.default_rng(0),
+            params={},
+            px_per_mm=px_per_mm,
+            light_dir=light_dir,
+        )
+        # Collapsed along the grain (columns), so what survives is structure
+        # that varies *across* it -- a figure measure, not a noise measure.
+        profiles.append(_luminance(out).mean(axis=1))
+
+    n = len(profiles)
+    diffs = [
+        float(np.abs(profiles[i] - profiles[(i + 1) % n]).mean()) for i in range(n)
+    ]
+    assert min(diffs) > 1.0 / 255.0, diffs
+
+    peaks = {int(np.argmax(p)) for p in profiles}
+    assert len(peaks) > 1, peaks
+
+
+def test_analytic_shear_transports_the_axis_by_the_inverse_jacobian() -> None:
+    """The in-plane fibre direction is exactly ``normalize(J_f^-1 e_u)``.
+
+    ``wu = u + A*sin(k*v)``, ``wv = v``: a pure along-grain shear, chosen
+    because its Jacobian ``J_f = [[1, A*k*cos(k*v)], [0, 1]]`` is triangular,
+    so the closed form is exact rather than approximate. Applying the general
+    2x2 inverse-Jacobian formula (not the fact that this particular warp makes
+    it trivial) to ``e_u = (1, 0)`` gives ``(d, -c) / det`` with ``c = 0``
+    identically for every ``v`` here (``wv`` has no ``u``-dependence at all),
+    so the fibre direction has to come back as exactly ``(1, 0)`` -- pure
+    along-grain, undeflected -- for every amplitude and wavenumber, which is
+    an easy place for an implementation to leak the *other* Jacobian entry
+    (``b = dwu/dv``) into the in-plane angle by mistake.
+    """
+    size = 96
+    px_per_unit = float(size)
+    x, y = np.meshgrid(
+        np.arange(size, dtype=np.float32) / px_per_unit,
+        np.arange(size, dtype=np.float32) / px_per_unit,
+    )
+    amp = 0.15
+    k = 4.0 * np.pi
+    wu = (x + amp * np.sin(k * y)).astype(np.float32)
+    wv = y.copy()
+
+    tangent = wood._fibre_tangents(
+        x,
+        y,
+        wu,
+        wv,
+        np.random.default_rng(6),
+        tilt=0.0,
+        along_x=True,
+        px_per_unit=px_per_unit,
+        mm_per_unit=225.0,
+    )
+
+    # The general 2x2 inverse-Jacobian formula, evaluated from the warp's own
+    # analytic derivatives -- not the shortcut that ``c == 0`` makes this
+    # trivial.
+    a = np.ones_like(y)
+    b = amp * k * np.cos(k * y)
+    c = np.zeros_like(y)
+    d = np.ones_like(y)
+    det = a * d - b * c
+    jinv_eu = np.stack([d / det, -c / det], axis=-1)
+    expected_angle = np.arctan2(jinv_eu[..., 1], jinv_eu[..., 0])
+
+    actual_angle = np.arctan2(tangent[..., 1], tangent[..., 0])
+
+    interior = np.s_[3:-3, 3:-3]
+    assert np.abs(actual_angle[interior] - expected_angle[interior]).max() < 1e-4
