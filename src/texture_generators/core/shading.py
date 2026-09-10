@@ -117,6 +117,12 @@ def shade(
     normalise: bool = False,
     conserve_energy: bool = False,
     return_parts: bool = False,
+    height_spacing: float = 1.0,
+    coat_height: np.ndarray | None = None,
+    fibre_ior: float = 1.0,
+    ray_tangent: np.ndarray | None = None,
+    ray_weight: float | np.ndarray = 0.0,
+    ray_gain: float = 1.0,
 ):
     """Shade an albedo/height pair into an RGB array in [0, 1].
 
@@ -181,14 +187,75 @@ def shade(
             of two clipped renders loses exactly the bright highlight pixels the
             film colour lives in. ``shade(...)`` is
             ``clip(sum(shade(..., return_parts=True)))``.
+        height_spacing: distance between adjacent height samples, in the
+            height field's own length units (see
+            :func:`~texture_generators.core.fields.height_to_normal`).
+            Forwarded to every normal computed inside this function, so a
+            board's relief keeps the same normals whatever resolution it is
+            rendered at. ``1.0`` reproduces the historical per-texel
+            gradient exactly.
+        coat_height: (H, W) height of a separate coat surface sitting above
+            ``height``, for a film that has its own (smoother) relief -- a
+            varnish self-levels, but the wood grain underneath does not. When
+            given, the *surface* lobes (``specular``/``specular2``, the
+            anisotropic tangent-plane projection, the micro-rim Schlick term
+            and the ``ndl > 0`` gate of those lobes) use normals from
+            ``coat_height`` instead of ``height``. The diffuse term,
+            ``cavity`` and the fibre/ray lobes always use the substrate
+            normals from ``height`` -- light that reaches the fibres or gets
+            absorbed by the pigment has already crossed the film, so it is
+            the wood's own relief that scatters it, not the film's.
+            ``None`` (the default) uses ``height`` for both, which is
+            bit-identical to not having a coat at all.
+        fibre_ior: refractive index of a flat coat sitting over the fibres,
+            for the fibre and ray lobes only. Before those lobes are
+            evaluated the unit light direction is refracted into the coat
+            (tangential components divided by ``fibre_ior``, ``z`` filled in
+            from the unit-length constraint); the view stays at +z and
+            refracts to itself, so only the light moves. ``1.0`` (the
+            default, no boundary) takes the exact pre-existing code path.
+            Must be at least 1.0 -- air cannot be denser than the coat.
+        ray_tangent: (H, W, 3) unit vectors along a **ray** axis -- wood's
+            medullary rays, a second fibre population running roughly
+            crosswise to the grain. Rays are a distinct population, not the
+            same fibres rotated: mixing the two lobes' *weights* per pixel
+            (see ``ray_weight``) keeps that, where blending the two *axes*
+            together first would invent diagonal fibres that exist nowhere
+            in the wood. ``None`` (the default) omits the ray population.
+        ray_weight: 0..1 fraction of the fibre response, per pixel, that
+            comes from the ray population instead of the ordinary fibre
+            axis -- typically a fleck mask. A scalar or an (H, W) array.
+            The fibre term becomes
+            ``fibre * ((1 - w) * lobe(fibre_tangent) + w * ray_gain *
+            lobe(ray_tangent))``, with the same exponent, colour and
+            (refracted) light for both. ``ray_tangent is None`` or an
+            all-zero ``ray_weight`` takes the exact pre-existing
+            single-population code path.
+        ray_gain: gain on the ray lobe relative to the fibre lobe -- rays
+            typically read slightly brighter than the surrounding fibres.
+
+    Raises:
+        ValueError: if ``fibre_ior`` is less than 1.0.
 
     Returns:
         (H, W, 3) float32 RGB clipped to [0, 1], or -- with ``return_parts`` --
         a ``(diffuse, specular)`` pair of unclipped (H, W, 3) float32 arrays.
     """
+    if fibre_ior < 1.0:
+        raise ValueError(f"fibre_ior must be >= 1.0 (got fibre_ior={fibre_ior})")
+
     alb = as_rgb(albedo)
     h = np.asarray(height, dtype=np.float32)
-    normals = height_to_normal(h, normal_strength)
+    normals = height_to_normal(h, normal_strength, spacing=height_spacing)
+    if coat_height is None:
+        # Bit-identical to today: no second normal computation at all.
+        coat_normals = normals
+    else:
+        coat_normals = height_to_normal(
+            np.asarray(coat_height, dtype=np.float32),
+            normal_strength,
+            spacing=height_spacing,
+        )
 
     light = _unit(light_dir)
     ndl = np.clip((normals * light).sum(axis=-1), 0.0, 1.0)
@@ -212,14 +279,14 @@ def shade(
     if float(spec_w.max(initial=0.0)) > 0.0 or float(spec2_w.max(initial=0.0)) > 0.0:
         view = np.asarray([0.0, 0.0, 1.0], dtype=np.float32)
         half = _unit(tuple((light + view).tolist()))
-        ndh = np.clip((normals * half).sum(axis=-1), 0.0, 1.0)
+        ndh = np.clip((coat_normals * half).sum(axis=-1), 0.0, 1.0)
 
         shin = np.asarray(shininess, dtype=np.float32)
         if aniso > 0.0 and aniso_dir is not None:
             tangent, bitangent = tangent_frame(aniso_dir, h.shape)
             # Tangent-plane component of the half-vector, which varies with
-            # the local normal and therefore across the texture.
-            proj = half.reshape(1, 1, 3) - ndh[..., None] * normals
+            # the local (coat) normal and therefore across the texture.
+            proj = half.reshape(1, 1, 3) - ndh[..., None] * coat_normals
             along = (proj * tangent).sum(axis=-1)
             across = (proj * bitangent).sum(axis=-1)
             a2 = along * along
@@ -235,12 +302,15 @@ def shade(
         spec = spec_w * np.power(ndh, expo)
         if float(spec2_w.max(initial=0.0)) > 0.0:
             spec = spec + spec2_w * np.power(ndh, np.float32(shininess2))
-        spec = np.where(ndl > 0.0, spec, 0.0).astype(np.float32)
+        ndl_coat = np.clip((coat_normals * light).sum(axis=-1), 0.0, 1.0)
+        spec = np.where(ndl_coat > 0.0, spec, 0.0).astype(np.float32)
         # Schlick term on the MICRO-geometry: steep feature edges (scratch
         # lips, dimple walls) whiten and brighten, which is where grazing
-        # reflection actually lands on a face-on flat sheet.
+        # reflection actually lands on a face-on flat sheet. Uses the coat
+        # normal, like the rest of this block: it is the film's surface that
+        # grazes, not the substrate's.
         fres = np.clip(
-            np.power(1.0 - np.clip(normals[..., 2], 0.0, 1.0), 5.0), 0.0, 0.6
+            np.power(1.0 - np.clip(coat_normals[..., 2], 0.0, 1.0), 5.0), 0.0, 0.6
         )[..., None]
         if spec_tint > 0.0:
             t = np.float32(np.clip(spec_tint, 0.0, 1.0))
@@ -253,8 +323,29 @@ def shade(
 
     fibre_w = np.asarray(fibre, dtype=np.float32)
     if fibre_tangent is not None and float(fibre_w.max(initial=0.0)) > 0.0:
-        fib = _fibre_lobe(fibre_tangent, light, ndl, fibre_exponent)
-        fib = fibre_w * fib
+        if fibre_ior != 1.0:
+            # Refract the light into a flat coat over the fibres. The view is
+            # fixed at +z and refracts to itself, so only the light moves and
+            # _fibre_lobe itself needs no change.
+            ior = np.float32(fibre_ior)
+            lx = light[0] / ior
+            ly = light[1] / ior
+            lz = np.sqrt(np.maximum(1.0 - lx * lx - ly * ly, np.float32(0.0)))
+            light_fibre = np.asarray([lx, ly, lz], dtype=np.float32)
+        else:
+            light_fibre = light
+        fib_lobe = _fibre_lobe(fibre_tangent, light_fibre, ndl, fibre_exponent)
+        ray_w = np.asarray(ray_weight, dtype=np.float32)
+        if ray_tangent is not None and float(ray_w.max(initial=0.0)) > 0.0:
+            # Two populations mixed by weight, not two axes blended into one:
+            # averaging fibre_tangent and ray_tangent first would produce a
+            # direction that runs diagonally between grain and ray -- a fibre
+            # angle that does not exist in the wood.
+            w = np.broadcast_to(ray_w, h.shape).astype(np.float32)
+            ray_lobe = _fibre_lobe(ray_tangent, light_fibre, ndl, fibre_exponent)
+            fib = fibre_w * ((1.0 - w) * fib_lobe + w * np.float32(ray_gain) * ray_lobe)
+        else:
+            fib = fibre_w * fib_lobe
         colour = (
             np.ones(3, dtype=np.float32)
             if fibre_colour is None

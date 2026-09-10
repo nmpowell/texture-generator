@@ -131,6 +131,22 @@ def gradient_noise(
     return gradient_noise_at(x, y, freq, rng)
 
 
+def _octave_gain(freq_cycles: float, max_freq: float) -> float:
+    """Hermite falloff for an octave whose frequency exceeds a Nyquist-style limit.
+
+    Returns 1.0 at or below half ``max_freq``, 0.0 at or above ``max_freq``,
+    and a smooth (C1) transition between -- a soft alternative to a hard
+    cut-off, which would ring. Computed in Python floats: this is a per-octave
+    scalar weight, not a field.
+    """
+    edge0 = 0.5 * max_freq
+    edge1 = max_freq
+    if edge1 - edge0 < 1e-8:
+        return 1.0 if freq_cycles < edge1 else 0.0
+    t = min(max((freq_cycles - edge0) / (edge1 - edge0), 0.0), 1.0)
+    return 1.0 - t * t * (3.0 - 2.0 * t)
+
+
 def fbm_at(
     x: np.ndarray,
     y: np.ndarray,
@@ -140,18 +156,45 @@ def fbm_at(
     lacunarity: float = 2.0,
     gain: float = 0.5,
     periodic: tuple[bool, bool] = (False, False),
+    max_freq: float | None = None,
 ) -> np.ndarray:
     """Sum ``gain^k * noise(freq * lacunarity^k)`` at arbitrary coordinates.
 
     The result is normalised by the total amplitude, so it stays roughly in
     [-1, 1] regardless of octave count.
+
+    Args:
+        x: sample x coordinates.
+        y: sample y coordinates, same shape as ``x``.
+        rng: numpy random generator, consumed once per octave.
+        freq: base frequency (cycles per unit), scalar or ``(fx, fy)``.
+        octaves: number of octaves to sum.
+        lacunarity: frequency multiplier between octaves.
+        gain: amplitude multiplier between octaves.
+        periodic: passed through to the underlying noise sampling.
+        max_freq: band limit in cycles per unit -- typically the sampling
+            grid's own Nyquist frequency. Each octave's frequency
+            ``f_k = max(fx_k, fy_k)`` is weighted by a Hermite falloff between
+            ``0.5 * max_freq`` and ``max_freq`` (see :func:`_octave_gain`), so
+            an octave finer than the grid can resolve fades out smoothly
+            instead of aliasing. The normalisation still divides by the
+            *unweighted* amplitude sum, so energy that is dropped stays
+            dropped rather than being redistributed onto the octaves that
+            remain -- and every octave's noise is still drawn regardless of
+            its weight, so the rng sequence never depends on ``max_freq``.
+            ``None`` (the default) disables band-limiting and reproduces the
+            unweighted sum exactly.
     """
     fx, fy = _as_freq_pair(freq)
     total = np.zeros(np.shape(x), dtype=np.float32)
     amp = 1.0
     norm = 0.0
     for _ in range(max(1, int(octaves))):
-        total += np.float32(amp) * gradient_noise_at(x, y, (fx, fy), rng, periodic)
+        octave = gradient_noise_at(x, y, (fx, fy), rng, periodic)
+        weight = amp
+        if max_freq is not None:
+            weight *= _octave_gain(max(fx, fy), float(max_freq))
+        total += np.float32(weight) * octave
         norm += amp
         amp *= gain
         fx *= lacunarity
