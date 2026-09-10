@@ -202,6 +202,56 @@ their displayed brightness is not a physical unit.
 
 ![Brushed metal / oil film](images/metal-custom-film.png)
 
+## Wood species
+
+### Wood / pine
+
+384 x 384 · RGB
+
+![Wood / pine](images/species/wood-pine.png)
+
+### Wood / maple
+
+384 x 384 · RGB
+
+![Wood / maple](images/species/wood-maple.png)
+
+### Wood / ash
+
+384 x 384 · RGB
+
+![Wood / ash](images/species/wood-ash.png)
+
+### Wood / oak
+
+384 x 384 · RGB
+
+![Wood / oak](images/species/wood-oak.png)
+
+### Wood / cherry
+
+384 x 384 · RGB
+
+![Wood / cherry](images/species/wood-cherry.png)
+
+### Wood / walnut
+
+384 x 384 · RGB
+
+![Wood / walnut](images/species/wood-walnut.png)
+
+### Wood / sapele
+
+384 x 384 · RGB
+
+![Wood / sapele](images/species/wood-sapele.png)
+
+### Wood / mahogany
+
+384 x 384 · RGB
+
+![Wood / mahogany](images/species/wood-mahogany.png)
+
 ## Brushing direction
 
 ### Metal / brushed — brush angle 0°
