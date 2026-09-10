@@ -114,6 +114,7 @@ def shade(
     fibre_exponent: float = 40.0,
     fibre_colour=None,
     cavity: float = 0.0,
+    cavity_depth: float | None = None,
     normalise: bool = False,
     conserve_energy: bool = False,
     return_parts: bool = False,
@@ -161,6 +162,14 @@ def shade(
         cavity: 0..1 strength of concavity darkening derived from the height
             field -- recesses collect less light, which grounds relief that
             normals alone leave floating.
+        cavity_depth: physical recess depth (in ``height``'s own units) at
+            which ``cavity`` reaches its full darkening, forwarded to
+            :func:`_cavity_shadow` as ``depth_scale``. Without it every
+            render's darkest recess is *always* fully dark, whatever its
+            physical depth -- a single deep feature (a plank gap) then
+            dominates and every shallower recess reads relative to it rather
+            than to its own depth. ``None`` (the default) keeps that
+            peak-normalised path exactly.
         normalise: divide the diffuse+ambient lighting by its own mean, so the
             shaded mean is the albedo it was given rather than the albedo times
             whatever this light rig happens to average to. Needed only where the
@@ -264,7 +273,7 @@ def shade(
     amb = np.float32(ambient) * (0.85 + 0.15 * np.clip(normals[..., 2], 0.0, 1.0))
     lit = amb + np.float32(1.0 - ambient) * ndl
     if cavity > 0.0:
-        lit = lit * _cavity_shadow(h, np.float32(cavity))
+        lit = lit * _cavity_shadow(h, np.float32(cavity), depth_scale=cavity_depth)
     if normalise:
         # Only the diffuse path: the specular below is an addition on top of the
         # surface's own reflectance, not part of it, so scaling it here would
@@ -302,7 +311,14 @@ def shade(
         spec = spec_w * np.power(ndh, expo)
         if float(spec2_w.max(initial=0.0)) > 0.0:
             spec = spec + spec2_w * np.power(ndh, np.float32(shininess2))
-        ndl_coat = np.clip((coat_normals * light).sum(axis=-1), 0.0, 1.0)
+        # ``coat_height is None`` means ``coat_normals is normals`` (same array),
+        # so this is exactly the ``ndl`` already computed above -- reuse it
+        # rather than reducing the whole frame a second time.
+        ndl_coat = (
+            ndl
+            if coat_height is None
+            else np.clip((coat_normals * light).sum(axis=-1), 0.0, 1.0)
+        )
         spec = np.where(ndl_coat > 0.0, spec, 0.0).astype(np.float32)
         # Schlick term on the MICRO-geometry: steep feature edges (scratch
         # lips, dimple walls) whiten and brighten, which is where grazing
@@ -408,12 +424,23 @@ def _fibre_lobe(
 
 
 def _cavity_shadow(
-    h: np.ndarray, strength: np.float32, periodic: bool = False
+    h: np.ndarray,
+    strength: np.float32,
+    periodic: bool = False,
+    depth_scale: float | None = None,
 ) -> np.ndarray:
     """Multiplicative darkening where the height field is locally concave.
 
     A 3x3 box mean stands in for the neighbourhood: pixels below their
     surroundings sit in a recess and lose up to ``strength`` of their light.
+
+    ``depth_scale``, in ``h``'s own units, is the recess depth at which that
+    loss is complete. ``None`` (the default) normalises by this field's own
+    deepest recess instead, so darkening is always relative to whatever the
+    single darkest feature happens to be -- fine for a field with one kind of
+    recess, wrong once recesses of very different physical depths share a
+    field (a fine vessel trough and a plank gap), where the deep one would
+    otherwise wash out every shallower one's shadow.
     """
     # Edge-padded neighbourhood: most of these textures are not tileable, so
     # the opposite edge is not a neighbour. Paper's fields are periodic, so it
@@ -426,18 +453,40 @@ def _cavity_shadow(
             acc = acc + hp[dy : dy + hh, dx : dx + ww]
     mean = acc * np.float32(1.0 / 9.0)
     depth = np.clip(mean - h, 0.0, None)
-    peak = float(depth.max())
-    if peak > 1e-8:
-        depth = depth / np.float32(peak)
+    if depth_scale is None:
+        peak = float(depth.max())
+        if peak > 1e-8:
+            depth = depth / np.float32(peak)
+    else:
+        depth = np.clip(depth / np.float32(max(float(depth_scale), 1e-8)), 0.0, 1.0)
     return (1.0 - strength * depth).astype(np.float32)
 
 
-def gaussian_blur(a: np.ndarray, sigma: float) -> np.ndarray:
-    """Separable Gaussian blur with wrap-around, via FFT-free direct convolution.
+def gaussian_blur(a: np.ndarray, sigma: float, mode: str = "wrap") -> np.ndarray:
+    """Separable Gaussian blur, via FFT-free direct convolution.
 
     Small sigmas dominate here (0.3-6 px), so a truncated separable kernel is
-    cheaper than a transform and keeps the wrap that makes fields tile.
+    cheaper than a transform.
+
+    Args:
+        a: (H, W) field to blur.
+        sigma: Gaussian standard deviation, in pixels.
+        mode: ``"wrap"`` (the default) blurs periodically via ``np.roll``,
+            bit-identical to every existing caller. ``"edge"`` instead pads
+            the array by the kernel radius with edge replication
+            (:func:`numpy.pad`'s ``mode="edge"``) and convolves separably
+            without wraparound, then crops back to shape -- for a field that
+            is not tileable (a board's own relief), so the blur is not mixed
+            with its own opposite edge as a neighbour, which shows up as a
+            bright or dark band down one side.
+
+    Raises:
+        ValueError: for any ``mode`` other than ``"wrap"`` or ``"edge"``.
     """
+    if mode not in ("wrap", "edge"):
+        raise ValueError(
+            f"gaussian_blur mode must be 'wrap' or 'edge' (got mode={mode!r})"
+        )
     a = np.asarray(a, dtype=np.float32)
     sigma = float(sigma)
     if sigma <= 1e-3:
@@ -446,13 +495,27 @@ def gaussian_blur(a: np.ndarray, sigma: float) -> np.ndarray:
     x = np.arange(-radius, radius + 1, dtype=np.float32)
     k = np.exp(-0.5 * (x / np.float32(sigma)) ** 2)
     k /= k.sum()
-    out = np.zeros_like(a)
+    if mode == "wrap":
+        out = np.zeros_like(a)
+        for offset, weight in zip(range(-radius, radius + 1), k, strict=False):
+            out += weight * np.roll(a, offset, axis=1)
+        acc = np.zeros_like(out)
+        for offset, weight in zip(range(-radius, radius + 1), k, strict=False):
+            acc += weight * np.roll(out, offset, axis=0)
+        return acc.astype(np.float32)
+    # mode == "edge": pad by the kernel radius with edge replication, then
+    # convolve separably by summing shifted slices of the padded array --
+    # every slice start/end stays within the padded bounds by construction,
+    # so this is the crop as well as the convolution.
+    hh, ww = a.shape
+    padded = np.pad(a, radius, mode="edge")
+    across = np.zeros((hh + 2 * radius, ww), dtype=np.float32)
     for offset, weight in zip(range(-radius, radius + 1), k, strict=False):
-        out += weight * np.roll(a, offset, axis=1)
-    acc = np.zeros_like(out)
+        across += weight * padded[:, radius + offset : radius + offset + ww]
+    out = np.zeros((hh, ww), dtype=np.float32)
     for offset, weight in zip(range(-radius, radius + 1), k, strict=False):
-        acc += weight * np.roll(out, offset, axis=0)
-    return acc.astype(np.float32)
+        out += weight * across[radius + offset : radius + offset + hh, :]
+    return out.astype(np.float32)
 
 
 def iso_highpass(field: np.ndarray, cutoff_px: float) -> np.ndarray:

@@ -97,7 +97,7 @@ import pytest
 from texture_generators.core.colour import linear_to_srgb, srgb_to_linear
 from texture_generators.core.fields import height_to_normal
 from texture_generators.core.noise import fbm_at
-from texture_generators.core.shading import shade
+from texture_generators.core.shading import gaussian_blur, shade
 from texture_generators.materials import wood
 
 LUMA = np.asarray([0.2126, 0.7152, 0.0722], dtype=np.float32)
@@ -574,43 +574,56 @@ def test_a_small_render_matches_a_downsampled_large_one() -> None:
     all biased above 1.0), and seeds 0/1 happen to land inside the [0.75,
     1.33] band on the unmodified code (1.09, 1.26) -- which would make the
     test pass vacuously before the fix it exists to guard.
+
+    ``variant="planks"`` is the same check on the multi-plank panel, added for
+    the W6 review fix that put the plank gap and bevel in physical
+    millimetres (:data:`~texture_generators.materials.wood.PLANK_GAP_MM`,
+    :data:`~texture_generators.materials.wood.PLANK_BEVEL_MM`) rather than a
+    fixed pixel count -- a fixed-pixel gap is exactly the grid-relative
+    authoring this test's ``"board"`` half already guards against, just at
+    the seam instead of the pore layer.
     """
-    for seed in (4, 9):
-        rng_small = np.random.default_rng(seed)
-        small = wood.generate(
-            (256, 256),
-            rng_small,
-            "board",
-            species="oak",
-            finish="oil",
-            colour_variation=0.0,
-            knots=0.0,
-            sapwood=0.0,
-            mm_across=200.0,
-        )
-        rng_large = np.random.default_rng(seed)
-        large = wood.generate(
-            (1024, 1024),
-            rng_large,
-            "board",
-            species="oak",
-            finish="oil",
-            colour_variation=0.0,
-            knots=0.0,
-            sapwood=0.0,
-            mm_across=200.0,
-        )
-        down = _box_downsample_linear(large, 4)
+    for variant in ("board", "planks"):
+        for seed in (4, 9):
+            rng_small = np.random.default_rng(seed)
+            small = wood.generate(
+                (256, 256),
+                rng_small,
+                variant,
+                species="oak",
+                finish="oil",
+                colour_variation=0.0,
+                knots=0.0,
+                sapwood=0.0,
+                mm_across=200.0,
+            )
+            rng_large = np.random.default_rng(seed)
+            large = wood.generate(
+                (1024, 1024),
+                rng_large,
+                variant,
+                species="oak",
+                finish="oil",
+                colour_variation=0.0,
+                knots=0.0,
+                sapwood=0.0,
+                mm_across=200.0,
+            )
+            down = _box_downsample_linear(large, 4)
 
-        mean_err = np.abs(
-            small.reshape(-1, 3).mean(axis=0) - down.reshape(-1, 3).mean(axis=0)
-        )
-        assert float(mean_err.max()) * 255.0 < 3.0, (seed, mean_err * 255.0)
+            mean_err = np.abs(
+                small.reshape(-1, 3).mean(axis=0) - down.reshape(-1, 3).mean(axis=0)
+            )
+            assert float(mean_err.max()) * 255.0 < 3.0, (
+                variant,
+                seed,
+                mean_err * 255.0,
+            )
 
-        small_std = float(_luminance(small).std())
-        down_std = float(_luminance(down).std())
-        ratio = small_std / max(down_std, 1e-9)
-        assert 0.75 <= ratio <= 1.33, (seed, small_std, down_std, ratio)
+            small_std = float(_luminance(small).std())
+            down_std = float(_luminance(down).std())
+            ratio = small_std / max(down_std, 1e-9)
+            assert 0.75 <= ratio <= 1.33, (variant, seed, small_std, down_std, ratio)
 
 
 def test_wood_shades_in_linear_light() -> None:
@@ -635,7 +648,7 @@ def test_wood_shades_in_linear_light() -> None:
     flat_fields = wood.BoardFields(
         albedo=albedo,
         height=np.zeros((size, size), dtype=np.float32),
-        coat_height=np.zeros((size, size), dtype=np.float32),
+        coat_lift=np.zeros((size, size), dtype=np.float32),
         tangent=np.zeros((size, size, 3), dtype=np.float32),
         ray_tangent=np.zeros((size, size, 3), dtype=np.float32),
         ray_weight=np.zeros((size, size), dtype=np.float32),
@@ -662,7 +675,7 @@ def test_wood_shades_in_linear_light() -> None:
     ramp_fields = wood.BoardFields(
         albedo=albedo,
         height=height,
-        coat_height=height,
+        coat_lift=np.zeros((size, size), dtype=np.float32),
         tangent=np.zeros((size, size, 3), dtype=np.float32),
         ray_tangent=np.zeros((size, size, 3), dtype=np.float32),
         ray_weight=np.zeros((size, size), dtype=np.float32),
@@ -733,16 +746,17 @@ def test_finish_none_recovers_the_bare_board_exactly() -> None:
         knot_p=0.0,
         sap_p=0.0,
     )
-    assert np.array_equal(fields.coat_height, fields.height)
+    assert float(fields.coat_lift.max()) == 0.0
+    assert float(fields.coat_lift.min()) == 0.0
 
 
 def test_film_fills_a_pore_no_deeper_than_its_build() -> None:
     """A film pools in a pore, but never deeper than the film it built.
 
-    ``coat_height`` is the substrate levelled by however much film sits above
-    it, so the film's own contribution must stay within [0, film_max] -- and,
-    because a film self-levels, the resulting coat surface has to be at least
-    as smooth (lower gradient RMS) as the wood underneath it.
+    ``coat_lift`` is how far the film's own levelled surface sits above the
+    substrate, so it must stay within [0, film_max] -- and, because a film
+    self-levels, the resulting coat surface (``height + coat_lift``) has to
+    be at least as smooth (lower gradient RMS) as the wood underneath it.
     """
     _film_lo, film_hi = wood.FINISHES["polyurethane"]["film_um"]
     film_max_mm = film_hi / 1000.0
@@ -755,15 +769,16 @@ def test_film_fills_a_pore_no_deeper_than_its_build() -> None:
         knot_p=0.0,
         sap_p=0.0,
     )
-    delta = (fields.coat_height - fields.height).astype(np.float64)
-    assert float(delta.min()) >= -1e-6
-    assert float(delta.max()) <= film_max_mm + 1e-6
+    lift = fields.coat_lift.astype(np.float64)
+    assert float(lift.min()) >= -1e-6
+    assert float(lift.max()) <= film_max_mm + 1e-6
 
     def _gradient_rms(h: np.ndarray) -> float:
         gy, gx = np.gradient(h.astype(np.float64))
         return float(np.sqrt((gx * gx + gy * gy).mean()))
 
-    assert _gradient_rms(fields.coat_height) <= _gradient_rms(fields.height)
+    coat_height = fields.height + fields.coat_lift
+    assert _gradient_rms(coat_height) <= _gradient_rms(fields.height)
 
 
 def test_finish_state_is_ordered_by_film_build() -> None:
@@ -911,3 +926,98 @@ def test_analytic_shear_transports_the_axis_by_the_inverse_jacobian() -> None:
 
     interior = np.s_[3:-3, 3:-3]
     assert np.abs(actual_angle[interior] - expected_angle[interior]).max() < 1e-4
+
+
+# --- W6 review fixes: gaussian_blur(mode=...) and shade(cavity_depth=...) ----
+
+
+def test_gaussian_blur_edge_mode_avoids_the_wrap_seam() -> None:
+    """``mode="edge"`` must not blur a non-tileable field against its own far edge.
+
+    Build a ramp that is flat for the first ``radius + 1`` rows and only climbs
+    after that: every real tap "edge" mode's row-0 convolution touches (the
+    3x3-mean-style kernel's offsets 0..radius, from :func:`gaussian_blur`'s own
+    edge-replicate-then-convolve description) sits inside that flat run, so an
+    edge-padded blur must reproduce row 0 exactly, to float32 rounding.
+    ``mode="wrap"`` instead wraps row 0's upper neighbours around to the
+    ramp's *far, high-valued* end -- that mismatch is the seam "edge" exists
+    to avoid, and it must be large, not a rounding difference.
+    """
+    sigma = 1.5
+    radius = 5  # max(1, ceil(3 * sigma)) at sigma=1.5
+    size = 40
+    rows = np.arange(size, dtype=np.float32)
+    flat_rows = radius + 1
+    ramp_1d = np.where(
+        rows < flat_rows,
+        np.float32(0.2),
+        np.float32(0.2) + (rows - flat_rows + 1) * np.float32(0.05),
+    ).astype(np.float32)
+    ramp = np.broadcast_to(ramp_1d[:, None], (size, size)).astype(np.float32).copy()
+
+    edge_blurred = gaussian_blur(ramp, sigma, mode="edge")
+    assert float(np.abs(edge_blurred[0] - ramp[0]).max()) < 1e-6
+
+    wrap_blurred = gaussian_blur(ramp, sigma, mode="wrap")
+    assert float(np.abs(wrap_blurred[0] - ramp[0]).max()) > 0.1
+
+    default_blurred = gaussian_blur(ramp, sigma)
+    assert np.array_equal(default_blurred, wrap_blurred)
+
+
+def test_gaussian_blur_rejects_an_unknown_mode() -> None:
+    """An unrecognised ``mode`` is refused rather than silently misbehaving."""
+    a = np.zeros((4, 4), dtype=np.float32)
+
+    with pytest.raises(ValueError, match="mode"):
+        gaussian_blur(a, 1.0, mode="mirror")
+
+
+def test_shade_cavity_depth_scales_the_recess_not_its_own_peak() -> None:
+    """``cavity_depth`` shadows a recess against a fixed physical scale, not its own peak.
+
+    ``_cavity_shadow``'s box filter computes, at an isolated single low pixel
+    surrounded by flat neighbours, a "depth" of exactly ``8/9`` of that
+    pixel's true drop below the flat background -- worked out by hand from
+    the documented formula (``mean`` over the 3x3 window *including the
+    pixel itself*, minus the pixel): for a lone drop of ``d`` amid zeros the
+    8 flat neighbours average 0 and the pixel is ``-d``, so
+    ``mean - h = -d/9 - (-d) = 8d/9``. So a height of ``-0.05625`` mm gives a
+    computed depth of exactly ``0.05`` mm -- half of ``cavity_depth=0.1`` --
+    and a height of ``-1.0`` mm gives ``0.8889`` mm, far past ``0.1``, so it
+    clips to the full ``cavity`` darkening. Neither depends on the *other*
+    feature's own depth, unlike the old peak-normalised path.
+
+    ``normal_strength=0`` flattens every normal to straight up, so ``ndl``
+    and the ambient term are spatially constant and dividing by a flat
+    background pixel isolates the cavity factor alone, without re-deriving
+    the baseline lighting by hand.
+    """
+    size = 12
+    height = np.zeros((size, size), dtype=np.float32)
+    height[5, 3] = -0.05625  # isolated recess: box-filter depth exactly 0.05 mm
+    height[5, 8] = -1.0  # isolated recess: box-filter depth 0.8889 mm (>> 0.1)
+    albedo = np.full((size, size, 3), 0.5, dtype=np.float32)
+    cavity = 0.4
+
+    kwargs = dict(specular=0.0, normal_strength=0.0, cavity=cavity, cavity_depth=0.1)
+    out = shade(albedo, height, **kwargs)
+
+    background = float(out[0, 0, 0])
+    shallow_factor = float(out[5, 3, 0]) / background
+    deep_factor = float(out[5, 8, 0]) / background
+
+    assert abs(shallow_factor - (1.0 - cavity * 0.5)) < 1e-4
+    assert abs(deep_factor - (1.0 - cavity)) < 1e-4
+
+    # cavity_depth=None keeps the old peak-normalised path, bit for bit.
+    old_path = shade(albedo, height, specular=0.0, normal_strength=0.0, cavity=cavity)
+    explicit_none = shade(
+        albedo,
+        height,
+        specular=0.0,
+        normal_strength=0.0,
+        cavity=cavity,
+        cavity_depth=None,
+    )
+    assert np.array_equal(old_path, explicit_none)

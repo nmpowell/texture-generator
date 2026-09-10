@@ -14,8 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This is documentation and examples only; the generator, public API and rendered
   output for existing recipes are unchanged.
 - `core/shading.py`'s `shade()` gains `height_spacing`, `coat_height`,
-  `fibre_ior` and `ray_tangent`/`ray_weight`/`ray_gain`, all wired through
-  `materials/wood.py` for the changes below. `core/fields.py`'s
+  `fibre_ior`, `cavity_depth` and `ray_tangent`/`ray_weight`/`ray_gain`, all
+  wired through `materials/wood.py` for the changes below, and `gaussian_blur()`
+  gains `mode="edge"` for fields that do not tile. `core/fields.py`'s
   `height_to_normal()` gains `spacing`. `core/noise.py`'s `fbm_at()` gains
   `max_freq`. Every new parameter defaults to the exact pre-existing code
   path (`1.0`, `None` or `0`, as appropriate), which
@@ -39,8 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of a per-texel gradient that changed with render size, so a small render now
   matches a downsampled large one — on a 200 mm oak board a direct 500px
   render's luminance std (12.99) sat 33% above an equivalent 2000px
-  downsample's (9.77); after this change they agree to within 5% (7.58 vs
-  7.93). Each finish now carries explicit coat state: a film build that fills
+  downsample's (9.77); after this change they agree to within 5% (7.55 vs
+  7.92). Each finish now carries explicit coat state: a film build that fills
   pores and levels the coat normal, a refractive index that refracts the
   light before the fibre lobe, and a fibre-lobe tint; `finish="none"`
   recovers the bare board exactly. The ray-fleck lobe is now a second fibre
@@ -49,13 +50,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a vessel narrower than a texel is drawn at the grid's own width and faded so
   the drawn area matches its anatomy, instead of being re-authored at full
   contrast at whatever pitch the board happens to be rendered at.
+  Plank gaps and bevels are now millimetres (a 0.5–1.5 mm gap, 0.8 mm deep,
+  with a 1 mm arrissed edge) instead of pixel counts and normalised-height
+  literals, so a seam is the same groove at every render size, and cavity
+  darkening is measured against a fixed 0.15 mm recess rather than the
+  deepest feature in the frame.
   `generate()`'s signature and the CLI are unchanged; metal, plastic and paper
   render byte-identically.
 - One honest limitation of the area-honest pore change above: fine-vesselled
   species (cherry, maple, mahogany), whose vessels are narrower than a texel
   at any sane render size, now render their pores as the uniform tone the
   grid can carry, without the per-pixel Poisson variance a photograph at
-  0.1 mm per pixel would show. That variance is deferred, not modelled.
+  0.1 mm per pixel would show. That variance is deferred, not modelled. In
+  the same spirit, a sub-pixel vessel is drawn at the noise lattice's 2 px
+  minimum width (half the peak contrast of a downsampled large render, same
+  mean), and at 512 px and below most boards' fine streak layer is sub-pixel
+  and averages away; rendering at 1000 px or more and resampling, the
+  documented workflow, sidesteps both.
 
 ### Fixed
 

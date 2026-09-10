@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from .fields import smoothstep
+
 __all__ = [
     "fbm",
     "fbm_at",
@@ -136,15 +138,10 @@ def _octave_gain(freq_cycles: float, max_freq: float) -> float:
 
     Returns 1.0 at or below half ``max_freq``, 0.0 at or above ``max_freq``,
     and a smooth (C1) transition between -- a soft alternative to a hard
-    cut-off, which would ring. Computed in Python floats: this is a per-octave
-    scalar weight, not a field.
+    cut-off, which would ring. Delegates to :func:`~.fields.smoothstep`, the
+    same Hermite curve used everywhere else in this package.
     """
-    edge0 = 0.5 * max_freq
-    edge1 = max_freq
-    if edge1 - edge0 < 1e-8:
-        return 1.0 if freq_cycles < edge1 else 0.0
-    t = min(max((freq_cycles - edge0) / (edge1 - edge0), 0.0), 1.0)
-    return 1.0 - t * t * (3.0 - 2.0 * t)
+    return 1.0 - float(smoothstep(0.5 * max_freq, max_freq, np.float32(freq_cycles)))
 
 
 def fbm_at(

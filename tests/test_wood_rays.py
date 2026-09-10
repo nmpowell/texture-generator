@@ -63,13 +63,17 @@ def _coverage(fleck: dict) -> float:
 
 
 def _cross_grain_fraction(species: str, cut: str, seed: int = 0) -> float:
-    """Share of the board carrying a ray-fleck mask, through :func:`_board_fields`.
+    """Share of the board where a fleck sits *and* runs crosswise to the fibre.
 
     The fibre tangent no longer rotates inside a fleck -- the ray axis is its
     own field now (:func:`_ray_tangents`) -- so what used to be a fleck
-    detector on the tangent field is now a plain read of ``ray_weight``,
-    through the whole of :func:`_board_fields` rather than by reaching into
-    the fleck layer directly. Same threshold as :func:`_coverage`.
+    detector on the tangent field is now a read of ``ray_weight`` gated by the
+    two tangent fields' own dot product, through the whole of
+    :func:`_board_fields` rather than by reaching into the fleck layer
+    directly: a pixel counts only where the ray lobe is weighted in
+    (``ray_weight > 0.5``) *and* its axis is at right angles to the
+    surrounding fibre (``|tangent . ray_tangent| < 0.05``), so a mask that
+    happened to land on a diagonal (non-crosswise) axis would not pass.
     """
     fields = _board_fields(
         (SIZE, SIZE),
@@ -82,7 +86,9 @@ def _cross_grain_fraction(species: str, cut: str, seed: int = 0) -> float:
         along_x=True,
         px_per_mm=PX_PER_MM,
     )
-    return float((fields.ray_weight > 0.5).mean())
+    dot = (fields.tangent * fields.ray_tangent).sum(axis=-1)
+    crosswise = np.abs(dot) < 0.05
+    return float(((fields.ray_weight > 0.5) & crosswise).mean())
 
 
 # --- The population ----------------------------------------------------------
@@ -287,6 +293,52 @@ def test_the_fleck_flashes_the_opposite_way_to_the_wood_around_it() -> None:
     on_fleck, on_wood = float(delta[core].mean()), float(delta[wood_only].mean())
     assert on_fleck * on_wood < 0.0, (on_fleck, on_wood)
     assert abs(on_fleck - on_wood) > 0.02, (on_fleck, on_wood)
+
+
+def test_the_ray_population_leaves_the_grain_alone() -> None:
+    """Zeroing the ray-fleck mask must not perturb the fibre tangent field.
+
+    The fibre tangent is built before the ray population is drawn and
+    stitched into ``ray_weight`` (:func:`_board_fields`), so a fleck's
+    presence or absence must not be able to reach back and change it. Spying
+    on :func:`_ray_fleck` to call the real function -- so ``rng`` is
+    consumed exactly as it always is -- and return its result with the mask
+    replaced by zeros isolates that: it changes what the render *sees* of the
+    fleck without changing anything the fleck layer *drew*, so
+    ``fields.tangent`` must come back bit for bit identical, and
+    ``ray_weight`` -- the only field the mask actually feeds -- must differ.
+    """
+    plain = wood._ray_fleck
+
+    def spy(*args, **kwargs):
+        out = plain(*args, **kwargs)
+        zeroed = dict(out)
+        zeroed["mask"] = np.zeros_like(out["mask"])
+        return zeroed
+
+    def render() -> wood.BoardFields:
+        return _board_fields(
+            (SIZE, SIZE),
+            np.random.default_rng(2),
+            "oak",
+            finish="oil",
+            knot_p=0.0,
+            sap_p=0.0,
+            cut="quartersawn",
+            along_x=True,
+            px_per_mm=PX_PER_MM,
+        )
+
+    with_fleck = render()
+    wood._ray_fleck = spy
+    try:
+        without_fleck = render()
+    finally:
+        wood._ray_fleck = plain
+
+    assert float(with_fleck.ray_weight.max()) > 0.5  # the mask is non-trivial
+    assert np.array_equal(with_fleck.tangent, without_fleck.tangent)
+    assert not np.array_equal(with_fleck.ray_weight, without_fleck.ray_weight)
 
 
 # --- The cut ------------------------------------------------------------------

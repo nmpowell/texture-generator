@@ -74,8 +74,8 @@ exists nowhere in the wood.
 as such (:func:`_finish_lab`) -- and carry no physical darkening; the finish's
 actual optics are explicit state layered on top of the substrate instead: a
 per-board film build in microns (:data:`FINISHES`'s ``film_um``) that
-self-levels over the wood's relief into its own ``coat_height`` and can pool a
-pore no deeper than it is built, a refractive index (``ior``) that bends the
+self-levels over the wood's relief into its own ``coat_lift`` above it and can
+pool a pore no deeper than it is built, a refractive index (``ior``) that bends the
 light reaching the fibre and ray lobes before they see it, and a fibre-lobe
 tint (``fibre_tint``) for the light that has passed through the film. Nothing
 physical is stacked on the CIELAB fit; the two live side by side.
@@ -310,9 +310,10 @@ COAT_LEVEL_MM = 0.75
 # shifts with angle. That is chatoyance, and layering two lobes is what makes a
 # polished panel look deep rather than printed:
 #
-#   * a sharp surface lobe off the finish film -- a dielectric, so ``F0`` 0.04 at
-#     n 1.5, white, and only mildly anisotropic (whatever grain telegraphs
-#     through the film);
+#   * a sharp surface lobe -- a dielectric at n ~ 1.5, white, so ``F0`` 0.04
+#     applies whether that surface is the finish film or, bare, the cell wall
+#     itself, and it is only mildly anisotropic (whatever grain telegraphs
+#     through);
 #   * a soft fibre lobe *underneath* it, aligned to the local fibre tangent, which
 #     sweeps as the light moves. Marschner's separately-coloured component: this
 #     light has been through pigment, so it is neither white nor fully saturated.
@@ -377,7 +378,9 @@ SPECULAR = {
     ),
 }
 
-# Normal-incidence reflectance of the finish film, n ~ 1.5:
+# Normal-incidence reflectance at n ~ 1.5 -- both a generic clear finish film
+# AND, bare, the cell wall's own air interface, so this one conventional F0
+# applies to bare and finished wood alike:
 # ``F0 = ((n - 1)/(n + 1))^2 = 0.04``. VERIFIED (Schlick / Fresnel at n 1.5).
 FINISH_F0 = 0.04
 
@@ -1141,13 +1144,19 @@ def _pore_streaks(
     keeps a ring-porous species' pore band a fixed width in a wide ring instead
     of stretching it.
 
-    Returns ``(mask, delta_lstar, depth_mm)``, all zero for softwoods.
+    Returns ``(mask, delta_lstar, depth_mm, trough_mm)``, all zero for
+    softwoods. ``depth_mm`` is ``mask``-weighted (the per-pixel *coverage*
+    depth a shading pass adds straight to height); ``trough_mm`` is the
+    unweighted per-pixel physical trough depth *where a vessel is present*
+    -- the earlywood/latewood-interpolated ``depth_um`` a coat film would
+    have to fill, independent of how much of a texel the vessel happens to
+    cover.
     """
     anat = ANATOMY[species]
     if anat["pore_class"] == "softwood":
         # Pine has no vessels at all. That absence is the whole point.
         zeros = np.zeros_like(g)
-        return zeros, zeros, zeros
+        return zeros, zeros, zeros, zeros
 
     # Where in the ring the coarse vessels sit.
     if anat["pore_class"] == "ring-porous":
@@ -1273,6 +1282,12 @@ def _pore_streaks(
     depth_ew = float(rng.uniform(*anat["ew_depth_um"]))
     depth_lw = float(rng.uniform(*anat["lw_depth_um"]))
     depth_um = np.float32(depth_lw) + np.float32(depth_ew - depth_lw) * ew
+    # The physical trough depth where a vessel is actually present, i.e. NOT
+    # scaled by ``mask``'s area fraction -- a coat film pools against this
+    # depth, not against the coverage-weighted one, since "how deep is the
+    # vessel a texel happens to expose" does not depend on how much of that
+    # texel the vessel covers.
+    trough_mm = (depth_um / np.float32(1000.0)).astype(np.float32)
     depth_mm = (mask * depth_um / np.float32(1000.0)).astype(np.float32)
 
     # The dL* is a *contrast* -- what an open pore is worth against the wood
@@ -1290,7 +1305,7 @@ def _pore_streaks(
         np.clip(core * np.float32(fade) + wash, 0.0, 1.0)
         * np.float32(rng.uniform(*anat["dl_star"]))
     ).astype(np.float32)
-    return mask, delta_l, depth_mm
+    return mask, delta_l, depth_mm, trough_mm
 
 
 def _fleck_lengths_mm(
@@ -1454,9 +1469,11 @@ def _fibre_frame(
 
     Split out of :func:`_fibre_tangents` because it draws **no random numbers**:
     the ray fleck needs the in-plane fibre angle to orient itself
-    (:func:`_ray_fleck`), and it has to have it *before* the tangents are built,
-    while the tangents must stay the last thing that touches ``rng`` so every
-    draw above them keeps the sequence it had before either layer existed.
+    (:func:`_ray_fleck`), and it has to have it *before* the tangents are
+    built, while the tangents stay the last thing every *earlier* layer's
+    draw keeps its sequence against (the film build after them draws ``rng``
+    too, but only once that whole earlier sequence -- fleck, tangents -- is
+    fixed).
 
     Returns ``(phi, ddu_dv)``: the in-plane fibre angle in the grain frame, and
     the cross-grain shear that becomes the out-of-plane dip.
@@ -1645,10 +1662,11 @@ class BoardFields:
         height: (H, W) float32 substrate relief, in millimetres, not
             normalised: physical slopes are what :func:`_shade_fields`
             asks :func:`..core.shading.shade` for.
-        coat_height: (H, W) float32 relief of the finish film's own (smoother,
-            self-levelled) surface, in millimetres, over ``height``. The
-            surface specular lobes are shaded off this; the diffuse term,
-            cavity and the fibre/ray lobes stay on ``height``.
+        coat_lift: (H, W) float32 millimetres, >= 0: how far the finish
+            film's own (smoother, self-levelled) surface sits above
+            ``height``. ``height + coat_lift`` is the coat's own surface,
+            which the surface specular lobes are shaded off; the diffuse
+            term, cavity and the fibre/ray lobes stay on ``height`` itself.
         tangent: (H, W, 3) float32 unit fibre-tangent axis, in image (x, y, z)
             with z negative where the fibre dips below the face
             (:func:`_fibre_tangents`).
@@ -1665,7 +1683,7 @@ class BoardFields:
 
     albedo: np.ndarray
     height: np.ndarray
-    coat_height: np.ndarray
+    coat_lift: np.ndarray
     tangent: np.ndarray
     ray_tangent: np.ndarray
     ray_weight: np.ndarray
@@ -1996,7 +2014,7 @@ def _board_fields(
     # Axial vessel streaks, sized from real anatomy at the board's physical
     # scale. Stretched along the *warped* coordinates so they follow the
     # figure. This is the one feature printed laminate physically cannot have.
-    pores, pore_dl, pore_depth_mm = _pore_streaks(
+    pores, pore_dl, pore_depth_mm, pore_trough_mm = _pore_streaks(
         wu,
         wv,
         g,
@@ -2122,8 +2140,9 @@ def _board_fields(
         colour = colour * (1.0 - k * np.float32(0.85)) + knot_rgb * k * np.float32(0.85)
         height = height + knot["bump"]
 
-    # Fibre tangents last, so that every draw above keeps the sequence it had
-    # before this layer existed.
+    # Fibre tangents next-to-last (the film build below is the true last
+    # draw), so that every draw above keeps the sequence it had before this
+    # layer existed.
     tangent = _fibre_tangents(
         u,
         v,
@@ -2146,17 +2165,24 @@ def _board_fields(
     # Coat geometry: a real film self-levels, so its own surface is the
     # substrate blurred over the film's own levelling length and then capped
     # to how much film there actually is -- a pore pools finish up to
-    # ``film_mm`` deep and no deeper. Drawn last, after the tangents, so every
-    # earlier draw keeps the sequence it had before this layer existed.
+    # ``film_mm`` deep and no deeper. Drawn last, after the tangents (though
+    # the film build itself is a draw too, so it is the true last one, not
+    # the tangents -- see :func:`_fibre_frame`), so every earlier draw keeps
+    # the sequence it had before this layer existed. ``coat_lift`` is a
+    # *lift*, not a second absolute surface: ``mode="edge"`` blurs the
+    # substrate against its own edges rather than its opposite side, since a
+    # board face is not tileable, and the blur is skipped entirely where
+    # there is no film to level.
     film_mm = float(rng.uniform(*FINISHES[finish]["film_um"])) / 1000.0
-    coat_height = (
-        height
-        + np.clip(
-            gaussian_blur(height, np.float32(COAT_LEVEL_MM * px_per_mm)) - height,
+    if film_mm > 0.0:
+        coat_lift = np.clip(
+            gaussian_blur(height, np.float32(COAT_LEVEL_MM * px_per_mm), mode="edge")
+            - height,
             0.0,
             film_mm,
-        )
-    ).astype(np.float32)
+        ).astype(np.float32)
+    else:
+        coat_lift = np.zeros_like(height)
 
     # Latewood is denser and takes a polish; the latewood zone is a broad band
     # rather than a line, so the coefficients are the ~2:1 sheen ratio between
@@ -2166,11 +2192,14 @@ def _board_fields(
     knot_dark = (
         np.clip(knot["dark"], 0.0, 1.0) if knot is not None else np.zeros_like(band)
     )
-    has_pore = pore_depth_mm > 0.0
+    # Off the *trough* (the vessel's own physical depth where one is present),
+    # not the mask-weighted ``pore_depth_mm`` -- the fraction of a vessel left
+    # open under the film must not depend on how much of a texel it covers.
+    has_pore = pore_trough_mm > 0.0
     open_frac = np.where(
         has_pore,
-        np.clip(pore_depth_mm - np.float32(film_mm), 0.0, None)
-        / np.where(has_pore, pore_depth_mm, np.float32(1.0)),
+        np.clip(pore_trough_mm - np.float32(film_mm), 0.0, None)
+        / np.where(has_pore, pore_trough_mm, np.float32(1.0)),
         np.float32(0.0),
     ).astype(np.float32)
     coat_gloss = (
@@ -2190,7 +2219,7 @@ def _board_fields(
     return BoardFields(
         albedo=np.clip(colour, 0.0, 1.0).astype(np.float32),
         height=height.astype(np.float32),
-        coat_height=coat_height,
+        coat_lift=coat_lift,
         tangent=tangent,
         ray_tangent=ray_tangent,
         ray_weight=fleck["mask"],
@@ -2375,6 +2404,17 @@ def generate(
     )
 
 
+# Recess depth, in millimetres, at which the ``cavity`` share of the shading
+# darkening is fully lost, forwarded to :func:`..core.shading.shade` as
+# ``cavity_depth``. UNVERIFIED: the depth of a large earlywood vessel trough
+# (oak/ash run to 0.20 mm, :data:`ANATOMY`'s ``ew_depth_um``) -- a recess
+# deeper than this (a plank gap, :data:`PLANK_GAP_DEPTH_MM`) shadows no more
+# than one already does, rather than washing out every shallower recess'
+# share the way normalising against the field's own single deepest feature
+# used to.
+CAVITY_DEPTH_MM = 0.15
+
+
 def _shade_fields(
     fields: BoardFields,
     *,
@@ -2424,7 +2464,9 @@ def _shade_fields(
         shininess=float(params.get("shininess", lobes["shininess"])),
         normal_strength=float(params.get("normal_strength", rng.uniform(1.1, 2.2))),
         height_spacing=1.0 / px_per_mm,
-        coat_height=fields.coat_height,
+        coat_height=(
+            None if not fields.coat_lift.any() else fields.height + fields.coat_lift
+        ),
         fibre_ior=float(FINISHES[finish]["ior"]),
         # Only the in-plane part: this lobe is the finish film reflecting off the
         # surface, and it is the *fibre* lobe below that cares about the dip.
@@ -2442,6 +2484,7 @@ def _shade_fields(
         ray_gain=RAY_LOBE_GAIN,
         ambient=0.62,
         cavity=0.12,
+        cavity_depth=CAVITY_DEPTH_MM,
         # The albedo is a measured colour, so the lighting must average to 1 or
         # the render is a species' colour times an arbitrary constant. Without
         # this every board came out 20-25% dark in every channel.
@@ -2523,6 +2566,22 @@ def _fibre_colour(albedo_linear: np.ndarray, finish: str) -> np.ndarray:
     )
 
 
+# Plank gap and bevel, in millimetres -- the seam between adjacent boards in
+# a multi-plank panel. UNVERIFIED (woodworking practice, not a measurement):
+#
+#   PLANK_GAP_MM        the fitted gap, drawn per panel: a tight, deliberate
+#                        joint, not a construction tolerance.
+#   PLANK_GAP_DEPTH_MM  the groove's depth (the old -0.8 literal, now a
+#                        physical unit rather than a bare number).
+#   PLANK_BEVEL_MM      an arrissed edge either side of the gap: the eased
+#                        corner every real plank edge carries, sloping the
+#                        groove's depth back up to the board face rather than
+#                        stopping it in a hard step.
+PLANK_GAP_MM = (0.5, 1.5)
+PLANK_GAP_DEPTH_MM = 0.8
+PLANK_BEVEL_MM = 1.0
+
+
 def _planks(
     shape: tuple[int, int],
     rng: np.random.Generator,
@@ -2548,13 +2607,17 @@ def _planks(
 
     Per-strip fields are pasted into panel-sized arrays and returned as one
     :class:`BoardFields`; the gap-line edits below darken ``albedo``, cut
-    both ``height`` and ``coat_height`` and scale both gloss fields as they
-    always have, and do not touch either tangent field.
+    ``height`` (the coat lift carries through unedited, by construction --
+    ``height + coat_lift`` follows the groove because ``height`` now does)
+    and scale both gloss fields as they always have, and do not touch either
+    tangent field.
     """
     h, w = int(shape[0]), int(shape[1])
+    if px_per_mm is None:
+        px_per_mm = float(w) / 225.0
     albedo = np.zeros((h, w, 3), dtype=np.float32)
     height = np.zeros((h, w), dtype=np.float32)
-    coat_height = np.zeros((h, w), dtype=np.float32)
+    coat_lift = np.zeros((h, w), dtype=np.float32)
     coat_gloss = np.ones((h, w), dtype=np.float32)
     fibre_lustre = np.ones((h, w), dtype=np.float32)
 
@@ -2596,61 +2659,57 @@ def _planks(
             ref_across=panel_ref,
             px_per_mm=px_per_mm,
         )
-        if along_x:
-            albedo[lo:hi, :, :] = fields.albedo
-            height[lo:hi, :] = fields.height
-            coat_height[lo:hi, :] = fields.coat_height
-            coat_gloss[lo:hi, :] = fields.coat_gloss
-            fibre_lustre[lo:hi, :] = fields.fibre_lustre
-            tangent[lo:hi, :, :] = fields.tangent
-            ray_tangent[lo:hi, :, :] = fields.ray_tangent
-            ray_weight[lo:hi, :] = fields.ray_weight
-        else:
-            albedo[:, lo:hi, :] = fields.albedo
-            height[:, lo:hi] = fields.height
-            coat_height[:, lo:hi] = fields.coat_height
-            coat_gloss[:, lo:hi] = fields.coat_gloss
-            fibre_lustre[:, lo:hi] = fields.fibre_lustre
-            tangent[:, lo:hi, :] = fields.tangent
-            ray_tangent[:, lo:hi, :] = fields.ray_tangent
-            ray_weight[:, lo:hi] = fields.ray_weight
+        sl = (slice(lo, hi), slice(None)) if along_x else (slice(None), slice(lo, hi))
+        albedo[sl] = fields.albedo
+        height[sl] = fields.height
+        coat_lift[sl] = fields.coat_lift
+        coat_gloss[sl] = fields.coat_gloss
+        fibre_lustre[sl] = fields.fibre_lustre
+        tangent[sl] = fields.tangent
+        ray_tangent[sl] = fields.ray_tangent
+        ray_weight[sl] = fields.ray_weight
 
-    # Dark gap lines with a slight bevel highlight on each plank edge. Both
-    # heights (substrate and coat) get the same cut and bevel -- the gap is a
-    # real groove, so the film follows it down -- and both gloss fields are
-    # scaled the same way, since the gap is bare wood grain either side.
-    gap = int(rng.integers(1, 3))
+    # Dark gap lines with an arrissed bevel on each plank edge, all in
+    # physical millimetres rather than a fixed pixel count -- the gap and
+    # bevel keep the same *size on the board* whatever resolution the panel
+    # is rendered at, just as the rest of the relief does (module docstring).
+    # One rng call for the gap width, exactly where the old pixel draw was.
+    gap_mm = float(rng.uniform(*PLANK_GAP_MM))
+    gap_px = max(1, round(gap_mm * px_per_mm))
+    bevel_px = max(1, round(PLANK_BEVEL_MM * px_per_mm))
     for e in edges[1:-1]:
-        lo = max(0, e - gap)
-        if along_x:
-            albedo[lo:e, :, :] *= np.float32(0.28)
-            height[lo:e, :] -= np.float32(0.8)
-            coat_height[lo:e, :] -= np.float32(0.8)
-            coat_gloss[lo:e, :] *= np.float32(0.2)
-            fibre_lustre[lo:e, :] *= np.float32(0.2)
-            if e + 1 < h:
-                height[e : e + 1, :] += np.float32(0.35)
-                coat_height[e : e + 1, :] += np.float32(0.35)
-            if lo - 1 >= 0:
-                height[lo - 1 : lo, :] += np.float32(0.35)
-                coat_height[lo - 1 : lo, :] += np.float32(0.35)
-        else:
-            albedo[:, lo:e, :] *= np.float32(0.28)
-            height[:, lo:e] -= np.float32(0.8)
-            coat_height[:, lo:e] -= np.float32(0.8)
-            coat_gloss[:, lo:e] *= np.float32(0.2)
-            fibre_lustre[:, lo:e] *= np.float32(0.2)
-            if e + 1 < w:
-                height[:, e : e + 1] += np.float32(0.35)
-                coat_height[:, e : e + 1] += np.float32(0.35)
-            if lo - 1 >= 0:
-                height[:, lo - 1 : lo] += np.float32(0.35)
-                coat_height[:, lo - 1 : lo] += np.float32(0.35)
+        lo = max(0, e - gap_px)
+        hi = min(span, e)
+        sl = (slice(lo, hi), slice(None)) if along_x else (slice(None), slice(lo, hi))
+        albedo[sl] *= np.float32(0.28)
+        coat_gloss[sl] *= np.float32(0.2)
+        fibre_lustre[sl] *= np.float32(0.2)
+        height[sl] -= np.float32(PLANK_GAP_DEPTH_MM)
+        # An arrissed edge, not a raised lip: a linear ramp from near the
+        # groove's own depth back up to the board face, ``bevel_px`` rows
+        # outward on each side of the gap.
+        for k in range(bevel_px):
+            depth = np.float32(PLANK_GAP_DEPTH_MM) * (1.0 - (k + 1) / (bevel_px + 1))
+            r_lo, r_hi = lo - 1 - k, hi + k
+            if r_lo >= 0:
+                sl_lo = (
+                    (slice(r_lo, r_lo + 1), slice(None))
+                    if along_x
+                    else (slice(None), slice(r_lo, r_lo + 1))
+                )
+                height[sl_lo] -= depth
+            if r_hi < span:
+                sl_hi = (
+                    (slice(r_hi, r_hi + 1), slice(None))
+                    if along_x
+                    else (slice(None), slice(r_hi, r_hi + 1))
+                )
+                height[sl_hi] -= depth
 
     return BoardFields(
         albedo=albedo,
         height=height,
-        coat_height=coat_height,
+        coat_lift=coat_lift,
         tangent=tangent,
         ray_tangent=ray_tangent,
         ray_weight=ray_weight,
