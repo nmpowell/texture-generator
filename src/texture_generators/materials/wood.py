@@ -68,6 +68,8 @@ fibres run *across* the board's, so inside a fleck the tangent field is rotated
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import numpy as np
 
 from ..core.colour import lab_to_srgb, linear_to_srgb, srgb_to_linear
@@ -1348,6 +1350,41 @@ def _fibre_frame(
     return phi, ddu_dv
 
 
+def _grain_frame_to_image(
+    tu: np.ndarray, tv: np.ndarray, tz: np.ndarray, *, tilt: float, along_x: bool
+) -> np.ndarray:
+    """Back a ``(tu, tv, tz)`` grain-frame vector out into image ``(x, y, z)``.
+
+    ``u, v`` were rotated by ``+tilt`` about the board centre, so a vector's
+    components go the other way; then undo the axis swap that ``along_x=False``
+    made. Shared by :func:`_fibre_tangents` and :func:`_ray_tangents` so the two
+    axes are backed out of the same frame identically.
+    """
+    ca, sa = np.float32(np.cos(tilt)), np.float32(np.sin(tilt))
+    a = tu * ca + tv * sa
+    b = -tu * sa + tv * ca
+    tx, ty = (a, b) if along_x else (b, a)
+    return np.stack([tx, ty, tz], axis=-1).astype(np.float32)
+
+
+def _ray_tangents(phi: np.ndarray, *, tilt: float, along_x: bool) -> np.ndarray:
+    """Per-pixel unit ray-fleck axis: crosswise to the fibre, no dip.
+
+    Ray parenchyma runs *radially*, at right angles to the axial fibres
+    (:data:`RAY_FLECK_COVERAGE`), so its in-plane angle is the fibre's own
+    grain-frame angle ``phi`` (:func:`_fibre_frame`) turned a further 90
+    degrees, with zero out-of-plane dip -- there is no evidence for ray relief
+    (D5). Backed out of the grain frame with the same tilt/axis-swap
+    :func:`_fibre_tangents` uses, via :func:`_grain_frame_to_image`, so the two
+    axes agree by construction. Draws no random numbers.
+    """
+    phi_ray = (phi + np.float32(0.5 * np.pi)).astype(np.float32)
+    tu = np.cos(phi_ray).astype(np.float32)
+    tv = np.sin(phi_ray).astype(np.float32)
+    tz = np.zeros_like(tu)
+    return _grain_frame_to_image(tu, tv, tz, tilt=tilt, along_x=along_x)
+
+
 def _fibre_tangents(
     u: np.ndarray,
     v: np.ndarray,
@@ -1361,7 +1398,6 @@ def _fibre_tangents(
     mm_per_unit: float,
     figure: str = "plain",
     knot: dict | None = None,
-    fleck: np.ndarray | None = None,
 ) -> np.ndarray:
     """Per-pixel unit fibre tangents, taken from the board's own distortion field.
 
@@ -1400,9 +1436,9 @@ def _fibre_tangents(
       coordinate so the curl follows the figure rather than ruling straight
       lines over it. Plus the knot's own steep dip.
 
-    ``fleck`` is the ray-fleck mask (:func:`_ray_fleck`), and it is the *fourth*
-    term: a 90 degree in-plane rotation wherever ray tissue is exposed. See
-    :data:`RAY_FLECK_COVERAGE` -- that rotation is the whole effect.
+    Ray fleck is no longer a fourth term here: it is its own axis
+    (:func:`_ray_tangents`), since it is a second tissue rather than a
+    variation of this one (:data:`RAY_FLECK_COVERAGE`).
 
     Returns an (H, W, 3) unit-length field in image ``(x, y, z)``, z negative
     where the fibre dips below the face.
@@ -1410,19 +1446,6 @@ def _fibre_tangents(
     # ``u`` runs down one array axis and ``v`` the other, up to the board's +/-6
     # degree tilt, which is small enough to ignore when picking the axis.
     phi, ddu_dv = _fibre_frame(u, v, wu, wv, along_x=along_x, px_per_unit=px_per_unit)
-
-    if fleck is not None:
-        # Ray tissue runs RADIALLY, i.e. at right angles to the axial fibres, and
-        # a quartersawn cut exposes it as a sheet lying in the face -- so inside a
-        # fleck the in-plane fibre direction is the surrounding wood's turned
-        # through 90 degrees. This one line is what makes ray fleck *flash* as the
-        # light moves instead of reading as pale dashes: it puts the fleck into the
-        # anisotropic fibre lobe crosswise to everything around it. Scaled by the
-        # mask so the antialiased rim rotates part-way rather than stepping, which
-        # keeps the field unit-length everywhere (a rotation always is).
-        phi = (phi + np.float32(0.5 * np.pi) * np.clip(fleck, 0.0, 1.0)).astype(
-            np.float32
-        )
 
     sd = max(float(ddu_dv.std()), 1e-8)
     dip_deg = ddu_dv * np.float32(float(rng.uniform(*GRAIN_DIP_SIGMA_DEG)) / sd)
@@ -1475,14 +1498,38 @@ def _fibre_tangents(
     tv = (cos_t * np.sin(phi)).astype(np.float32)
     tz = (-np.sin(theta)).astype(np.float32)
 
-    # Back out of the grain frame. ``u, v`` were rotated by +tilt about the
-    # centre, so a vector's components go the other way; then undo the axis swap
-    # that ``along_x=False`` made.
-    ca, sa = np.float32(np.cos(tilt)), np.float32(np.sin(tilt))
-    a = tu * ca + tv * sa
-    b = -tu * sa + tv * ca
-    tx, ty = (a, b) if along_x else (b, a)
-    return np.stack([tx, ty, tz], axis=-1).astype(np.float32)
+    return _grain_frame_to_image(tu, tv, tz, tilt=tilt, along_x=along_x)
+
+
+@dataclass(frozen=True)
+class BoardFields:
+    """The anatomy of one sawn board face, before it is shaded.
+
+    The seam between the board's anatomy and :func:`_shade_fields`'s lighting
+    call: everything a renderer needs to know about the wood itself, and
+    nothing about how it is lit.
+
+    Attributes:
+        albedo: (H, W, 3) float32 sRGB display-referred colour, in [0, 1].
+        height: (H, W) float32 relief, in millimetres, *before* the caller's
+            ``normalize01`` -- see :func:`generate`, which still does that
+            normalisation for now.
+        tangent: (H, W, 3) float32 unit fibre-tangent axis, in image (x, y, z)
+            with z negative where the fibre dips below the face
+            (:func:`_fibre_tangents`).
+        ray_tangent: (H, W, 3) float32 unit ray-fleck axis, crosswise to the
+            fibre and with no dip (:func:`_ray_tangents`).
+        ray_weight: (H, W) float32 in [0, 1], the ray-fleck coverage mask
+            (:func:`_ray_fleck`); zero everywhere off a quartersawn face.
+        gloss: (H, W) float32 sheen modulation for the specular lobes.
+    """
+
+    albedo: np.ndarray
+    height: np.ndarray
+    tangent: np.ndarray
+    ray_tangent: np.ndarray
+    ray_weight: np.ndarray
+    gloss: np.ndarray
 
 
 def _board_fields(
@@ -1501,8 +1548,8 @@ def _board_fields(
     along_x: bool = True,
     ref_across: float | None = None,
     px_per_mm: float | None = None,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Build (albedo, height, fibre_tangent, gloss) for one sawn board face.
+) -> BoardFields:
+    """Build the :class:`BoardFields` for one sawn board face.
 
     Colour is drawn here rather than passed in, and that is deliberate: it is
     **one board's** colour, so a multi-plank panel gets a fresh Lab offset and a
@@ -1539,9 +1586,10 @@ def _board_fields(
     ring geometry, and it gates the ray fleck: a quartersawn face is the only one
     that exposes ray tissue as sheets (:data:`RAY_FLECK_COVERAGE`).
 
-    The third return value is an (H, W, 3) unit fibre-tangent field, not the
-    single grain angle this used to hand back: the whole point of deriving it from
-    the distortion is that it varies per pixel.
+    ``tangent`` is an (H, W, 3) unit fibre-tangent field, not the single grain
+    angle this used to hand back: the whole point of deriving it from the
+    distortion is that it varies per pixel. See :class:`BoardFields` for the
+    other fields.
     """
     h, w = int(shape[0]), int(shape[1])
     x, y = grid_coords((h, w))
@@ -1943,15 +1991,19 @@ def _board_fields(
         mm_per_unit=mm_per_unit,
         figure=figure,
         knot=knot,
-        # None rather than a zero mask off the quartersawn cut, so every other
-        # board takes exactly the code path it took before this layer existed.
-        fleck=fleck["mask"] if fleck["mask"].any() else None,
     )
-    return (
-        np.clip(colour, 0.0, 1.0).astype(np.float32),
-        height.astype(np.float32),
-        tangent,
-        gloss.astype(np.float32),
+    # The ray axis is its own field now: crosswise to the fibre, no dip, gated
+    # by the same mask that used to rotate the fibre tangent in place. Built
+    # from ``phi_fibre`` above, which is why that stays available even off the
+    # quartersawn cut -- ``ray_weight`` is simply zero there.
+    ray_tangent = _ray_tangents(phi_fibre, tilt=tilt, along_x=along_x)
+    return BoardFields(
+        albedo=np.clip(colour, 0.0, 1.0).astype(np.float32),
+        height=height.astype(np.float32),
+        tangent=tangent,
+        ray_tangent=ray_tangent,
+        ray_weight=fleck["mask"],
+        gloss=gloss.astype(np.float32),
     )
 
 
@@ -2103,17 +2155,45 @@ def generate(
     px_per_mm = w / mm_across
 
     if variant == "board":
-        albedo, height, tangent, gloss = _board_fields(
+        fields = _board_fields(
             (h, w), rng, species, along_x=along_x, px_per_mm=px_per_mm, **colour
         )
     elif variant == "planks":
-        albedo, height, tangent, gloss = _planks(
+        fields = _planks(
             (h, w), rng, species, along_x=along_x, px_per_mm=px_per_mm, **colour
         )
     else:
         raise ValueError(f"unknown wood variant {variant!r}; choose from {VARIANTS}")
 
-    height = normalize01(height)
+    light_dir = (-0.5, -0.55, 0.78)
+    if "light_dir" in params:
+        light_dir = tuple(float(c) for c in params["light_dir"])
+    return _shade_fields(
+        fields, finish=finish, rng=rng, params=params, light_dir=light_dir
+    )
+
+
+def _shade_fields(
+    fields: BoardFields,
+    *,
+    finish: str,
+    rng: np.random.Generator,
+    params: dict,
+    light_dir: tuple[float, float, float],
+) -> np.ndarray:
+    """Light a board's anatomy: the seam between :class:`BoardFields` and :func:`..core.shading.shade`.
+
+    Everything :func:`generate` used to do once the fields existed lives here
+    now: the height's ``normalize01`` (see :class:`BoardFields` -- height
+    arrives in millimetres and is normalised here, not by the board builders),
+    the two specular lobes, the ring-correlated lustre, and the ``shade`` call
+    itself. This is the place a test replaces ``fields.albedo`` with a flat
+    colour to check that figure still lives in the reflection once the pigment
+    cannot carry it (:data:`~texture_generators.materials.wood`).
+    """
+    albedo = fields.albedo
+    height = normalize01(fields.height)
+    gloss = fields.gloss
     lobes = _specular_lobes(finish, rng)
     # Ring-correlated sheen: the dense latewood lines catch the light while
     # pores and knots break it, so the rings live in the reflection too. It
@@ -2124,9 +2204,33 @@ def generate(
     lustre = np.clip(gloss / max(float(gloss.mean()), 1e-6), 0.0, 2.0).astype(
         np.float32
     )
-    light_dir = (-0.5, -0.55, 0.78)
-    if "light_dir" in params:
-        light_dir = tuple(float(c) for c in params["light_dir"])
+
+    # Transitional, for this step only: ``shade`` cannot yet take the ray axis
+    # as its own field (that lands with the shading core), so reproduce the
+    # rotation the removed code baked into the fibre tangent, from the fields
+    # that will replace it. ``ray_weight`` plays the part the old ``fleck``
+    # mask played: the dip (``fields.tangent[..., 2]``) is kept, only the
+    # in-plane part rotates, towards ``ray_tangent`` -- which is exactly the
+    # fibre's own in-plane angle turned 90 degrees, so rotating *towards it* by
+    # ``pi/2 * ray_weight`` is the same rotation the old in-plane-angle formula
+    # performed, without needing this function to know the board's tilt or
+    # axis convention. The wiring worker deletes this block and instead calls
+    # ``shade(ray_tangent=fields.ray_tangent, ray_weight=fields.ray_weight)``.
+    delta = np.float32(0.5 * np.pi) * np.clip(fields.ray_weight, 0.0, 1.0).astype(
+        np.float32
+    )
+    cos_d = np.cos(delta).astype(np.float32)
+    sin_d = np.sin(delta).astype(np.float32)
+    fibre_xy = fields.tangent[..., :2]
+    fibre_mag = np.sqrt((fibre_xy * fibre_xy).sum(axis=-1)).astype(np.float32)
+    rotated_xy = (
+        cos_d[..., None] * fibre_xy
+        + (sin_d * fibre_mag)[..., None] * fields.ray_tangent[..., :2]
+    )
+    tangent = np.concatenate([rotated_xy, fields.tangent[..., 2:3]], axis=-1).astype(
+        np.float32
+    )
+
     return shade(
         albedo,
         height,
@@ -2236,13 +2340,18 @@ def _planks(
     cut: str | None = None,
     along_x: bool = True,
     px_per_mm: float | None = None,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> BoardFields:
     """Split the canvas across the grain into 3-6 boards with gap lines.
 
     Each strip is a separate board, so each gets its own Lab offset, its own
     finish magnitude and its own sapwood draw -- three random numbers and a
     couple more, for the single loudest "printed" tell there is at this scale.
     ``age`` is shared across the strips, being a property of the panel.
+
+    Per-strip fields are pasted into panel-sized arrays and returned as one
+    :class:`BoardFields`; the gap-line edits below darken ``albedo``, cut
+    ``height`` and scale ``gloss`` as they always have, and do not touch
+    either tangent field.
     """
     h, w = int(shape[0]), int(shape[1])
     albedo = np.zeros((h, w, 3), dtype=np.float32)
@@ -2257,15 +2366,21 @@ def _planks(
     # Ring spacing and knots are sized against the whole panel, not the strip.
     panel_ref = (h / max(w, 1)) if along_x else 1.0
 
-    # Per-pixel fibre tangents so each plank's chatoyance follows its own grain
-    # rather than whichever plank was built last.
+    # Per-pixel fibre and ray tangents so each plank's chatoyance follows its
+    # own grain rather than whichever plank was built last. Both default to
+    # the +x axis where no strip sets them, like the fibre tangent always has;
+    # ray_weight defaults to zero, i.e. no fleck, which is also the default
+    # off a quartersawn face.
     tangent = np.zeros((h, w, 3), dtype=np.float32)
     tangent[..., 0] = 1.0
+    ray_tangent = np.zeros((h, w, 3), dtype=np.float32)
+    ray_tangent[..., 0] = 1.0
+    ray_weight = np.zeros((h, w), dtype=np.float32)
     for i in range(n):
         lo, hi = edges[i], edges[i + 1]
         sub_rng = np.random.default_rng(rng.integers(0, 2**63 - 1))
         sub_shape = (hi - lo, w) if along_x else (h, hi - lo)
-        a, hh, tt, gg = _board_fields(
+        fields = _board_fields(
             sub_shape,
             sub_rng,
             species,
@@ -2282,15 +2397,19 @@ def _planks(
             px_per_mm=px_per_mm,
         )
         if along_x:
-            albedo[lo:hi, :, :] = a
-            height[lo:hi, :] = hh
-            gloss[lo:hi, :] = gg
-            tangent[lo:hi, :, :] = tt
+            albedo[lo:hi, :, :] = fields.albedo
+            height[lo:hi, :] = fields.height
+            gloss[lo:hi, :] = fields.gloss
+            tangent[lo:hi, :, :] = fields.tangent
+            ray_tangent[lo:hi, :, :] = fields.ray_tangent
+            ray_weight[lo:hi, :] = fields.ray_weight
         else:
-            albedo[:, lo:hi, :] = a
-            height[:, lo:hi] = hh
-            gloss[:, lo:hi] = gg
-            tangent[:, lo:hi, :] = tt
+            albedo[:, lo:hi, :] = fields.albedo
+            height[:, lo:hi] = fields.height
+            gloss[:, lo:hi] = fields.gloss
+            tangent[:, lo:hi, :] = fields.tangent
+            ray_tangent[:, lo:hi, :] = fields.ray_tangent
+            ray_weight[:, lo:hi] = fields.ray_weight
 
     # Dark gap lines with a slight bevel highlight on each plank edge.
     gap = int(rng.integers(1, 3))
@@ -2313,7 +2432,14 @@ def _planks(
             if lo - 1 >= 0:
                 height[:, lo - 1 : lo] += np.float32(0.35)
 
-    return albedo, height, tangent, gloss
+    return BoardFields(
+        albedo=albedo,
+        height=height,
+        tangent=tangent,
+        ray_tangent=ray_tangent,
+        ray_weight=ray_weight,
+        gloss=gloss,
+    )
 
 
 def _split_edges(span: int, n: int, rng: np.random.Generator) -> list[int]:
