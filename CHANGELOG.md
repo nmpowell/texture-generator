@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README gallery and workflow notebook examples covering all eight wood species,
+  rendered with the other parameters pinned so the tiles differ only by species.
+  This is documentation and examples only; the generator, public API and rendered
+  output for existing recipes are unchanged.
+
 ## [0.5.0] - 2026-09-09
 
 ### Added

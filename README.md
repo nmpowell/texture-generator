@@ -104,6 +104,15 @@ It also works with `--count`; JSON reports include the angle when it is supplied
 | Wood | `board`, `planks` |
 | Paper | `white`, `kraft`, `recycled`, `newsprint`, `laid`, `coated` |
 
+Both wood variants support pine, maple, ash, oak, cherry, walnut, sapele and
+mahogany; select one with `species=` in Python, and see the
+[species gallery](#species) below or the
+[parameter reference](https://github.com/nmpowell/texture-generator/blob/main/docs/reference.md#material-parameters).
+
+```python
+image = generate("wood", size=(640, 480), seed=42, variant="board", species="oak")
+```
+
 The generators combine noise, material anatomy and lighting. Albedo, height and
 roughness share underlying fields so visible features also affect shading.
 These are procedural approximations with documented calibration assumptions.
@@ -144,9 +153,25 @@ records how they were generated.
 
 ### Wood
 
+#### Variants
+
 | Board | Planks |
 | --- | --- |
 | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/wood-board.png" alt="Board wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/wood-planks.png" alt="Planks wood texture" width="160" height="160"> |
+
+#### Species
+
+Boards and planks are rendered in eight species. These tiles share seed 42 at
+384 × 384 pixels and differ only by `species`; the other draws are pinned to
+`variant="board"`, `cut="flatsawn"`, `figure="plain"`, `finish="oil"`,
+`colour_variation=0`, `mm_across=180`, `knots=0` and `sapwood=0`. Omitting
+`species` makes a uniform seeded choice.
+
+| Pine | Maple | Ash | Oak |
+| --- | --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-pine.png" alt="Pine wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-maple.png" alt="Maple wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-ash.png" alt="Ash wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-oak.png" alt="Oak wood texture" width="160" height="160"> |
+| **Cherry** | **Walnut** | **Sapele** | **Mahogany** |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-cherry.png" alt="Cherry wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-walnut.png" alt="Walnut wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-sapele.png" alt="Sapele wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-mahogany.png" alt="Mahogany wood texture" width="160" height="160"> |
 
 ### Paper
 
