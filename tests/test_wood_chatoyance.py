@@ -64,9 +64,9 @@ def test_fibre_tangents_are_unit_length_and_vary_across_the_board() -> None:
     """
     for variant in ("board", "planks"):
         builder = wood._board_fields if variant == "board" else wood._planks
-        _, _, tangent, _ = builder(
+        tangent = builder(
             (192, 192), np.random.default_rng(4), "maple", finish="oil"
-        )
+        ).tangent
         assert tangent.shape == (192, 192, 3)
         norm = np.sqrt((tangent * tangent).sum(axis=-1))
         assert np.abs(norm - 1.0).max() < 1e-4, f"{variant}: not unit length"
