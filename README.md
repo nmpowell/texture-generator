@@ -117,7 +117,11 @@ The generators combine noise, material anatomy and lighting. Albedo, height and
 roughness share underlying fields so visible features also affect shading.
 These are procedural approximations with documented calibration assumptions.
 Metal, plastic and wood do not tile seamlessly; paper tiles when creases are
-disabled with `creases=0.0`.
+disabled with `creases=0.0`. Wood's relief is carried in real millimetres, so
+the same board shades the same at any render size; the documented workflow is
+to render at 1000 px or more and resample down, which is what
+[the mip test](https://github.com/nmpowell/texture-generator/blob/main/tests/test_wood_optics.py)
+checks.
 
 Read the
 [technical reference](https://github.com/nmpowell/texture-generator/blob/main/docs/reference.md)
@@ -172,6 +176,13 @@ Boards and planks are rendered in eight species. These tiles share seed 42 at
 | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-pine.png" alt="Pine wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-maple.png" alt="Maple wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-ash.png" alt="Ash wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-oak.png" alt="Oak wood texture" width="160" height="160"> |
 | **Cherry** | **Walnut** | **Sapele** | **Mahogany** |
 | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-cherry.png" alt="Cherry wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-walnut.png" alt="Walnut wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-sapele.png" alt="Sapele wood texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/species/wood-mahogany.png" alt="Mahogany wood texture" width="160" height="160"> |
+
+Wood's chatoyance — the way figured grain flashes light and dark — lives in the
+reflection, not the pigment, so it only shows up once `light_dir` moves. The
+workflow notebook renders one board six times under different light azimuths
+and pastes the tiles into a strip:
+[curly maple](https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/wood-chatoyance-curly-maple.png),
+[quartersawn oak](https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/wood-chatoyance-quartersawn-oak.png).
 
 ### Paper
 

@@ -13,6 +13,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   rendered with the other parameters pinned so the tiles differ only by species.
   This is documentation and examples only; the generator, public API and rendered
   output for existing recipes are unchanged.
+- `core/shading.py`'s `shade()` gains `height_spacing`, `coat_height`,
+  `fibre_ior` and `ray_tangent`/`ray_weight`/`ray_gain`, all wired through
+  `materials/wood.py` for the changes below. `core/fields.py`'s
+  `height_to_normal()` gains `spacing`. `core/noise.py`'s `fbm_at()` gains
+  `max_freq`. Every new parameter defaults to the exact pre-existing code
+  path (`1.0`, `None` or `0`, as appropriate), which
+  `test_shade_defaults_are_bit_identical_with_the_new_parameters` checks
+  directly.
+- `tests/test_wood_optics.py`, validating the wood-optics change below against
+  closed-form oracles rather than the implementation's own output: axial sign
+  invariance, coat/fibre lobe separation, figure surviving a flattened albedo,
+  the `finish="none"` zero-coverage case, pore pooling under a film, refraction
+  of the fibre-lobe peak, ray-population isolation, band-limited noise, linear-
+  light compositing and the mip (small-direct-render-vs-downsampled-large-one)
+  sweep.
+
+### Changed
+
+- **Default wood output changes**, deliberately, for five reasons. Shading now
+  composites in linear light rather than display sRGB: the rendered means are
+  unchanged (the lighting is mean-normalised), but relief and highlight
+  contrast on pale species are slightly lower. Relief is now carried in real
+  millimetres with resolution-independent normals (`height_spacing`) instead
+  of a per-texel gradient that changed with render size, so a small render now
+  matches a downsampled large one — on a 200 mm oak board a direct 500px
+  render's luminance std (12.99) sat 33% above an equivalent 2000px
+  downsample's (9.77); after this change they agree to within 5% (7.58 vs
+  7.93). Each finish now carries explicit coat state: a film build that fills
+  pores and levels the coat normal, a refractive index that refracts the
+  light before the fibre lobe, and a fibre-lobe tint; `finish="none"`
+  recovers the bare board exactly. The ray-fleck lobe is now a second fibre
+  population mixed in by weight, rather than a 90-degree rotation of the
+  grain texture. And sub-pixel pores are now carried as area-honest coverage:
+  a vessel narrower than a texel is drawn at the grid's own width and faded so
+  the drawn area matches its anatomy, instead of being re-authored at full
+  contrast at whatever pitch the board happens to be rendered at.
+  `generate()`'s signature and the CLI are unchanged; metal, plastic and paper
+  render byte-identically.
+- One honest limitation of the area-honest pore change above: fine-vesselled
+  species (cherry, maple, mahogany), whose vessels are narrower than a texel
+  at any sane render size, now render their pores as the uniform tone the
+  grid can carry, without the per-pixel Poisson variance a photograph at
+  0.1 mm per pixel would show. That variance is deferred, not modelled.
 
 ### Fixed
 

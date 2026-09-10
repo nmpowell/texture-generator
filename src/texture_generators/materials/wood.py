@@ -235,11 +235,10 @@ BOARD_HUE_SPREAD = 0.6
 #   fibre_tint  colour of the fibre lobe (:func:`_fibre_colour`), normalised to
 #               unit luminance: this light has passed through the film, so it
 #               carries the film's own cast on top of the wood's pigment.
-#               UNVERIFIED: the existing amber kept for the two film
-#               finishes; neutral where there is no film (``none``, and
-#               ``oil`` -- a penetrating finish leaves no continuous film to
-#               cast through); near-neutral for the non-yellowing waterborne
-#               acrylic.
+#               UNVERIFIED: the existing amber kept for oil and polyurethane
+#               (an oil-based finish warms the light it passes, film or not);
+#               neutral for bare wood; near-neutral for the non-yellowing
+#               waterborne acrylic.
 #   film_um     dry film build, in microns, as a (lo, hi) range -- the coat's
 #               own optical state, separate from the CIELAB appearance
 #               fit above: how thick a continuous film sits over the wood,

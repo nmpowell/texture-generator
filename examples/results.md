@@ -16,7 +16,7 @@ on the dependency versions and platform. The saved floating-point array is
   "python": "3.14.7",
   "platform": "darwin",
   "architecture": "arm64",
-  "texture-generator": "0.4.0",
+  "texture-generator": "0.5.0",
   "numpy": "2.5.2",
   "pillow": "12.3.0"
 }
@@ -251,6 +251,28 @@ their displayed brightness is not a physical unit.
 384 x 384 · RGB
 
 ![Wood / mahogany](images/species/wood-mahogany.png)
+
+## Wood chatoyance
+
+### Wood / Curly maple — chatoyance under six light azimuths
+
+1566 x 256 · RGB
+
+![Wood / Curly maple — chatoyance under six light azimuths](images/wood-chatoyance-curly-maple.png)
+
+### Wood / Quartersawn oak — chatoyance under six light azimuths
+
+1566 x 256 · RGB
+
+![Wood / Quartersawn oak — chatoyance under six light azimuths](images/wood-chatoyance-quartersawn-oak.png)
+
+## Wood scale
+
+### Wood / oak — rendered at 1536px, resampled to 384px
+
+384 x 384 · RGB
+
+![Wood / oak — rendered at 1536px, resampled to 384px](images/wood-oak-1536-to-384.png)
 
 ## Brushing direction
 
