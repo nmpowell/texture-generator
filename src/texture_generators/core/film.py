@@ -165,7 +165,10 @@ TEMPER_LADDER = (
 
 
 def _fresnel(
-    n_i: np.ndarray, cos_i: np.ndarray, n_t: np.ndarray, cos_t: np.ndarray
+    n_i: np.ndarray | np.complex128,
+    cos_i: np.ndarray,
+    n_t: np.ndarray | np.complex128,
+    cos_t: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Complex amplitude reflection coefficients ``(r_s, r_p)`` at one interface."""
     r_s = (n_i * cos_i - n_t * cos_t) / (n_i * cos_i + n_t * cos_t)
@@ -203,7 +206,7 @@ def _spectral_reflectance(
     beta = 2.0 * np.pi * n1 * d * cos1 / lam
     phase = np.exp(2.0j * beta)
 
-    out = 0.0
+    out = np.zeros(np.broadcast_shapes(cos0.shape, phase.shape), dtype=np.float64)
     for r01, r12 in ((r01_s, r12_s), (r01_p, r12_p)):
         r = (r01 + r12 * phase) / (1.0 + r01 * r12 * phase)
         out = out + np.abs(r) ** 2

@@ -185,7 +185,7 @@ def generate(
     # bands radiating from a gate, sometimes with one weld line where two
     # flow fronts met. These are GLOSS features -- they live in the
     # specular weight, with only a whisper of tint.
-    spec_field = float(params.get("specular", specular))
+    spec_field: np.ndarray | float = float(params.get("specular", specular))
     if rng.random() < 0.35:
         x, y = grid_coords((h, w))
         aspect = h / max(w, 1)

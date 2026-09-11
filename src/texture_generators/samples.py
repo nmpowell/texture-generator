@@ -59,7 +59,7 @@ def default_outdir() -> Path:
 DEFAULT_OUTDIR = default_outdir()
 
 # A job: material, variant, seed, size, path, extra params for the material.
-Job = tuple[str, str, int, object, Path, Mapping[str, object]]
+Job = tuple[str, str, int, int | tuple[int, int], Path, Mapping[str, object]]
 
 
 @dataclass(frozen=True)
@@ -213,8 +213,8 @@ def _parse_only(only: Sequence[str] | None) -> set[tuple[str, str | None]] | Non
         return None
     wanted: set[tuple[str, str | None]] = set()
     for spec in only:
-        material, _, variant = spec.partition("/")
-        wanted.add((material, variant or None))
+        material, _, variant_part = spec.partition("/")
+        wanted.add((material, variant_part or None))
     valid = set(all_pairs())
     for material, variant in wanted:
         if material not in MATERIALS:

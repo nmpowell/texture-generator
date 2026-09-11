@@ -225,6 +225,7 @@ uv sync --locked
 uv run pytest
 uv run ruff check .
 uv run ruff format --check .
+uv run mypy
 ```
 
 `uv sync --locked` installs the project editable and uses the committed lockfile.
@@ -235,8 +236,9 @@ commands to check locked and minimum runtime dependencies on all three versions
 in separate environments. Minimum checks preserve the locked development tools
 and leave `uv.lock` unchanged.
 Use `uv run ruff format .` to apply formatting. The tests exercise rendering,
-determinism, material physics, the CLI and built-package contents. Internal mypy
-checks have existing findings and are informational; see the
+determinism, material physics, the CLI and built-package contents. mypy runs
+over the package internals and must pass; CI checks it against Python 3.12, the
+oldest supported interpreter. See the
 [development notes](https://github.com/nmpowell/texture-generator/blob/main/docs/reference.md#development).
 
 The version lives in `pyproject.toml`; `texture_generators.__version__` reads

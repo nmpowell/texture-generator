@@ -62,6 +62,7 @@ done
 quality_environment="$project_environment_root/3.14"
 UV_PROJECT_ENVIRONMENT="$quality_environment" uv run --locked --python 3.14 ruff check .
 UV_PROJECT_ENVIRONMENT="$quality_environment" uv run --locked --python 3.14 ruff format --check .
+UV_PROJECT_ENVIRONMENT="$project_environment_root/3.12" uv run --locked --python 3.12 mypy
 uv build --no-sources --python 3.14
 UV_PROJECT_ENVIRONMENT="$quality_environment" uv run --locked --python 3.14 twine check --strict dist/*
 ```
@@ -151,7 +152,9 @@ The reusable test workflow runs the full suite with both locked and minimum
 runtime dependencies on Python 3.12, 3.13 and 3.14, with fail-fast disabled and
 an assertion of each requested interpreter. It records installed versions and
 checks dependency consistency before testing. Ruff runs once on the 3.14
-development version. A separate job builds
+development version, and mypy runs once on 3.12, the oldest supported version,
+in its own `typecheck` job that fails the run on any type error. A separate
+job builds
 the wheel and source archive once on 3.14 and uploads one `dist` artifact. The
 artifact smoke jobs download that same build, install both distributions
 separately on all three Python versions, and check their dependencies. The

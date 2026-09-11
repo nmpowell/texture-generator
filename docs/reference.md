@@ -76,8 +76,8 @@ Contracts: `size` is an int (square) or `(width, height)`. `seed=None` draws
 fresh entropy; an integer seed is fully reproducible. `variant=None` picks a
 variant with the seeded rng. Unknown material or variant raises `ValueError`
 listing the valid names. The package ships `py.typed` (PEP 561), so type
-checkers use the public API's annotations; mypy over the package's own
-internals is not yet clean (see *Development*).
+checkers use the public API's annotations, and mypy passes over the package's
+own internals (see *Development*).
 
 For brushed metal, `generate()` and `generate_array()` accept `brush_angle` in
 degrees clockwise in image coordinates: 0 is horizontal, 90 is vertical, and
@@ -604,16 +604,20 @@ exists here for it to hold against.
 See the [README development instructions](../README.md#development) for the
 locked environment, tests, linting and formatting. Ruff is the formatter.
 
-mypy is configured but is not yet clean over the package internals; its output
-is informational, not a passing release gate. Run it in the development
-environment:
+mypy is a passing gate: the `typecheck` job in `.github/workflows/test.yml`
+runs it on every push and pull request against Python 3.12, the oldest
+supported interpreter, and `[tool.mypy]` in `pyproject.toml` pins
+`python_version = "3.12"` so a local run on a newer interpreter checks the
+same thing. Run it in the development environment:
 
 ```bash
 uv run mypy
 ```
 
-The package ships `py.typed`, so downstream type checkers can use its public
-annotations. That marker does not imply the internal mypy checks pass.
+Keep it clean without `# type: ignore` or `typing.cast`: the preset tables in
+the material modules are `TypedDict`s, and the numpy code is annotated where
+mypy cannot infer an array type on its own. The package ships `py.typed`, so
+downstream type checkers can use its public annotations.
 
 Project layout:
 

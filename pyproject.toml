@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "texture-generator"
-version = "0.6.0"
+version = "0.6.1"
 description = "Procedural generator for random but realistic material textures (metal, plastic, wood, paper) as PNGs or numpy arrays"
 readme = "README.md"
 license = "Apache-2.0"
@@ -83,9 +83,12 @@ ignore = ["E501"]
 known-first-party = ["texture_generators"]
 
 [tool.mypy]
-# Run mypy with the project's supported Python interpreter.
+# Check against the oldest supported Python whichever interpreter runs mypy, so
+# a local run on 3.14 and the CI ``typecheck`` job on 3.12 report the same thing.
+python_version = "3.12"
 packages = ["texture_generators"]
 mypy_path = "src"
 ignore_missing_imports = true
 warn_unused_configs = true
 warn_redundant_casts = true
+warn_unused_ignores = true

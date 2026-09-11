@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- mypy is now clean over the package internals and is a CI gate: a `typecheck`
+  job runs it against Python 3.12, the oldest supported interpreter, and
+  `[tool.mypy]` pins `python_version = "3.12"` to match. The preset tables in
+  `materials/wood.py` and `materials/paper.py` are typed as `TypedDict`s and a
+  handful of numpy variables carry explicit annotations; no rendered output,
+  random-draw order or public signature changes.
+
 ## [0.6.0] - 2026-09-11
 
 ### Added

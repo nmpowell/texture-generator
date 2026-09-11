@@ -41,7 +41,9 @@ def remap(
     return (np.float32(out_lo) + t * np.float32(out_hi - out_lo)).astype(np.float32)
 
 
-def smoothstep(edge0: float, edge1: float, x: np.ndarray) -> np.ndarray:
+def smoothstep(
+    edge0: float, edge1: float, x: np.ndarray | np.floating | float
+) -> np.ndarray:
     """Hermite smoothstep: 0 below ``edge0``, 1 above ``edge1``, smooth between."""
     x = np.asarray(x, dtype=np.float32)
     span = edge1 - edge0
