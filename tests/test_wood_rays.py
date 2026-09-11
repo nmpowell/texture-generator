@@ -36,6 +36,7 @@ from texture_generators.materials.wood import (
     _fibre_tangents,
     _fleck_lengths_mm,
     _ray_fleck,
+    _ray_tangents,
 )
 
 SIZE = 384
@@ -62,15 +63,19 @@ def _coverage(fleck: dict) -> float:
 
 
 def _cross_grain_fraction(species: str, cut: str, seed: int = 0) -> float:
-    """Share of the board whose in-plane fibre tangent runs *across* the grain.
+    """Share of the board where a fleck sits *and* runs crosswise to the fibre.
 
-    The fleck rotation is the only thing on a board that can turn the tangent
-    more than 45 degrees off the grain axis -- the deflection term is a few
-    degrees and the tilt is capped at six -- so on an ``along_x`` board this is a
-    fleck detector that goes through the whole of :func:`_board_fields` rather
-    than reaching into the fleck layer.
+    The fibre tangent no longer rotates inside a fleck -- the ray axis is its
+    own field now (:func:`_ray_tangents`) -- so what used to be a fleck
+    detector on the tangent field is now a read of ``ray_weight`` gated by the
+    two tangent fields' own dot product, through the whole of
+    :func:`_board_fields` rather than by reaching into the fleck layer
+    directly: a pixel counts only where the ray lobe is weighted in
+    (``ray_weight > 0.5``) *and* its axis is at right angles to the
+    surrounding fibre (``|tangent . ray_tangent| < 0.05``), so a mask that
+    happened to land on a diagonal (non-crosswise) axis would not pass.
     """
-    _, _, tangent, _ = _board_fields(
+    fields = _board_fields(
         (SIZE, SIZE),
         np.random.default_rng(seed),
         species,
@@ -81,7 +86,9 @@ def _cross_grain_fraction(species: str, cut: str, seed: int = 0) -> float:
         along_x=True,
         px_per_mm=PX_PER_MM,
     )
-    return float((np.abs(tangent[..., 1]) > np.abs(tangent[..., 0])).mean())
+    dot = (fields.tangent * fields.ray_tangent).sum(axis=-1)
+    crosswise = np.abs(dot) < 0.05
+    return float(((fields.ray_weight > 0.5) & crosswise).mean())
 
 
 # --- The population ----------------------------------------------------------
@@ -196,13 +203,14 @@ def test_fleck_albedo_contrast_stays_modest_and_signed() -> None:
 # --- The part that makes it flash --------------------------------------------
 
 
-def test_the_tangent_is_rotated_ninety_degrees_inside_a_fleck() -> None:
-    """Rays run radially, so the ray's fibre is at right angles to the wood's.
+def test_the_ray_axis_is_crosswise_to_the_fibre_inside_a_fleck() -> None:
+    """Rays run radially, so the ray's own axis is at right angles to the wood's.
 
-    Rendered from the same seed with and without the fleck mask, so the only
-    difference between the two tangent fields is the rotation. Inside a fleck it
-    is 90 degrees; outside it is exactly nothing, which is the other half of the
-    claim -- the fleck must not perturb the grain field around it.
+    The rotation used to be baked into the fibre tangent itself; now the ray
+    axis is its own field (:func:`_ray_tangents`), built at in-plane angle
+    ``phi + 90 degrees`` with zero dip. Checked directly against the fibre
+    tangent rather than by diffing two tangent fields, since there is now only
+    one fibre tangent field to look at.
     """
     x, y = grid_coords((SIZE, SIZE))
     wu, wv = warp(
@@ -219,34 +227,25 @@ def test_the_tangent_is_rotated_ninety_degrees_inside_a_fleck() -> None:
         px_per_mm=PX_PER_MM,
     )["mask"]
 
-    def tangents(fleck):
-        return _fibre_tangents(
-            x,
-            y,
-            wu,
-            wv,
-            np.random.default_rng(5),
-            tilt=0.0,
-            along_x=True,
-            px_per_unit=SIZE,
-            mm_per_unit=225.0,
-            fleck=fleck,
-        )
-
-    plain, flecked = tangents(None), tangents(mask)
-    delta = np.degrees(
-        np.abs(
-            np.arctan2(flecked[..., 1], flecked[..., 0])
-            - np.arctan2(plain[..., 1], plain[..., 0])
-        )
+    fibre = _fibre_tangents(
+        x,
+        y,
+        wu,
+        wv,
+        np.random.default_rng(5),
+        tilt=0.0,
+        along_x=True,
+        px_per_unit=SIZE,
+        mm_per_unit=225.0,
     )
-    core = mask > 0.99
+    ray = _ray_tangents(phi, tilt=0.0, along_x=True)
+
+    core = mask > 0.5
     assert int(core.sum()) > 1000
-    assert 88.0 <= float(np.median(delta[core])) <= 92.0
-    assert float(np.abs(delta[mask <= 0.0]).max()) == 0.0
-    # A rotation, so the field is still unit length -- the property every other
-    # consumer of the tangents relies on.
-    assert np.allclose(np.linalg.norm(flecked, axis=-1), 1.0, atol=2e-3)
+    assert np.allclose(np.linalg.norm(ray, axis=-1), 1.0, atol=1e-4)
+    assert (ray[..., 2] == 0.0).all()
+    dot = (fibre * ray).sum(axis=-1)
+    assert float(np.abs(dot[core]).max()) < 0.05
 
 
 def test_the_fleck_flashes_the_opposite_way_to_the_wood_around_it() -> None:
@@ -296,6 +295,52 @@ def test_the_fleck_flashes_the_opposite_way_to_the_wood_around_it() -> None:
     assert abs(on_fleck - on_wood) > 0.02, (on_fleck, on_wood)
 
 
+def test_the_ray_population_leaves_the_grain_alone() -> None:
+    """Zeroing the ray-fleck mask must not perturb the fibre tangent field.
+
+    The fibre tangent is built before the ray population is drawn and
+    stitched into ``ray_weight`` (:func:`_board_fields`), so a fleck's
+    presence or absence must not be able to reach back and change it. Spying
+    on :func:`_ray_fleck` to call the real function -- so ``rng`` is
+    consumed exactly as it always is -- and return its result with the mask
+    replaced by zeros isolates that: it changes what the render *sees* of the
+    fleck without changing anything the fleck layer *drew*, so
+    ``fields.tangent`` must come back bit for bit identical, and
+    ``ray_weight`` -- the only field the mask actually feeds -- must differ.
+    """
+    plain = wood._ray_fleck
+
+    def spy(*args, **kwargs):
+        out = plain(*args, **kwargs)
+        zeroed = dict(out)
+        zeroed["mask"] = np.zeros_like(out["mask"])
+        return zeroed
+
+    def render() -> wood.BoardFields:
+        return _board_fields(
+            (SIZE, SIZE),
+            np.random.default_rng(2),
+            "oak",
+            finish="oil",
+            knot_p=0.0,
+            sap_p=0.0,
+            cut="quartersawn",
+            along_x=True,
+            px_per_mm=PX_PER_MM,
+        )
+
+    with_fleck = render()
+    wood._ray_fleck = spy
+    try:
+        without_fleck = render()
+    finally:
+        wood._ray_fleck = plain
+
+    assert float(with_fleck.ray_weight.max()) > 0.5  # the mask is non-trivial
+    assert np.array_equal(with_fleck.tangent, without_fleck.tangent)
+    assert not np.array_equal(with_fleck.ray_weight, without_fleck.ray_weight)
+
+
 # --- The cut ------------------------------------------------------------------
 
 
@@ -339,7 +384,7 @@ def test_the_cut_is_a_ring_geometry_and_not_only_a_fleck_gate() -> None:
 
     faces = {}
     for cut in CUTS:
-        albedo, _, _, _ = _board_fields(
+        fields = _board_fields(
             (SIZE, SIZE),
             np.random.default_rng(3),
             "pine",
@@ -350,6 +395,6 @@ def test_the_cut_is_a_ring_geometry_and_not_only_a_fleck_gate() -> None:
             along_x=True,
             px_per_mm=PX_PER_MM,
         )
-        faces[cut] = albedo[..., 1]
+        faces[cut] = fields.albedo[..., 1]
     for a, b in (("cathedral", "flatsawn"), ("flatsawn", "quartersawn")):
         assert float(np.abs(faces[a] - faces[b]).mean()) > 0.01, (a, b)

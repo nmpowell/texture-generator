@@ -17,7 +17,7 @@ BOARD_MM = 225.0
 
 def _pore_fields(
     species: str, seed: int = 0, size: int = 256, n_rings: float = 12.0
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Run :func:`_pore_streaks` over a plain ring stack for one species."""
     rng = np.random.default_rng(seed)
     u, v = grid_coords((size, size))
@@ -65,7 +65,7 @@ def test_pore_coverage_follows_the_species_pore_class() -> None:
 
     # Pine is a softwood: no vessels at all, so no streaks, no troughs and no
     # darkening. That absence is what makes it read as a softwood.
-    mask, delta_l, depth_mm = _pore_fields("pine")
+    mask, delta_l, depth_mm, _trough_mm = _pore_fields("pine")
     assert ANATOMY["pine"]["pore_class"] == "softwood"
     assert float(mask.max()) == 0.0
     assert float(delta_l.max()) == 0.0
@@ -81,7 +81,7 @@ def test_ring_porous_pores_stay_in_a_narrow_earlywood_band() -> None:
     """
     covs = {}
     for n_rings in (8.0, 24.0):
-        mask, _, depth_mm = _pore_fields("oak", seed=1, n_rings=n_rings)
+        mask, _, depth_mm, _trough_mm = _pore_fields("oak", seed=1, n_rings=n_rings)
         ring_mm = BOARD_MM / n_rings
         _, v = grid_coords((mask.shape[0], mask.shape[1]))
         pos_mm = np.mod(v * np.float32(n_rings), 1.0) * np.float32(ring_mm)

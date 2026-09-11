@@ -52,7 +52,10 @@ def smoothstep(edge0: float, edge1: float, x: np.ndarray) -> np.ndarray:
 
 
 def height_to_normal(
-    h: np.ndarray, strength: float = 1.0, periodic: bool = False
+    h: np.ndarray,
+    strength: float = 1.0,
+    periodic: bool = False,
+    spacing: float = 1.0,
 ) -> np.ndarray:
     """Convert a height field to unit normals, shape (H, W, 3).
 
@@ -63,13 +66,28 @@ def height_to_normal(
     to one-sided ones. Use it when the height field itself is periodic --
     otherwise the edge rows get a different derivative from everywhere else,
     which shows up as a bright or dark rim and breaks tiling.
+
+    Args:
+        h: (H, W) height field.
+        strength: multiplier on the (physical) gradients.
+        periodic: wrap the differences at the edges; see above.
+        spacing: the distance between adjacent height samples, in the height
+            field's own length units (e.g. millimetres per texel). Both
+            gradient axes are divided by it, so the same physical surface
+            sampled at a different resolution yields the same normal.
+            ``spacing=1.0`` reproduces the historical per-texel gradient
+            exactly, which is why it stays the default.
     """
     h = np.asarray(h, dtype=np.float32)
     if periodic:
-        dhdv = (np.roll(h, -1, axis=0) - np.roll(h, 1, axis=0)) * np.float32(0.5)
-        dhdu = (np.roll(h, -1, axis=1) - np.roll(h, 1, axis=1)) * np.float32(0.5)
+        dhdv = (np.roll(h, -1, axis=0) - np.roll(h, 1, axis=0)) / np.float32(
+            2.0 * spacing
+        )
+        dhdu = (np.roll(h, -1, axis=1) - np.roll(h, 1, axis=1)) / np.float32(
+            2.0 * spacing
+        )
     else:
-        dhdv, dhdu = np.gradient(h)
+        dhdv, dhdu = np.gradient(h, spacing)
     s = np.float32(strength)
     nx = -s * dhdu
     ny = -s * dhdv

@@ -3,7 +3,7 @@
     "python": "3.14.7",
     "platform": "darwin",
     "architecture": "arm64",
-    "texture-generator": "0.4.0",
+    "texture-generator": "0.5.0",
     "numpy": "2.5.2",
     "pillow": "12.3.0"
   },
@@ -25,7 +25,7 @@
         "seed": 42,
         "variant": "board"
       },
-      "sha256": "5d1cbca88d5490886d741cb9ae6c8afb82248d7a3f8d54d3eb22da314344b3fe"
+      "sha256": "c5570880b6afefe601746e9133f58cb788226500fa02320b595f679965fb883d"
     },
     {
       "path": "images/metal-array.png",
@@ -219,7 +219,7 @@
         "seed": 42,
         "variant": "board"
       },
-      "sha256": "cc073268a503b2519070207ce9245e296b7f1f128b76d31f18771f3dcb5c9723"
+      "sha256": "ad1823447e9c2f42524270b1038d806d4d41fd756f3a86bc4a79a33118879043"
     },
     {
       "path": "images/variants/wood-planks.png",
@@ -235,7 +235,7 @@
         "seed": 42,
         "variant": "planks"
       },
-      "sha256": "b15c2e3bb265c7981b69b18589727cdfbf2dbe8badb49fb952cb7ac141097df1"
+      "sha256": "a04e99c0118b7e87c1ba3741e4319ec4a6e3937b4ec7a65ba20b006cc9791b35"
     },
     {
       "path": "images/variants/paper-white.png",
@@ -403,7 +403,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "03dd56ed04f5ae4f85f80dcda9a12d637c2bd5d126d1c96922cef3bcb6db2af4"
+      "sha256": "ea944317c9f4e703b7e2e7400ffe0ab8927acbe004e2f1afb7f6ae564f025f7b"
     },
     {
       "path": "images/walnut-oil.png",
@@ -426,7 +426,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "653e3588c1974d00180d142c0c5fce075a3ed391ff51ef192c087bc7c4b6ef77"
+      "sha256": "4dbff5c507e802885321354a3911704ba50debdef5052bf32ba11c19703ad4ce"
     },
     {
       "path": "images/metal-custom-film.png",
@@ -474,7 +474,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "6cc78d6ab5d552fa74aec850c7b74d81ee1299cd923a0737cf7857f903bc61eb"
+      "sha256": "518a357ac3f2570a52ff604a1f3484ec61739ce1fdc05caff93020b404cd8e9a"
     },
     {
       "path": "images/species/wood-maple.png",
@@ -498,7 +498,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "f1048087ebca9f5d265aff52e372cd6ed792499dcc5b81b0749a91bf59b7461b"
+      "sha256": "dc2e2b539b88f022d2a2934377abc19ff2be9c07b37b49e274deceb2794c5629"
     },
     {
       "path": "images/species/wood-ash.png",
@@ -522,7 +522,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "d0849e5e63cf41f4013b754ebb339bde33c9159560fed5d66eb39405911a0ac3"
+      "sha256": "895af74a3087af9ce943fd864dfb155ff485f3c611ede5e29e1fa725b3257cb3"
     },
     {
       "path": "images/species/wood-oak.png",
@@ -546,7 +546,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "629aaed09c7a2af3e22a3b2927584930442b9e468b35f44172225e9393cfd17d"
+      "sha256": "09805752204e39d4906fb8542ae08ae119b05f12e9b7f2482eb5c6d86f306b09"
     },
     {
       "path": "images/species/wood-cherry.png",
@@ -570,7 +570,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "af63965bd947608ca91b049cdaf6ba856b4b956f0dbc4712c56dbc845396c849"
+      "sha256": "0fdc2fd86c4715cca8fdc0b5285761e892969e076b0d11d6ce041f8f282f8433"
     },
     {
       "path": "images/species/wood-walnut.png",
@@ -594,7 +594,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "28b8a741b4253f592989e2bbc7ef4018dcd514de8c9bbd1159bfac14db490cdb"
+      "sha256": "80dfdee0813be3c21a2d7777c22204a9d8ff8112e967051262a076cfc96af6d8"
     },
     {
       "path": "images/species/wood-sapele.png",
@@ -618,7 +618,7 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "ac662f5ee7a0acad6952f4f24ca10a39a2087ccf261f56bfd18e4625bdef1e86"
+      "sha256": "8f0c794ac58c8210740955e8eae1eb98cbb29d551e851a26d63ed7423d54a1d8"
     },
     {
       "path": "images/species/wood-mahogany.png",
@@ -642,7 +642,150 @@
         "knots": 0,
         "sapwood": 0
       },
-      "sha256": "4b84708cdb4811d8f95a6668d116b77dddfa225ea744c88a8292af50375680c6"
+      "sha256": "e6b2e6ee5ae90d8a0d6a8ad0510272e5c2821cd8576f3163696fe9492cd93c92"
+    },
+    {
+      "path": "images/wood-chatoyance-curly-maple.png",
+      "title": "Wood / Curly maple \u2014 chatoyance under six light azimuths",
+      "section": "Wood chatoyance",
+      "width": 1566,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 256,
+        "seed": 42,
+        "variant": "board",
+        "finish": "oil",
+        "colour_variation": 0,
+        "mm_across": 180,
+        "knots": 0,
+        "sapwood": 0,
+        "species": "maple",
+        "figure": "curly",
+        "cut": "flatsawn",
+        "light_dirs": [
+          [
+            0.7071067811865476,
+            0.0,
+            0.7071067811865475
+          ],
+          [
+            0.35355339059327384,
+            0.6123724356957946,
+            0.7071067811865475
+          ],
+          [
+            -0.3535533905932737,
+            0.6123724356957946,
+            0.7071067811865475
+          ],
+          [
+            -0.7071067811865476,
+            8.659560562354934e-17,
+            0.7071067811865475
+          ],
+          [
+            -0.3535533905932741,
+            -0.6123724356957944,
+            0.7071067811865475
+          ],
+          [
+            0.35355339059327384,
+            -0.6123724356957946,
+            0.7071067811865475
+          ]
+        ]
+      },
+      "sha256": "762e9ec9c5998f168df73366dbb8c8e09ef11f5da1024d0aa914069bb94458bc"
+    },
+    {
+      "path": "images/wood-chatoyance-quartersawn-oak.png",
+      "title": "Wood / Quartersawn oak \u2014 chatoyance under six light azimuths",
+      "section": "Wood chatoyance",
+      "width": 1566,
+      "height": 256,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 256,
+        "seed": 42,
+        "variant": "board",
+        "finish": "oil",
+        "colour_variation": 0,
+        "mm_across": 180,
+        "knots": 0,
+        "sapwood": 0,
+        "species": "oak",
+        "figure": "plain",
+        "cut": "quartersawn",
+        "light_dirs": [
+          [
+            0.7071067811865476,
+            0.0,
+            0.7071067811865475
+          ],
+          [
+            0.35355339059327384,
+            0.6123724356957946,
+            0.7071067811865475
+          ],
+          [
+            -0.3535533905932737,
+            0.6123724356957946,
+            0.7071067811865475
+          ],
+          [
+            -0.7071067811865476,
+            8.659560562354934e-17,
+            0.7071067811865475
+          ],
+          [
+            -0.3535533905932741,
+            -0.6123724356957944,
+            0.7071067811865475
+          ],
+          [
+            0.35355339059327384,
+            -0.6123724356957946,
+            0.7071067811865475
+          ]
+        ]
+      },
+      "sha256": "d0dec78b916fba97ce446b8d54a897a99f2a3d681e096fb99189c1c9a0833351"
+    },
+    {
+      "path": "images/wood-oak-1536-to-384.png",
+      "title": "Wood / oak \u2014 rendered at 1536px, resampled to 384px",
+      "section": "Wood scale",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "wood",
+        "size": 1536,
+        "seed": 42,
+        "variant": "board",
+        "species": "oak",
+        "cut": "flatsawn",
+        "figure": "plain",
+        "finish": "oil",
+        "colour_variation": 0,
+        "mm_across": 180,
+        "knots": 0,
+        "sapwood": 0,
+        "resample": {
+          "to": [
+            384,
+            384
+          ],
+          "filter": "LANCZOS"
+        }
+      },
+      "sha256": "95ac8593820aaa0fa179bba195fe8550664e87fcd10dc95ad93d5aa878b8368c"
     },
     {
       "path": "images/metal-brush-angle-0.png",
@@ -788,7 +931,7 @@
         "seed": 7,
         "columns": 4
       },
-      "sha256": "c03e64100892a75fed2773eacc03279deeea8c81918bc6ab04286ae5639271b2"
+      "sha256": "1ede035891d1f43c2e670f7e94aacc13d159d510843bcf832be9815e17c21d87"
     }
   ]
 }
