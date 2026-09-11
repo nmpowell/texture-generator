@@ -103,6 +103,7 @@ exaggeration to read as relief on a flat texture map.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import NotRequired, TypedDict
 
 import numpy as np
 
@@ -113,6 +114,7 @@ from ..core.shading import gaussian_blur, shade
 from ..core.warp import rotate, warp
 
 VARIANTS = ["board", "planks"]
+
 
 # Heartwood colour as CIE L*a*b* (D65, 10 degree, as wood colour is reported).
 #
@@ -139,7 +141,16 @@ VARIANTS = ["board", "planks"]
 # **UNVERIFIED**: individual species figures are domain knowledge, not
 # measurements taken for this library. ``late``, ``sap_p`` and the ranges the
 # ageing interpolates over are reasoned, not published at all.
-SPECIES = {
+class SpeciesSpec(TypedDict):
+    lab: tuple[float, float, float]
+    half: tuple[float, float, float]
+    late: tuple[float, float, float]
+    sap: tuple[float, float, float] | None
+    sap_p: float
+    aged: NotRequired[tuple[float, float, float]]
+
+
+SPECIES: dict[str, SpeciesSpec] = {
     # Southern yellow pine: earlywood is the species value, and its latewood is
     # the hardest dark line of anything here -- that contrast is the softwood.
     "pine": {
@@ -223,6 +234,7 @@ SPECIES = {
 BOARD_LAB_SPREAD = (4.0, 1.5, 2.5)
 BOARD_HUE_SPREAD = 0.6
 
+
 # A finish is a change of *scattering*, not a tint: it index-matches away the
 # air/cell-wall interface that veils raw wood, so colour deepens (L* down) and
 # saturates (C* up) at the same time, with a warm shift on top from the film's
@@ -258,7 +270,17 @@ BOARD_HUE_SPREAD = 0.6
 #               1.518-1.522, shellac ~1.516, OpenPBR's own default 1.60.
 #
 # Deltas are typical measured magnitudes per finish class and are **UNVERIFIED**.
-FINISHES = {
+class FinishSpec(TypedDict):
+    dl: tuple[float, float]
+    dc: tuple[float, float]
+    db: tuple[float, float]
+    p: float
+    fibre_tint: tuple[float, float, float]
+    film_um: tuple[float, float]
+    ior: float
+
+
+FINISHES: dict[str, FinishSpec] = {
     "none": {
         "dl": (0.0, 0.0),
         "dc": (0.0, 0.0),
@@ -453,6 +475,7 @@ PORE_ANGLE_SIGMA_DEG = 3.0
 # rounds the streak's walls without spreading the streak. See :func:`_pore_streaks`.
 _PORE_EDGE_PX = 0.55
 
+
 # Vessel-pore anatomy and ring hue casts per species. Oak is ring-porous
 # (rows of coarse vessels crowd the earlywood right after each latewood
 # line); walnut is semi-ring-porous, its pore size tapering across the ring;
@@ -468,7 +491,23 @@ _PORE_EDGE_PX = 0.55
 #
 # Hue shifts are small per-channel multipliers: earlywood runs lighter and
 # yellower, latewood darker and browner-red.
-ANATOMY = {
+class AnatomySpec(TypedDict):
+    pore_class: str
+    rings: tuple[int, int]
+    line: float
+    ew_dia_um: NotRequired[tuple[float, float]]
+    lw_dia_um: NotRequired[tuple[float, float]]
+    ew_density: NotRequired[tuple[float, float]]
+    lw_density: NotRequired[tuple[float, float]]
+    streak_mm: NotRequired[tuple[float, float]]
+    ew_depth_um: NotRequired[tuple[float, float]]
+    lw_depth_um: NotRequired[tuple[float, float]]
+    dl_star: NotRequired[tuple[float, float]]
+    band_mm: NotRequired[tuple[float, float]]
+    taper: NotRequired[tuple[float, float]]
+
+
+ANATOMY: dict[str, AnatomySpec] = {
     "pine": dict(pore_class="softwood", rings=(10, 22), line=1.3),
     "oak": dict(
         pore_class="ring-porous",
@@ -643,6 +682,7 @@ RING_AR1 = (0.30, 0.40)
 RING_ACF1 = 0.70
 RING_WIDTH_LIMITS_MM = (0.4, 8.0)
 
+
 # A ring is not a symmetric ramp. It is a **sawtooth**: density climbs smoothly
 # from the open earlywood to the dense latewood across the ring and then falls
 # off a cliff at the ring boundary, where next spring's earlywood starts.
@@ -668,7 +708,14 @@ RING_WIDTH_LIMITS_MM = (0.4, 8.0)
 #
 # The shares and transition widths are domain knowledge for the porosity
 # classes; the within-zone density climbs are reasoned, not measured.
-RING_PROFILE = {
+class RingProfileSpec(TypedDict):
+    lw_frac: tuple[float, float]
+    width_mm: tuple[float, float] | None
+    trans_mm: tuple[float, float] | None
+    trans_frac: tuple[float, float] | None
+
+
+RING_PROFILE: dict[str, RingProfileSpec] = {
     "ring-porous": dict(
         lw_frac=(0.50, 0.85),
         width_mm=(1.0, 4.0),
@@ -925,6 +972,10 @@ def _ring_sawtooth(
             width_mm, np.float32(0.2)
         )
     else:
+        # Every :data:`RING_PROFILE` entry sets exactly one of ``trans_mm``
+        # and ``trans_frac``; the assert lets mypy narrow the latter here
+        # without weakening the shared ``RingProfileSpec`` type.
+        assert spec["trans_frac"] is not None
         trans = np.full(
             g.shape, float(rng.uniform(*spec["trans_frac"])), dtype=np.float32
         )
@@ -1113,7 +1164,7 @@ def _pore_streaks(
     px_per_unit: float,
     spacing: float | np.ndarray,
     along_axis: int = 1,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Axial vessel streaks for one board face -- the anatomy a laminate lacks.
 
     On a flatsawn face you never see vessels as dots: the saw plane cuts each
@@ -1241,7 +1292,7 @@ def _pore_streaks(
     # the frequency itself and chops every streak down to a few pixels.)
     f_along = np.float32(mm_per_unit) / lam_mm
     du = np.gradient(wu, axis=along_axis).astype(np.float32)
-    phase_u = np.cumsum(f_along * du, axis=along_axis, dtype=np.float32)
+    phase_u: np.ndarray = np.cumsum(f_along * du, axis=along_axis, dtype=np.float32)
     # Every lane's phase integral starts at 0, which would line the first
     # streak of each lane up down one edge. Offset each lane, using a slice
     # that is constant along the grain so it adds nothing to the frequency.
@@ -1300,7 +1351,7 @@ def _pore_streaks(
     # mask, which restores the contrast without touching the area the other
     # three consumers want.
     peak = float(np.quantile(streaks, 0.999))
-    core = streaks / np.float32(max(peak, 0.25)) if peak > 1e-4 else streaks
+    core: np.ndarray = streaks / np.float32(max(peak, 0.25)) if peak > 1e-4 else streaks
     delta_l = (
         np.clip(core * np.float32(fade) + wash, 0.0, 1.0)
         * np.float32(rng.uniform(*anat["dl_star"]))
@@ -2176,7 +2227,7 @@ def _board_fields(
     film_mm = float(rng.uniform(*FINISHES[finish]["film_um"])) / 1000.0
     if film_mm > 0.0:
         coat_lift = np.clip(
-            gaussian_blur(height, np.float32(COAT_LEVEL_MM * px_per_mm), mode="edge")
+            gaussian_blur(height, float(COAT_LEVEL_MM * px_per_mm), mode="edge")
             - height,
             0.0,
             film_mm,
@@ -2292,6 +2343,19 @@ def _knot(
     }
 
 
+class _BoardColour(TypedDict):
+    """Keyword colour params shared by :func:`_board_fields` and :func:`_planks`."""
+
+    finish: str
+    variation: float
+    age: float
+    sap_p: float | None
+    knot_p: float | None
+    ring_sigma: float | None
+    figure: str
+    cut: str | None
+
+
 def generate(
     shape: tuple[int, int],
     rng: np.random.Generator,
@@ -2363,7 +2427,7 @@ def generate(
     cut = None if cut is None else str(cut)
     if cut is not None and cut not in CUT_P:
         raise ValueError(f"unknown wood cut {cut!r}; choose from {CUTS}")
-    colour = dict(
+    colour: _BoardColour = dict(
         finish=finish,
         variation=float(params.get("colour_variation", 1.0)),
         age=age,
@@ -2393,7 +2457,8 @@ def generate(
 
     light_dir = (-0.5, -0.55, 0.78)
     if "light_dir" in params:
-        light_dir = tuple(float(c) for c in params["light_dir"])
+        lx, ly, lz = (float(c) for c in params["light_dir"])
+        light_dir = (lx, ly, lz)
     return _shade_fields(
         fields,
         finish=finish,

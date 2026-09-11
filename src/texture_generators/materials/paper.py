@@ -68,6 +68,8 @@ by a key in :data:`STOCKS`:
 
 from __future__ import annotations
 
+from typing import Literal, NotRequired, TypedDict
+
 import numpy as np
 
 from ..core.colour import lab_to_linear_rgb, linear_to_srgb
@@ -136,7 +138,77 @@ VARIANTS = ["white", "kraft", "recycled", "newsprint", "laid", "coated"]
 #               ceiling the operator stays monotone up to. It also
 #               drives the gloss and the calender blackening, because all three
 #               are consequences of the same local densification.
-STOCKS = {
+
+
+class FeltSpec(TypedDict):
+    """Sub-resolution LIC felt parameters. See :func:`_felt_stack`."""
+
+    fines_mm: float
+    fibre_mm: float
+    layers: int
+    mass: float
+    albedo: float
+    height: float
+
+
+class WireSpec(TypedDict):
+    """Laid-mould wire-mark parameters. See :func:`_wire_marks`."""
+
+    laid_pitch_mm: tuple[float, float]
+    laid_um: tuple[float, float]
+    chain_pitch_mm: tuple[float, float]
+    chain_um: tuple[float, float]
+
+
+class CoatingSpec(TypedDict):
+    """Pigment-coating overrides applied on top of the base fibre network."""
+
+    mottle_mm: tuple[float, float]
+    gloss: float
+    albedo: float
+
+
+class Stock(TypedDict):
+    """Per-variant physical profile. See the table comment above and :data:`STOCKS`."""
+
+    mm_across: tuple[float, float]
+    lab: tuple[float, float, float]
+    lab_jitter: tuple[float, float, float]
+    fibre_mm: float
+    fibre_sigma: float
+    width_um: float
+    coverage: float
+    kappa: tuple[float, float]
+    persistence: float
+    kinks: float
+    tone_spread: float
+    extinction: float
+    floc_spacing_mm: float
+    floc_spread_mm: float
+    clustered: float
+    fibrillation: float
+    psf_um: float
+    sheen: tuple[float, float]
+    sheen_exp: tuple[float, float]
+    sq_um: float
+    cockle_um: tuple[float, float]
+    roughness_deg: float
+    calender_k: float
+    stack_skew: float
+    asperity: float
+    crease_chance: float
+    md: float
+    tooth_mm: float
+    rough_w: tuple[float, float, float, float]
+    felt: FeltSpec | None
+    wire: WireSpec | None
+    coating: CoatingSpec | None
+    # Only ``coated`` sets this; every other stock uses the default of 1.0
+    # applied where it is read, in :func:`render_sheet`.
+    crease_scale: NotRequired[float]
+
+
+STOCKS: dict[str, Stock] = {
     # Uncoated woodfree copier stock: short hardwood-rich furnish, heavily
     # filled, calendered, optically brightened.
     "white": {
@@ -838,7 +910,7 @@ def _fines_and_flocs(
 def _felt_stack(
     shape: tuple[int, int],
     rng: np.random.Generator,
-    spec: dict,
+    spec: FeltSpec,
     ppm: float,
     machine_dir: float,
     kappa: float,
@@ -915,10 +987,13 @@ def _felt_stack(
     # the long population is a broad grain that reads fine at two or three.
     # The long one is also a single octave -- it *is* the coarse fibre, and a
     # third-length sub-octave of it would only duplicate the fines felt.
-    for key, share, weight, octaves in (
+    populations: tuple[
+        tuple[Literal["fines_mm", "fibre_mm"], float, float, int], ...
+    ] = (
         ("fines_mm", 100.0, 1.0, 2),
         ("fibre_mm", 50.0, 0.62, 1),
-    ):
+    )
+    for key, share, weight, octaves in populations:
         scale_mm = float(spec.get(key, 0.0))
         if scale_mm <= 0.0:
             continue
@@ -975,7 +1050,7 @@ def wire_counts(
 def _wire_marks(
     shape: tuple[int, int],
     rng: np.random.Generator,
-    spec: dict,
+    spec: WireSpec,
     ppm: float,
     formation: np.ndarray,
 ) -> tuple[np.ndarray, float, float]:
@@ -1300,7 +1375,7 @@ def render_sheet(
     # --- Sub-resolution felt ---------------------------------------------
     # Only for stocks that specify one, and only after every draw the other
     # stocks make, so adding it leaves their pixels untouched.
-    felt_field = None
+    felt_field: np.ndarray | None = None
     felt_spec = stock["felt"]
     if felt_spec is not None:
         felt_field = _felt_stack((h, w), rng, felt_spec, ppm, machine_dir, kappa)
@@ -1358,7 +1433,7 @@ def render_sheet(
     # splitting them into two independent textures is what makes procedural
     # grain read as sensor noise. Keep it to a couple of percent.
     rgb = rgb * (1.0 + np.float32(rng.uniform(0.010, 0.022)) * fines[..., None])
-    if felt_field is not None:
+    if felt_field is not None and felt_spec is not None:
         # The felt is *oriented* debris, so unlike the isotropic fines band it
         # reads as grain with a direction to it -- the thing that separates a
         # mechanical-pulp sheet from a noisy one. Still only a few percent:
@@ -1373,7 +1448,7 @@ def render_sheet(
     # feature, so it goes into the sheen at full strength and into the albedo at
     # 1% -- put it in the colour instead and the sheet reads as blotchy paper
     # rather than as coated paper.
-    mottle = None
+    mottle: np.ndarray | None = None
     coating = stock["coating"]
     if coating is not None:
         mottle = matern_field(
@@ -1523,7 +1598,7 @@ def render_sheet(
             _ASPERITY_AREA,
             _ASPERITY_SIZE_UM * 1e-3 * ppm,
         ) * np.float32(abs(asperity))
-    if felt_field is not None:
+    if felt_field is not None and felt_spec is not None:
         # Fines pack into the inter-fibre valleys and stand slightly proud of
         # them, so the felt is relief as well as mass and albedo.
         rough = rough + felt_field * np.float32(felt_spec["height"])
@@ -1628,7 +1703,7 @@ def render_sheet(
         + np.float32(_CALENDER_GLOSS)
         * (densified - np.float32(float(densified.mean())))
     )
-    if mottle is not None:
+    if mottle is not None and coating is not None:
         # The mottle belongs here, at a weight an order of magnitude above what
         # it gets in the albedo. Floored rather than clipped symmetrically: a
         # dull patch of coating is still coating, and never a matte hole.

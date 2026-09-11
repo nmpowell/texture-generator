@@ -18,6 +18,8 @@ what makes figured wood shimmer as the light moves.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 import numpy as np
 
 from .fields import height_to_normal
@@ -62,16 +64,21 @@ def _unit(v: tuple[float, float, float]) -> np.ndarray:
     return (arr / max(float(np.linalg.norm(arr)), 1e-8)).astype(np.float32)
 
 
-def tangent_frame(aniso_dir, shape: tuple[int, int]) -> tuple[np.ndarray, np.ndarray]:
+def tangent_frame(
+    aniso_dir: float | Sequence[float] | Sequence[np.ndarray] | np.ndarray,
+    shape: tuple[int, int],
+) -> tuple[np.ndarray, np.ndarray]:
     """Build tangent/bitangent fields from an angle, a 2-vector, or per-pixel arrays.
 
     Accepts a scalar angle in radians, a ``(dx, dy)`` pair, a pair of (H, W)
     arrays, or an (H, W, 2) array. Returns two arrays broadcastable to
     (H, W, 3).
     """
-    if np.isscalar(aniso_dir):
-        tx = np.float32(np.cos(float(aniso_dir)))
-        ty = np.float32(np.sin(float(aniso_dir)))
+    tx: np.ndarray
+    ty: np.ndarray
+    if isinstance(aniso_dir, (int, float, np.floating)):
+        tx = np.asarray(np.cos(float(aniso_dir)), dtype=np.float32)
+        ty = np.asarray(np.sin(float(aniso_dir)), dtype=np.float32)
     else:
         arr = aniso_dir
         if isinstance(arr, (tuple, list)):

@@ -145,7 +145,7 @@ def _env_gradient(
 
 def _soften(field: np.ndarray) -> np.ndarray:
     """3x3 smoothing so 1px scratch rasters read as hairlines, not dashes."""
-    out = field * np.float32(0.4)
+    out: np.ndarray = field * np.float32(0.4)
     for dy in (-1, 0, 1):
         for dx in (-1, 0, 1):
             if dx == 0 and dy == 0:
@@ -832,7 +832,7 @@ def engine_turn_lattice(
 def _brick_offset(rows: np.ndarray, step_px: float, brick: bool) -> np.ndarray:
     """Half-step x offset applied to odd rows when the layout is brick-laid."""
     if not brick:
-        return np.float32(0.0)
+        return np.zeros_like(rows, dtype=np.float32)
     return np.where(rows % 2 != 0, np.float32(0.5 * step_px), np.float32(0.0)).astype(
         np.float32
     )
