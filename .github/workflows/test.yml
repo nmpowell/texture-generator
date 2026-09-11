@@ -58,6 +58,21 @@ jobs:
       - run: uv run --locked --python 3.14 ruff check .
       - run: uv run --locked --python 3.14 ruff format --check .
 
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.10"
+          enable-cache: true
+      - name: Install Python 3.12 and locked dependencies
+        run: uv sync --locked --python 3.12
+      - name: Type-check against the oldest supported Python
+        run: uv run --locked --python 3.12 mypy
+
   build:
     runs-on: ubuntu-latest
     steps:
