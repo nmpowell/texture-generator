@@ -19,15 +19,18 @@ BASELINE = json.loads(
 
 
 def _check_pixels(result: np.ndarray, record: dict) -> None:
-    assert (
-        hashlib.sha256(to_image(result).tobytes()).hexdigest() == record["rgb8_sha256"]
-    )
-    # Exact float bytes are a same-runtime contract, unlike the existing
-    # quantised-image regression checks. libm/NumPy can differ across platforms.
+    image = np.asarray(to_image(result))
+    height, width, _ = image.shape
+    grid = image.reshape(4, height // 4, 4, width // 4, 3).mean(axis=(1, 3))
+    reference = np.frombuffer(bytes.fromhex(record["rgb8_grid4_hex"]), dtype=np.uint8)
+    np.testing.assert_allclose(grid, reference.reshape(4, 4, 3), rtol=0, atol=2)
+    # Exact image and float bytes are same-runtime contracts. A few quantised
+    # pixels can differ when libm/NumPy takes another platform's code path.
     if (
         platform.platform() == BASELINE["platform"]
         and np.__version__ == BASELINE["numpy"]
     ):
+        assert hashlib.sha256(image.tobytes()).hexdigest() == record["rgb8_sha256"]
         assert hashlib.sha256(result.tobytes()).hexdigest() == record["sha256"]
 
 
