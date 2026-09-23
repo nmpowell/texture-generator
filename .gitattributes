@@ -1,0 +1,4 @@
+# Preserve the exact downloaded bytes used by the optical resource manifest.
+src/texture_generators/data/galvanised/optics/sources/CIE_std_illum_D65.csv -text
+src/texture_generators/data/galvanised/optics/sources/CIE_xyz_1931_2deg.csv -text
+src/texture_generators/data/galvanised/optics/sources/CIE_xyz_1931_2deg.csv_metadata.json -text
