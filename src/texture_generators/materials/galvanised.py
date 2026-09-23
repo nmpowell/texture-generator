@@ -57,7 +57,7 @@ from texture_generators.materials.galvanised_config import (
     PreviewConfig,
 )
 
-GENERATOR_VERSION = "galvanised-2"
+GENERATOR_VERSION = "galvanised-3"
 GALVANISED_PRESETS = ("regular", "minimised", "weathered", "wet_storage")
 
 # Exact-area 12-seed fit at 100x100 mm, 8 mm diameter; extrapolation is marked.
@@ -304,10 +304,11 @@ def _sample_continuous(
     )
     azimuth = state.dendrites.azimuth_rad[ids]
     base_axis = np.stack((np.cos(2.0 * azimuth), np.sin(2.0 * azimuth)), axis=-1)
-    # The branch descriptor already carries its support and axis coherence.
-    # A weak intrinsic crystal axis remains in empty regions; competing arms
-    # may cancel without being normalised back into an arbitrary strong axis.
-    directional = 0.15 * base_axis + 0.85 * branch_direction
+    # A crystal keeps its reflection direction between visible growth arms.
+    # Letting only narrow branches carry anisotropy turns an otherwise flat
+    # grain into a repeated comb. Fine branches perturb the coherent crystal
+    # frame without dominating its response at ordinary viewing distances.
+    directional = 0.66 * base_axis + 0.34 * branch_direction
     coherence = np.linalg.norm(directional, axis=-1)
     axis = np.divide(
         directional,
@@ -315,9 +316,16 @@ def _sample_continuous(
         out=np.zeros_like(directional),
         where=coherence[..., None] > 1e-8,
     )
-    # Family-locked intrinsic zinc widths: weather only mixes separate deposits.
+    # Tilt changes the authored distribution of unresolved surface slopes,
+    # not zinc's pinned optical reflectance. This is an appearance model, not
+    # orientation-resolved measurements of zinc. Weather mixes separate lobes.
+    tilt = state.dendrites.tilt_rad[ids]
+    crystal_width = 0.76 + 0.48 * np.sin(tilt) ** 2
     intrinsic_roughness = np.clip(
-        config.roughness - 0.10 * config.texture_strength * np.tanh(branch), 0.0, 1.0
+        config.roughness * crystal_width
+        - 0.040 * config.texture_strength * np.tanh(branch),
+        0.0,
+        1.0,
     )
     intrinsic_anisotropy = np.clip(
         config.anisotropy * np.minimum(coherence, 1.0), 0.0, 1.0
@@ -404,7 +412,7 @@ _DEPOSIT_OPTICS = (
     {
         "material_id": 1,
         "kind": "dielectric",
-        "diffuse_color_linear": [0.43, 0.45, 0.37],
+        "diffuse_color_linear": [0.43, 0.45, 0.46],
         "roughness": 0.64,
         "anisotropy": 0.0,
         "ior": 1.5,
@@ -412,7 +420,7 @@ _DEPOSIT_OPTICS = (
     {
         "material_id": 2,
         "kind": "dielectric",
-        "diffuse_color_linear": [0.78, 0.80, 0.74],
+        "diffuse_color_linear": [0.78, 0.80, 0.81],
         "roughness": 0.86,
         "anisotropy": 0.0,
         "ior": 1.5,

@@ -53,7 +53,15 @@ The morphology and surface suites passed together: **24 tests**. Ruff and mypy p
 
 The revision removes much of the coarse crosshatching and reduces isolated botanical outlines. Fine fans, herringbone sectors and some sparse two-direction grains remain conspicuous in branch diagnostics and studio previews. Three seeds and four lights establish a bounded comparison, not the plan's held-out calibration programme. Fitting projected families, fine-scale topography and grain-wide unresolved reflection still needs independent evidence. No completed P7 or calibrated-appearance claim follows from these changes.
 
-## Separate grain-wide reflection diagnostic
+## Historical grain-wide reflection diagnostic
+
+The 0.7.0 procedural release later superseded the rejection below for its
+bounded visual scope. The sampler now uses a 0.66 intrinsic crystal-axis and
+0.34 local-branch blend, with tilt-dependent roughness and reduced branch
+relief. Multi-seed, scale and light previews favoured the resulting spangle
+contrast over the previous comb pattern. Balanced-family angular fitting and
+specimen-calibrated evidence remain open, so this release choice is an
+appearance model rather than a physical validation of a single crystal axis.
 
 A frozen scratch experiment also tested whether the sampler's weak grain-wide response makes individual arms dominate the preview. Geometry, normal, roughness and metallic arrays were asserted bitwise unchanged. All three seeds were rendered under the same four lights. No repository sampler change was made.
 

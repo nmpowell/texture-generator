@@ -1,12 +1,21 @@
 # Galvanised metal implementation record
 
-Status: implementation in progress; no production or calibration sign-off.
+Status: 0.7.0 procedural release candidate; measured-material calibration and
+the original full acceptance plan remain open.
 
 The accepted design is `data/plans/2026-09-22-galvanised-metal/implementation-plan.md`
 in the sibling data repository, dated 22 September 2026. The supporting research is
 `data/llm-output/2026-09/2026-09-22/084026383-b5634651-269b4f34_output.md`.
 The baseline commit is `cf455ee3a4904ac7fbece87948f6a16cb0c8f948` (0.6.1).
 This record tracks the full design; a working fresh preview does not complete it.
+
+The 0.7.0 release scope is narrower than that design: four visually reviewed
+presets, deterministic public image and map paths, independent relighting,
+lossless/TIFF export and replay. It does not claim a measured zinc specimen fit,
+complete angular fitting, finite-band certification or full 4K/8K rich-export
+support. `inconspicuous` and `batch` remain experimental. The open gates below
+continue to track the original research ambition rather than blocking this
+explicitly scoped procedural approximation.
 
 On 23 September the user clarified that Blender is not part of this task.
 No Blender adapter or Blender scene is being implemented. Numerical rendering,
@@ -63,7 +72,7 @@ Each row remains open until the named evidence covers its whole scope.
 | G11 | Weathering geometry and fractions | Exposure zero, monotonicity, nested coverage, confinement, finite limits, same substrate | Open |
 | G12 | Serialization/professional I/O/replay | Exact arrays and rich records, tiny-slope round trip with independent reader, interrupted-export atomicity, version/resource errors | Open |
 | G13 | Resource limits | Machine/stage/RSS/candidate data at 512,1K,4K,8K and >=80k nuclei; streaming and selected output equality | Open |
-| G14 | Compatibility and distribution | Legacy hashes/RNG/default selections; all tests/lint/typing/build/metadata; installed wheel/sdist resources outside source | Passed local Python 3.14 checks; remote CI matrix not yet run |
+| G14 | Compatibility and distribution | Legacy hashes/RNG/default selections; all tests/lint/typing/build/metadata; installed wheel/sdist resources outside source | Passed local 3.12/3.13/3.14 locked/minimum tests and artifact smoke checks; remote platform CI pending |
 | Visual | Four initial presets across seeds/lights/views/crops/meshes/mips | >=12 seeds each, four rigs, front/oblique/grazing, >=2 crops, 3x3 tiles, flat/curved external renders; reference and reviewer record | Open |
 | Examples | Repeatable documented usage | Notebook recipe, maps/scale/light/resolution/weathering, concrete seeds and hashes in examples manifest, preset sweeps | Implemented; new cells executed and ten asset hashes verified |
 | Blender adapter | Original pinned renderer integration | Blender-specific scene, node and displacement validation | Excluded by the user; data-frame and independent float-I/O checks remain in scope |
@@ -154,7 +163,7 @@ P7. No production, measured-material or complete-goal sign-off is claimed.
 
 ## Continuation: sampling, physical footprints and support search
 
-The generator is now `galvanised-2`. Draft supports the existing shared 2 × 2
+The generator is now `galvanised-3`. Draft supports the existing shared 2 × 2
 samples; single-lobe production uses 4 × 4. Single-lobe reference uses per-pixel
 8 → 16 → 32 comparisons with independent 17/33 grids and explicit rejection.
 Its 4096-pixel diagnostic cap bounds work. It does not certify a finite band or
@@ -221,7 +230,7 @@ verification. These results are in `continuation/preview-summary.json` and
 `continuation/preview-progress.json`, under the validation directory above.
 The ten updated notebook/gallery assets also match their manifest hashes.
 
-Current verification covers **732 collected tests**: 682 passed in the main
+Earlier foundation verification covered **732 collected tests**: 682 passed in the main
 run and 49 in the packaging/adapter run before the derivative-ceiling change;
 the subsequent 58-test rendering/optics/adapter rerun passed, including the new
 wet-transition regression and the strengthened unresolved-derivative fixture.
@@ -229,6 +238,32 @@ The two earlier runs took 207.41 and 14.10 seconds; the targeted rerun took
 16.46 seconds. Ruff lint and formatting (102 Python files), and mypy (43 source
 files), pass on the final source. Packaging checks include installed wheel and
 rebuilt-sdist resources outside the checkout. Remote CI remains unrun.
+
+## 0.7.0 release validation
+
+The final procedural branch was reviewed across seeds 17, 42 and 73, two
+physical extents, two light azimuths, two weather states, a 2 × 2 repeat and
+384 → 192 pixel downsampling. The repeat has no visible edge seam; the direct
+versus downsampled display RGB mean absolute error was 0.00370. The resulting
+standard metal tile, four-preset comparison, relighting examples and contact
+sheet were inspected. The full notebook executed all 22 code cells, wrote 61
+images, and all image hashes match its 0.7.0 manifest.
+
+On macOS ARM64, the complete suite passed on Python 3.12, 3.13 and 3.14 with
+both locked and minimum compatible runtime dependencies: **732 passed, one
+optional TIFF test skipped** in each environment. The minimum selections were
+Click 8.1.0 throughout; NumPy/Pillow were 2.0.0/10.0.0 on 3.12,
+2.1.0/10.4.0 on 3.13 and 2.3.2/11.3.0 on 3.14. The optional TIFF export suite
+passed all 15 tests on 3.12 and 3.14 with both locked `tifffile` and its
+minimum supported 2025.5.10 release. Ruff lint/format, mypy on 3.12, and
+dependency checks passed. The release performance record gives the final
+512 × 384 RGB and four-preset rich-map measurements and states the limits.
+
+The 0.7.0 wheel and source archive passed strict Twine checks. Both artifacts
+were installed outside the checkout and passed API, CLI, map/export/replay,
+sample-gallery and dependency smoke checks on all three supported Python
+versions. Remote Ubuntu, macOS and Windows CI remains to be run on the pushed
+branch; these local macOS checks do not substitute for that platform matrix.
 
 ## Next implementation steps
 
@@ -240,6 +275,6 @@ rebuilt-sdist resources outside the checkout. Remote CI remains unrun.
 3. Profile and accelerate morphology and boundary work before repeating full
    rich 4K/8K workloads. Include dense complete-state construction in the memory
    policy, separately from the already-measured grain partition alone.
-4. Fit the remaining fan-like geometry and weathered appearance against the
-   source dossier, acquire missing physical evidence, and complete the visual
-   matrix. The experimental label remains until those checks pass.
+4. Fit the remaining morphology and weathering against measured specimens,
+   acquire missing physical evidence, and complete the original visual matrix.
+   The procedural release does not close those calibration gates.

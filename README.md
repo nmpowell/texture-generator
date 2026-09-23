@@ -56,9 +56,11 @@ covers all public functions and material parameters.
 
 ## Galvanised metal
 
-The experimental `metal/galvanised` variant adds physical millimetre dimensions,
+The `metal/galvanised` variant adds physical millimetre dimensions,
 micrometre height maps, independent relighting and lossless material exports.
-Its initial presets are `regular`, `minimised`, `weathered` and `wet_storage`.
+Its presets are `regular`, `minimised`, `weathered` and `wet_storage`. It is a
+procedural visual approximation; measured-material calibration and a complete
+angular reflection fit remain outside this release.
 
 ```python
 from texture_generators import generate_maps, render_material
@@ -75,8 +77,8 @@ render_material(maps).save("galvanised.png")
 ```
 
 See the [galvanised guide](docs/galvanised.md) for map semantics, export and CLI
-usage, and the [acceptance record](docs/galvanised-implementation.md) for the
-remaining calibration and performance work.
+usage and limits. The [implementation record](docs/galvanised-implementation.md)
+tracks the separate calibration and performance ambitions.
 
 ## Brushing direction
 
@@ -124,7 +126,7 @@ It also works with `--count`; JSON reports include the angle when it is supplied
 
 | Material | Variants |
 | --- | --- |
-| Metal | `brushed`, `radial`, `polished`, `heat_tinted`, `oil_film`, `anodised_titanium`, `engine_turned`, `galvanised` (experimental) |
+| Metal | `brushed`, `radial`, `polished`, `heat_tinted`, `oil_film`, `anodised_titanium`, `engine_turned`, `galvanised` |
 | Plastic | `glossy`, `matte`, `textured` |
 | Wood | `board`, `planks` |
 | Paper | `white`, `kraft`, `recycled`, `newsprint`, `laid`, `coated` |
@@ -172,8 +174,10 @@ records how they were generated.
 | Brushed | Radial | Polished | Heat tinted |
 | --- | --- | --- | --- |
 | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-brushed.png" alt="Brushed metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-radial.png" alt="Radial metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-polished.png" alt="Polished metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-heat_tinted.png" alt="Heat tinted metal texture" width="160" height="160"> |
-| **Oil film** | **Anodised titanium** | **Engine turned** |  |
-| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-oil_film.png" alt="Oil film metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-anodised_titanium.png" alt="Anodised titanium metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-engine_turned.png" alt="Engine turned metal texture" width="160" height="160"> |  |
+| **Oil film** | **Anodised titanium** | **Engine turned** | **Galvanised** |
+| <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-oil_film.png" alt="Oil film metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-anodised_titanium.png" alt="Anodised titanium metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-engine_turned.png" alt="Engine turned metal texture" width="160" height="160"> | <img src="https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/variants/metal-galvanised.png" alt="Galvanised zinc texture" width="160" height="160"> |
+
+The [four galvanised presets](https://raw.githubusercontent.com/nmpowell/texture-generator/main/examples/images/galvanised/preset-comparison.png) show the same seed and light with different surface conditions.
 
 ### Plastic
 

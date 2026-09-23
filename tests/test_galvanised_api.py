@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import json
 from pathlib import Path
 
@@ -24,6 +25,14 @@ from texture_generators.materials import metal
 from texture_generators.materials.galvanised_config import GalvanisedConfig
 
 RECIPE = GalvanisedConfig(size_mm=(12.0, 8.0))
+
+
+def _cli_runner_with_separate_streams() -> CliRunner:
+    # Click 8.1 merges stderr into Result.stdout by default; newer Click
+    # captures it separately. The CLI's JSON contract concerns stdout alone.
+    if "mix_stderr" in inspect.signature(CliRunner).parameters:
+        return CliRunner(mix_stderr=False)
+    return CliRunner()
 
 
 def test_image_and_map_paths_render_identically() -> None:
@@ -116,7 +125,7 @@ def test_two_pixel_images_and_minimum_map_size() -> None:
 
 
 def test_image_cli_reports_concrete_physical_recipe(tmp_path: Path) -> None:
-    result = CliRunner().invoke(
+    result = _cli_runner_with_separate_streams().invoke(
         main,
         [
             "metal",
@@ -143,7 +152,7 @@ def test_image_cli_reports_concrete_physical_recipe(tmp_path: Path) -> None:
 
 def test_map_cli_bundle_report_and_selection(tmp_path: Path) -> None:
     destination = tmp_path / "bundle"
-    result = CliRunner().invoke(
+    result = _cli_runner_with_separate_streams().invoke(
         main,
         [
             "maps",

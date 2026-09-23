@@ -1,10 +1,10 @@
 # Galvanised zinc
 
-`metal/galvanised` is a separate physically scaled surface generator. Its current
-implementation is experimental: numerical contracts, optics and file round trips
-have tests, while morphology, angular filtering and large-output budgets are still
-being evaluated. The [implementation record](galvanised-implementation.md) tracks
-the remaining acceptance work.
+`metal/galvanised` is a separate physically scaled surface generator. The four
+release presets provide a procedural approximation of zinc sheet, with tested
+numerical contracts, optics and file round trips. They are authoring defaults,
+not a measured material calibration. The [implementation record](galvanised-implementation.md)
+separates release acceptance from the unfinished research programme.
 
 ## Generate and relight one surface
 
@@ -49,6 +49,15 @@ The gallery presets are `regular`, `minimised`, `weathered`, and `wet_storage`.
 with `galvanised`. `inconspicuous` and `batch` exist as experimental config
 presets with separate, incomplete scale and fabrication validation.
 
+The fresh presets use coherent grain reflections with a restrained fine growth
+pattern. `regular` has a nominal 8 mm spangle diameter; `minimised` uses 1.5 mm.
+`weathered` adds widespread dull grey patina while retaining the original zinc
+substrate. `wet_storage` adds uneven pale deposits with finer moisture variation.
+Weathering controls are appearance parameters rather than elapsed years.
+Directional lights show grain contrast most clearly; diffuse overcast light
+intentionally makes clean zinc more uniform. Grain contrast comes from authored
+roughness and reflection directions, while the zinc reflectance stays constant.
+
 ## Sampling quality
 
 `quality="draft"` uses shared 2 × 2 midpoint samples. With
@@ -69,8 +78,10 @@ extracts candidates and dense targets from real surface rectangles and tests
 stored fitted records at a fixed normal view. It preserves rejected diagnostics
 and provides a development tool for the angular fitter.
 
-The sampling revision is `galvanised-2`. Replay rejects older generator versions
-instead of silently regenerating different samples.
+The generator revision is `galvanised-3`, with preset revision
+`2026-09-23.release-1`. It changes the grain reflection model, relief defaults
+and weather distribution. Replay rejects older generator versions instead of
+silently regenerating different samples.
 
 ## Material data
 

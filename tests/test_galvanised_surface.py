@@ -85,6 +85,45 @@ def test_weather_nested_monotonic_and_substrate_fixed(regular):
     assert weathered.config.anisotropy == regular.config.anisotropy
 
 
+def test_release_weather_presets_have_distinct_coverage_without_repainting_zinc(
+    regular,
+):
+    lx, ly = regular.config.size_mm
+    x, y = np.meshgrid(
+        (np.arange(48) + 0.5) * lx / 48,
+        (np.arange(36) + 0.5) * ly / 36,
+    )
+    fresh = sample_points(regular, x, y)
+    exposed = sample_points(
+        replace(
+            regular,
+            config=GalvanisedConfig(preset="weathered", size_mm=(lx, ly)),
+        ),
+        x,
+        y,
+    )
+    stored_state = replace(
+        regular,
+        config=GalvanisedConfig(preset="wet_storage", size_mm=(lx, ly)),
+    )
+    stored = sample_points(stored_state, x, y)
+    shifted = sample_points(stored_state, x + 2 * lx, y - 3 * ly)
+    for name in ("metallic", "patina_coverage", "white_stain_coverage", "height_um"):
+        np.testing.assert_allclose(stored[name], shifted[name], atol=1e-10, rtol=0)
+    # Ordinary weathering must dull most of the sheet; the former sparse
+    # moisture mask left it visually indistinguishable from fresh metal.
+    assert 0.65 < exposed["patina_coverage"].mean() < 0.95
+    assert not np.any(exposed["white_stain_coverage"])
+    assert stored["white_stain_coverage"].mean() > 0.25
+    assert np.ptp(stored["white_stain_coverage"]) > 0.4
+    for name in ("substrate_height_um", "intrinsic_roughness", "intrinsic_anisotropy"):
+        np.testing.assert_array_equal(fresh[name], exposed[name])
+        np.testing.assert_array_equal(fresh[name], stored[name])
+    # Reflections persist between the fine growth arms, rather than outlining
+    # every branch against a uniformly isotropic grain interior.
+    assert np.median(fresh["intrinsic_anisotropy"]) > 0.35
+
+
 @pytest.mark.parametrize("exposure", [5.0, 100.0])
 def test_saturated_weather_keeps_nonnegative_fractions_and_defined_axes(exposure):
     config = GalvanisedConfig(

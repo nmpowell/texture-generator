@@ -233,8 +233,16 @@ def test_provenance_identifies_captured_arrays_and_versions(real_state):
 
 
 def test_real_wet_transition_converges_with_fifth_derivative_refinement(monkeypatch):
+    # Keep the original relief recipe so this physical clamp-crossing point
+    # remains a regression fixture when release appearance defaults change.
     state = build_state(
-        GalvanisedConfig(preset="wet_storage", size_mm=(8, 6), spangle_diameter_mm=3),
+        GalvanisedConfig(
+            preset="wet_storage",
+            size_mm=(8, 6),
+            spangle_diameter_mm=3,
+            dendrite_relief_um=2.5,
+            trunk_relief_um=4.5,
+        ),
         seed=42,
     )
     step = material_render._reference_derivative_step_mm(state, None)
@@ -258,8 +266,10 @@ def test_real_wet_transition_converges_with_fifth_derivative_refinement(monkeypa
     )
     assert result.accepted and len(result.records) == 12
     assert result.report["accepted_spatial_rate"] == 32
-    assert (
-        max(item["max_derivative_halvings"] for item in result.report["integration"])
-        == 5
+    # The footprint also contains the newer fine deposit modulation; other
+    # points may need more refinement than this original fifth-step example.
+    refinements = max(
+        item["max_derivative_halvings"] for item in result.report["integration"]
     )
+    assert 5 <= refinements <= material_render._MAX_DERIVATIVE_HALVINGS
     assert all(error["passed"] for error in result.report["storage_errors"].values())

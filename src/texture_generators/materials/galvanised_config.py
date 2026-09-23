@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 SCHEMA_VERSION = 1
-PRESET_REVISION = "2026-09-22.initial-1"
+PRESET_REVISION = "2026-09-23.release-1"
 PRESET_VERSION = PRESET_REVISION
 
 Preset = Literal[
@@ -51,12 +51,12 @@ _SCHEMA_DEFAULTS: dict[str, Any] = {
     "placement": "poisson",
     "texture_strength": 0.45,
     "crystal_tilt_concentration": 4.0,
-    "dendrite_relief_um": 2.5,
-    "trunk_relief_um": 4.5,
+    "dendrite_relief_um": 1.0,
+    "trunk_relief_um": 2.0,
     "boundary_depth_um": 1.0,
     "micro_relief_um": 0.4,
     "roughness": 0.30,
-    "anisotropy": 0.55,
+    "anisotropy": 0.70,
     "exposure": 0.0,
     "wetness": 0.0,
     "confinement": 0.0,
@@ -76,17 +76,17 @@ _PRESET_DEFAULTS: dict[str, dict[str, Any]] = {
     "minimised": {
         "spangle_diameter_mm": 1.5,
         "spangle_cv": 0.20,
-        "dendrite_relief_um": 1.2,
-        "trunk_relief_um": 2.5,
+        "dendrite_relief_um": 0.6,
+        "trunk_relief_um": 1.2,
         "micro_relief_um": 0.25,
     },
     "weathered": {
-        "exposure": 0.65,
+        "exposure": 3.0,
         "wetness": 0.35,
         "white_stain": 0.05,
     },
     "wet_storage": {
-        "exposure": 1.0,
+        "exposure": 1.8,
         "wetness": 0.95,
         "confinement": 0.90,
         "salt_exposure": 0.25,

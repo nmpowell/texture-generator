@@ -33,7 +33,8 @@ from texture_generators.materials.galvanised_config import PreviewConfig
 
 __all__ = ["render_material", "render_material_array", "render_reference"]
 
-_LOBE_CHUNK = 4096
+_LOBE_CHUNK = 16384
+_LIGHT_BATCH = 4
 _REFERENCE_POINT_CHUNK = 4096
 _DERIVATIVE_TOLERANCE = 1e-5
 _MAX_DERIVATIVE_HALVINGS = 8
@@ -429,8 +430,12 @@ def _render_lobe_chunks(
                     subset_ab,
                     optical,
                 )
-        for direction, radiance in zip(directions, radiances, strict=True):
-            cosine = np.maximum(0.0, np.sum(normal * direction, axis=1))
+        for light_start in range(0, len(directions), _LIGHT_BATCH):
+            light_directions = directions[light_start : light_start + _LIGHT_BATCH]
+            light_radiances = radiances[light_start : light_start + _LIGHT_BATCH]
+            cosine = np.maximum(
+                0.0, np.sum(normal[None] * light_directions[:, None, :], axis=-1)
+            )
             if not np.any(cosine > 0):
                 continue
             for (
@@ -443,16 +448,19 @@ def _render_lobe_chunks(
                 prepared_view,
             ) in subsets:
                 f = _bsdf(
-                    subset_normal,
-                    subset_tangent,
-                    direction,
+                    subset_normal[None],
+                    subset_tangent[None],
+                    light_directions[:, None, :],
                     view,
-                    subset_at,
-                    subset_ab,
+                    subset_at[None],
+                    subset_ab[None],
                     optical,
                     prepared_view,
                 )
-                local[subset] += radiance * cosine[subset, None] * f
+                for light_index, radiance in enumerate(light_radiances):
+                    local[subset] += (
+                        radiance * cosine[light_index, subset, None] * f[light_index]
+                    )
         np.add.at(output, pixel, local * weights[:, None])
     return output.reshape((*shape, 3))
 

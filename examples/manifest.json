@@ -3,7 +3,7 @@
     "python": "3.14.7",
     "platform": "darwin",
     "architecture": "arm64",
-    "texture-generator": "0.5.0",
+    "texture-generator": "0.7.0",
     "numpy": "2.5.2",
     "pillow": "12.3.0"
   },
@@ -156,6 +156,22 @@
         "variant": "engine_turned"
       },
       "sha256": "f56f19bd837fe5e71aa4d304c86d818677073c180a005eacf9725c56310a5de1"
+    },
+    {
+      "path": "images/variants/metal-galvanised.png",
+      "title": "metal / galvanised",
+      "section": "All variants \u2014 metal",
+      "width": 384,
+      "height": 384,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "size": 384,
+        "seed": 42,
+        "variant": "galvanised"
+      },
+      "sha256": "ebc96398e8a4b34feccf37211f34fad2c7a9739cca3b578fd258449058a1512b"
     },
     {
       "path": "images/variants/plastic-glossy.png",
@@ -919,21 +935,6 @@
       "sha256": "c6a09fca3729d9214a85ffca5372625f6f912c82beefef928704865cb55af73f"
     },
     {
-      "path": "images/contact-sheet.png",
-      "title": "All materials \u2014 labelled contact sheet",
-      "section": "Contact sheet",
-      "width": 798,
-      "height": 1066,
-      "mode": "RGB",
-      "recipe": {
-        "function": "sample_sheet",
-        "size": 192,
-        "seed": 7,
-        "columns": 4
-      },
-      "sha256": "1ede035891d1f43c2e670f7e94aacc13d159d510843bcf832be9815e17c21d87"
-    },
-    {
       "path": "images/galvanised/regular-scale.png",
       "title": "Galvanised prototype, 5 mm scale bar",
       "section": "Galvanised physical maps",
@@ -959,12 +960,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -978,12 +979,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1005,11 +1006,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "scale_bar_mm": 5,
         "preview": {
           "rig": "studio",
@@ -1024,7 +1025,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "2012b4a3b3b96818095de678d4286af38765f8d8b976b1ddb52bc6cc3d05642c"
+      "sha256": "1e371483d54d8a534abcb94fe67c3b13dd7fc9ea75dfef480bab5684fd92774a"
     },
     {
       "path": "images/galvanised/maps.png",
@@ -1052,12 +1053,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -1071,12 +1072,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1098,11 +1099,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "display_panels": [
           "height: -2 to 6 um",
           "signed normal: RGB encode",
@@ -1112,7 +1113,252 @@
           "zinc coverage: 0 to 1"
         ]
       },
-      "sha256": "3531e4ba5e99fd2cb69bbf0323aaf1884ccf1a23330602115beaf6bea4f43d60"
+      "sha256": "04f8e62136914a8bdff132b26dd956c6cf96e3886f59e2d0a66ddf39f226e881"
+    },
+    {
+      "path": "images/galvanised/preset-regular.png",
+      "title": "Galvanised / regular preset",
+      "section": "Galvanised presets",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "variant": "galvanised",
+        "size": [
+          192,
+          144
+        ],
+        "seed": 42,
+        "galvanised": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.7,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-23.release-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        }
+      },
+      "sha256": "4a41d84ccc2df1af0f9c3ce5766dfaab9e167443cc95bb56f929c5a61168df69"
+    },
+    {
+      "path": "images/galvanised/preset-minimised.png",
+      "title": "Galvanised / minimised preset",
+      "section": "Galvanised presets",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "variant": "galvanised",
+        "size": [
+          192,
+          144
+        ],
+        "seed": 42,
+        "galvanised": {
+          "preset": "minimised",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 1.5,
+          "spangle_cv": 0.2,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 0.6,
+          "trunk_relief_um": 1.2,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.25,
+          "roughness": 0.3,
+          "anisotropy": 0.7,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-23.release-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        }
+      },
+      "sha256": "b7ecad32a24a2b7a12e2f66dcd6096e57492c5386f88119b1d62cc5b9dae4bf1"
+    },
+    {
+      "path": "images/galvanised/preset-weathered.png",
+      "title": "Galvanised / weathered preset",
+      "section": "Galvanised presets",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "variant": "galvanised",
+        "size": [
+          192,
+          144
+        ],
+        "seed": 42,
+        "galvanised": {
+          "preset": "weathered",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.7,
+          "exposure": 3.0,
+          "wetness": 0.35,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.05,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-23.release-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        }
+      },
+      "sha256": "5cfa447b2ab060f6086d8b6524ace1b9104b25e3a4f4218f3c7f5c06c5771947"
+    },
+    {
+      "path": "images/galvanised/preset-wet_storage.png",
+      "title": "Galvanised / wet_storage preset",
+      "section": "Galvanised presets",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "variant": "galvanised",
+        "size": [
+          192,
+          144
+        ],
+        "seed": 42,
+        "galvanised": {
+          "preset": "wet_storage",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.7,
+          "exposure": 1.8,
+          "wetness": 0.95,
+          "confinement": 0.9,
+          "salt_exposure": 0.25,
+          "white_stain": 0.9,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-23.release-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        }
+      },
+      "sha256": "aa57e78e942c01a3f70acb8c5b558588f486868582517994a19e358bd40b23dc"
+    },
+    {
+      "path": "images/galvanised/preset-comparison.png",
+      "title": "Galvanised \u2014 four presets, one seed and light",
+      "section": "Galvanised presets",
+      "width": 408,
+      "height": 360,
+      "mode": "RGB",
+      "recipe": {
+        "function": "generate",
+        "material": "metal",
+        "variant": "galvanised",
+        "presets": [
+          "regular",
+          "minimised",
+          "weathered",
+          "wet_storage"
+        ],
+        "size": [
+          192,
+          144
+        ],
+        "size_mm": [
+          24,
+          18
+        ],
+        "seed": 42
+      },
+      "sha256": "e4d81c44bc9cf208a7ca4f3304254e484b62f16ed354076f2541ff1eef390497"
     },
     {
       "path": "images/galvanised/light-15.png",
@@ -1140,12 +1386,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -1159,12 +1405,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1186,11 +1432,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "oblique",
           "exposure_stops": 0.0,
@@ -1204,7 +1450,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "0cf970440a28b6a46eec0cecdd049e9418690e2f8d924dd7079b7b1748630293"
+      "sha256": "02b97cf6f0e0b261e9d5f385ffd38c38e7dc5bdb94ce25c383bf44edf0450958"
     },
     {
       "path": "images/galvanised/light-105.png",
@@ -1232,12 +1478,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -1251,12 +1497,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1278,11 +1524,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "oblique",
           "exposure_stops": 0.0,
@@ -1296,7 +1542,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "f90a7953feffc3818ce541481c146a080b897da995ba41eb1f6490c2d447e5d7"
+      "sha256": "425524768dfda3238114e0efc2b5dfbf2ea5629d166a116950598d3a046220dc"
     },
     {
       "path": "images/galvanised/resolution-48.png",
@@ -1324,12 +1570,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -1343,12 +1589,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1370,11 +1616,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "studio",
           "exposure_stops": 0.0,
@@ -1388,7 +1634,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "9db3d5a66900615b37e3cd29045fc0cf34196876d3c97ec2511b473bb310bf4c"
+      "sha256": "752ba97bae03879a7063f8cfbefce48f2143b0117a45dd0007e9736c92d05c8c"
     },
     {
       "path": "images/galvanised/resolution-96.png",
@@ -1416,12 +1662,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -1435,12 +1681,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1462,11 +1708,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "studio",
           "exposure_stops": 0.0,
@@ -1480,7 +1726,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "2da73ed02b14c625f325792912ba5b13b01930d4282d07ddfc050744b26cf2d1"
+      "sha256": "5c12c9be127944a500a5b550ef13ecc5b11cb61122ffd3f2639118e0c9e1081d"
     },
     {
       "path": "images/galvanised/resolution-192.png",
@@ -1508,12 +1754,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.0,
           "confinement": 0.0,
@@ -1527,12 +1773,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1554,11 +1800,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "studio",
           "exposure_stops": 0.0,
@@ -1572,7 +1818,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "da0a48b689c8a31f220bc976c37a7ee554d259fa8b1d216d4235087987445928"
+      "sha256": "4a41d84ccc2df1af0f9c3ce5766dfaab9e167443cc95bb56f929c5a61168df69"
     },
     {
       "path": "images/galvanised/exposure-0.0.png",
@@ -1600,12 +1846,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.0,
           "wetness": 0.9,
           "confinement": 0.85,
@@ -1619,12 +1865,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1646,11 +1892,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "studio",
           "exposure_stops": 0.0,
@@ -1664,7 +1910,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "da0a48b689c8a31f220bc976c37a7ee554d259fa8b1d216d4235087987445928"
+      "sha256": "4a41d84ccc2df1af0f9c3ce5766dfaab9e167443cc95bb56f929c5a61168df69"
     },
     {
       "path": "images/galvanised/exposure-0.5.png",
@@ -1692,12 +1938,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 0.5,
           "wetness": 0.9,
           "confinement": 0.85,
@@ -1711,12 +1957,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1738,11 +1984,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "studio",
           "exposure_stops": 0.0,
@@ -1756,7 +2002,7 @@
           "render_samples": 64
         }
       },
-      "sha256": "4614d629c01012cb4b80d18e31e79dd8bea444ef75ba3aa680f6687a9ef68bee"
+      "sha256": "5c46dc575b2ebc95b12a556f7c16071bf1975d75a4159e200b6e31261ef9719f"
     },
     {
       "path": "images/galvanised/exposure-1.0.png",
@@ -1784,12 +2030,12 @@
           "placement": "poisson",
           "texture_strength": 0.45,
           "crystal_tilt_concentration": 4.0,
-          "dendrite_relief_um": 2.5,
-          "trunk_relief_um": 4.5,
+          "dendrite_relief_um": 1.0,
+          "trunk_relief_um": 2.0,
           "boundary_depth_um": 1.0,
           "micro_relief_um": 0.4,
           "roughness": 0.3,
-          "anisotropy": 0.55,
+          "anisotropy": 0.7,
           "exposure": 1.0,
           "wetness": 0.9,
           "confinement": 0.85,
@@ -1803,12 +2049,12 @@
           "representation": "rich",
           "memory_budget_mb": 512,
           "schema_version": 1,
-          "preset_revision": "2026-09-22.initial-1",
+          "preset_revision": "2026-09-23.release-1",
           "warnings": [
             "Preset values are physically grounded authoring defaults, not metrological calibration."
           ]
         },
-        "generator_version": "galvanised-2",
+        "generator_version": "galvanised-3",
         "resource_hashes": {
           "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
           "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
@@ -1830,11 +2076,11 @@
           "python": "3.14.7",
           "platform": "darwin",
           "architecture": "arm64",
-          "texture-generator": "0.6.1",
+          "texture-generator": "0.7.0",
           "numpy": "2.5.2",
           "pillow": "12.3.0"
         },
-        "status": "experimental; visual and LOD acceptance open",
+        "status": "procedural approximation; measured-material calibration open",
         "preview": {
           "rig": "studio",
           "exposure_stops": 0.0,
@@ -1848,15 +2094,22 @@
           "render_samples": 64
         }
       },
-      "sha256": "eadae672f99155fef226663da1b2c5567b0972b02d1d7b8854b44aea43d86108"
+      "sha256": "a561dca83c443459f1ab195699fa29c9ae82f27cffda2f1fc879a4e991aca017"
+    },
+    {
+      "path": "images/contact-sheet.png",
+      "title": "All materials \u2014 labelled contact sheet",
+      "section": "Contact sheet",
+      "width": 798,
+      "height": 1066,
+      "mode": "RGB",
+      "recipe": {
+        "function": "sample_sheet",
+        "size": 192,
+        "seed": 7,
+        "columns": 4
+      },
+      "sha256": "e6181b77bdb2421c5bf6216ffe7f69fc475a389463f65be3dcbbeda36d6762b9"
     }
-  ],
-  "galvanised_environment": {
-    "python": "3.14.7",
-    "platform": "darwin",
-    "architecture": "arm64",
-    "texture-generator": "0.6.1",
-    "numpy": "2.5.2",
-    "pillow": "12.3.0"
-  }
+  ]
 }

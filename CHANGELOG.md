@@ -7,8 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-23
+
+### Added
+
+- `metal/galvanised` as an explicitly selected, physically scaled procedural
+  texture with regular, minimised, weathered and wet-storage presets. It works
+  through the image and array APIs, CLI, sample galleries and contact sheets.
+  It provides relightable physical maps, lossless and TIFF exports, and replay
+  with resource and generator identity checks. Random metal selection retains
+  its previous seeded results.
+- Galvanised examples, including a standard metal gallery tile, a four-preset
+  comparison, relighting and weathering examples, and a notebook recipe
+  manifest.
+
 ### Changed
 
+- The galvanised preset and generator revisions now favour grain-wide crystal
+  reflection over repeated branch highlights, with more visible ordinary
+  patina and mottled wet-storage deposits. Preview rendering batches emitter
+  directions with unchanged rich RGB values on the measured comparison.
+- The galvanised guide and performance record state the procedural release
+  scope, measured preview cost and supported size envelope. Full measured
+  calibration, production angular fitting and rich 4K/8K exports remain open.
 - mypy is now clean over the package internals and is a CI gate: a `typecheck`
   job runs it against Python 3.12, the oldest supported interpreter, and
   `[tool.mypy]` pins `python_version = "3.12"` to match. The preset tables in

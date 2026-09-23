@@ -98,11 +98,16 @@ def evaluate_ggx(
     )
     projected = raw_tangent - np.sum(raw_tangent * n, axis=-1, keepdims=True) * n
     projected_length = np.linalg.norm(projected, axis=-1, keepdims=True)
-    t = np.where(
-        projected_length > 1.0e-12,
-        projected / np.maximum(projected_length, 1.0e-300),
-        _orthogonal_fallback(n),
-    )
+    if np.all(projected_length > 1.0e-12):
+        # Most material frames already have a well-defined tangent. Avoid
+        # constructing an unused fallback for every BRDF light sample.
+        t = projected / projected_length
+    else:
+        t = np.where(
+            projected_length > 1.0e-12,
+            projected / np.maximum(projected_length, 1.0e-300),
+            _orthogonal_fallback(n),
+        )
     b = np.cross(n, t)
 
     at, ab = np.broadcast_arrays(
