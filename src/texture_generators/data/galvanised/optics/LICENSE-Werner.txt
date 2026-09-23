@@ -1,0 +1,11 @@
+Werner zinc optical constants
+================================
+
+Source: refractiveindex.info database file database/data/main/Zn/nk/Werner.yml
+Original authors: W. S. M. Werner, K. Glantschnig, C. Ambrosch-Draxl
+Source file licence declaration: CC0 1.0 Universal.
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The bibliographic source is J. Phys. Chem. Ref. Data 38, 1013--1092 (2009),
+DOI 10.1063/1.3243762. CC0 applies to the database file; it does not replace
+the article's publication terms.

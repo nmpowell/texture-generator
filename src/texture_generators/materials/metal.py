@@ -47,6 +47,12 @@ VARIANTS = [
     "engine_turned",
 ]
 
+# Preserve the seven pre-existing seeded default choices. The new physical
+# material is opt-in; catalogues and explicit variant selection include it.
+DEFAULT_VARIANTS = tuple(VARIANTS)
+VARIANTS.append("galvanised")
+GALVANISED_PRESETS = ("regular", "minimised", "weathered", "wet_storage")
+
 PALETTES = {
     "aluminium": (0.87, 0.88, 0.89),
     "steel": (0.75, 0.76, 0.77),
@@ -1372,6 +1378,25 @@ def generate(
     """
     if variant not in VARIANTS:
         raise ValueError(f"unknown metal variant {variant!r}; choose from {VARIANTS}")
+    if variant == "galvanised":
+        if (
+            film is not None
+            or iridescence != 0.0
+            or brush_angle is not None
+            or source_angular_radius != SUN_ANGULAR_RADIUS_DEG
+            or groove_pitch_um != GROOVE_PITCH_UM
+        ):
+            raise ValueError(
+                "galvanised does not accept legacy film or brushing controls"
+            )
+        unknown = set(params) - {"galvanised", "galvanised_preset", "preview"}
+        if unknown:
+            raise ValueError(f"unknown galvanised controls: {sorted(unknown)!r}")
+        from .galvanised import generate as generate_galvanised
+
+        return generate_galvanised(shape, rng, **params)
+    if any(name in params for name in ("galvanised", "galvanised_preset", "preview")):
+        raise ValueError("galvanised controls require explicit variant='galvanised'")
     if brush_angle is not None and variant != "brushed":
         raise ValueError("brush_angle is supported only for the brushed metal variant")
     angle_radians = _brush_angle_radians(brush_angle)

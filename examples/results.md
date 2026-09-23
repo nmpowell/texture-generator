@@ -327,3 +327,79 @@ their displayed brightness is not a physical unit.
 798 x 1066 · RGB
 
 ![All materials — labelled contact sheet](images/contact-sheet.png)
+
+## Galvanised physical maps
+
+Experimental prototype; visual and LOD acceptance remain open.
+
+### Galvanised prototype, 5 mm scale bar
+
+192 x 144 · RGB
+
+![Galvanised prototype, 5 mm scale bar](images/galvanised/regular-scale.png)
+
+### Galvanised map diagnostics with fixed display ranges
+
+576 x 332 · RGB
+
+![Galvanised map diagnostics with fixed display ranges](images/galvanised/maps.png)
+
+## Galvanised relighting
+
+Experimental prototype; visual and LOD acceptance remain open.
+
+### Same galvanised surface, light azimuth 15 degrees
+
+192 x 144 · RGB
+
+![Same galvanised surface, light azimuth 15 degrees](images/galvanised/light-15.png)
+
+### Same galvanised surface, light azimuth 105 degrees
+
+192 x 144 · RGB
+
+![Same galvanised surface, light azimuth 105 degrees](images/galvanised/light-105.png)
+
+## Galvanised resolution diagnostics
+
+Experimental prototype; visual and LOD acceptance remain open.
+
+### Same 24 x 18 mm tile at 48 x 36 pixels
+
+48 x 36 · RGB
+
+![Same 24 x 18 mm tile at 48 x 36 pixels](images/galvanised/resolution-48.png)
+
+### Same 24 x 18 mm tile at 96 x 72 pixels
+
+96 x 72 · RGB
+
+![Same 24 x 18 mm tile at 96 x 72 pixels](images/galvanised/resolution-96.png)
+
+### Same 24 x 18 mm tile at 192 x 144 pixels
+
+192 x 144 · RGB
+
+![Same 24 x 18 mm tile at 192 x 144 pixels](images/galvanised/resolution-192.png)
+
+## Galvanised weathering
+
+Experimental prototype; visual and LOD acceptance remain open.
+
+### Fixed galvanised substrate, exposure 0.0
+
+192 x 144 · RGB
+
+![Fixed galvanised substrate, exposure 0.0](images/galvanised/exposure-0.0.png)
+
+### Fixed galvanised substrate, exposure 0.5
+
+192 x 144 · RGB
+
+![Fixed galvanised substrate, exposure 0.5](images/galvanised/exposure-0.5.png)
+
+### Fixed galvanised substrate, exposure 1.0
+
+192 x 144 · RGB
+
+![Fixed galvanised substrate, exposure 1.0](images/galvanised/exposure-1.0.png)

@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 import math
 import secrets
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -35,10 +36,93 @@ from . import (
     __version__,
     all_pairs,
     generate,
+    generate_maps,
     resolve_variant,
     sample_sheet,
     samples,
 )
+from .material_api import resolve_galvanised_config
+from .materials.galvanised_config import GalvanisedConfig
+
+
+class PhysicalSizeType(click.ParamType):
+    """Explicit physical tile dimensions, in millimetres."""
+
+    name = "millimetres"
+
+    def convert(
+        self, value: Any, param: click.Parameter | None, ctx: click.Context | None
+    ):
+        try:
+            dimensions = tuple(float(part) for part in str(value).lower().split("x"))
+            if len(dimensions) != 2 or not all(
+                math.isfinite(part) and part > 0.0 for part in dimensions
+            ):
+                raise ValueError
+        except (ValueError, TypeError):
+            self.fail("use positive finite WIDTHxHEIGHT in millimetres", param, ctx)
+        return dimensions
+
+
+PHYSICAL_SIZE = PhysicalSizeType()
+
+
+def _unique_json_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate config key: {key}")
+        result[key] = value
+    return result
+
+
+def _galvanised_recipe(
+    preset: str | None, size_mm: tuple[float, float] | None, config_path: Path | None
+) -> GalvanisedConfig:
+    if config_path is not None and (preset is not None or size_mm is not None):
+        raise click.UsageError(
+            "--config cannot be combined with --galvanised-preset or --size-mm"
+        )
+    try:
+        if config_path is not None:
+            with config_path.open(encoding="utf-8") as stream:
+                data = json.load(stream, object_pairs_hook=_unique_json_object)
+            if not isinstance(data, dict):
+                raise ValueError("config must be a JSON object")
+            return GalvanisedConfig.from_mapping(data)
+        values: dict[str, Any] = {}
+        if preset is not None:
+            values["preset"] = preset
+        if size_mm is not None:
+            values["size_mm"] = size_mm
+        return resolve_galvanised_config(values)
+    except OSError as exc:
+        raise click.ClickException(f"could not read config: {exc}") from exc
+    except (TypeError, ValueError) as exc:
+        raise click.UsageError(str(exc)) from exc
+
+
+def _galvanised_options(function: Any) -> Any:
+    function = click.option(
+        "--galvanised-preset",
+        type=click.Choice(["regular", "minimised", "weathered", "wet_storage"]),
+        default=None,
+        help="physical material preset; requires --variant galvanised.",
+    )(function)
+    function = click.option(
+        "--size-mm",
+        type=PHYSICAL_SIZE,
+        default=None,
+        metavar="WIDTHxHEIGHT",
+        help="physical tile extent in millimetres; requires --variant galvanised.",
+    )(function)
+    return click.option(
+        "--config",
+        "config_path",
+        type=click.Path(dir_okay=False, path_type=Path),
+        default=None,
+        help="strict galvanised JSON recipe; exclusive with preset/size-mm flags.",
+    )(function)
 
 
 class SizeType(click.ParamType):
@@ -169,15 +253,13 @@ def _one_destination(out: Path | None, outdir: Path | None) -> None:
         )
 
 
-def _record(
-    path: Path, img: Image.Image, **fields: Any
-) -> dict[str, str | int | float | None]:
+def _record(path: Path, img: Image.Image, **fields: Any) -> dict[str, Any]:
     """One ``written`` entry: the path, the given fields, then the pixel size."""
     width, height = img.size
     return {"path": str(path), **fields, "width": width, "height": height}
 
 
-def _emit(records: list[dict[str, str | int | float | None]], as_json: bool) -> None:
+def _emit(records: list[dict[str, Any]], as_json: bool) -> None:
     """Report what was written, as JSON or as one path per line."""
     if as_json:
         click.echo(json.dumps({"written": records}, indent=2))
@@ -209,6 +291,9 @@ Example:
 def _material_command(material: str) -> click.Command:
     """Build the subcommand for one material, from that material's variants."""
     variants = list(MATERIALS[material].VARIANTS)
+
+    def galvanised_options(function: Any) -> Any:
+        return _galvanised_options(function) if material == "metal" else function
 
     def brush_angle_option(function: Any) -> Any:
         if material != "metal":
@@ -253,6 +338,7 @@ def _material_command(material: str) -> click.Command:
     @outdir_option
     @json_option
     @brush_angle_option
+    @galvanised_options
     def command(
         size: int | tuple[int, int],
         seed: int | None,
@@ -262,6 +348,9 @@ def _material_command(material: str) -> click.Command:
         outdir: Path | None,
         as_json: bool,
         brush_angle: float | None = None,
+        galvanised_preset: str | None = None,
+        size_mm: tuple[float, float] | None = None,
+        config_path: Path | None = None,
     ) -> None:
         _one_destination(out, outdir)
         if brush_angle is not None and variant != "brushed":
@@ -271,13 +360,50 @@ def _material_command(material: str) -> click.Command:
                 "--out names a single file; use --outdir with --count"
             )
         records = []
+        physical_flags = any(
+            value is not None for value in (galvanised_preset, size_mm, config_path)
+        )
+        if physical_flags and variant != "galvanised":
+            raise click.UsageError(
+                "galvanised options require explicit --variant galvanised"
+            )
+        recipe = (
+            _galvanised_recipe(galvanised_preset, size_mm, config_path)
+            if variant == "galvanised"
+            else None
+        )
+        if recipe is not None:
+            for warning in recipe.warnings:
+                click.echo(f"Warning: {warning}", err=True)
         angle_field = {"brush_angle": brush_angle} if brush_angle is not None else {}
         for index in range(count):
             seed_i = _seed_for(seed, index)
             # Name the variant before rendering, so an omitted --variant is
             # reported and filed as the variant the seed actually picks.
             resolved = resolve_variant(material, seed_i, variant)
-            img = generate(material, size, seed=seed_i, variant=variant, **angle_field)
+            params: dict[str, Any] = dict(angle_field)
+            extra: dict[str, Any] = {}
+            if recipe is not None:
+                params["galvanised"] = recipe
+                from .core.random_fields import make_rng, material_key_from_rng
+                from .materials.galvanised import GENERATOR_VERSION
+
+                dimensions = (size, size) if isinstance(size, int) else size
+                resolved_recipe = recipe.resolve(size=dimensions)
+                extra["galvanised"] = {
+                    "size_mm": list(resolved_recipe.size_mm or ()),
+                    "preset": recipe.preset,
+                    "preset_version": recipe.preset_version,
+                    "generator_version": GENERATOR_VERSION,
+                    "material_key": material_key_from_rng(make_rng(seed_i)),
+                    "preview_rig": "studio",
+                }
+            try:
+                img = generate(material, size, seed=seed_i, variant=variant, **params)
+            except (TypeError, ValueError) as exc:
+                raise click.UsageError(str(exc)) from exc
+            except (OSError, MemoryError) as exc:
+                raise click.ClickException(str(exc)) from exc
             path = _resolve_path(out, outdir, _default_name(material, resolved, seed_i))
             _save(img, path)
             records.append(
@@ -288,6 +414,7 @@ def _material_command(material: str) -> click.Command:
                     variant=resolved,
                     seed=seed_i,
                     **angle_field,
+                    **extra,
                 )
             )
         _emit(records, as_json)
@@ -339,6 +466,106 @@ def main() -> None:
 
 for _material in MATERIALS:
     main.add_command(_material_command(_material))
+
+
+@main.command(
+    "maps",
+    help="Export physical maps and a replay manifest.\n\nExample: texture-gen maps metal --variant galvanised --size 1024 --size-mm 100x100 --seed 42 --outdir galvanised-42 --json",
+)
+@click.argument("material", type=click.Choice(list(MATERIALS)))
+@click.option(
+    "--variant", required=True, help="material variant; currently galvanised only."
+)
+@size_option
+@seed_option
+@_galvanised_options
+@click.option(
+    "--profile",
+    type=click.Choice(["lossless", "tiff"]),
+    default="lossless",
+    show_default=True,
+)
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False, path_type=Path),
+    required=True,
+    help="new material bundle directory.",
+)
+@click.option(
+    "--map",
+    "map_names",
+    multiple=True,
+    help="select a channel; repeat for several (default: all core maps).",
+)
+@json_option
+def maps_command(
+    material: str,
+    variant: str,
+    size: int | tuple[int, int],
+    seed: int | None,
+    galvanised_preset: str | None,
+    size_mm: tuple[float, float] | None,
+    config_path: Path | None,
+    profile: str,
+    outdir: Path,
+    map_names: tuple[str, ...],
+    as_json: bool,
+) -> None:
+    from .core.material import CANONICAL_CHANNELS
+    from .export import export_material, validate_export_profile
+
+    if material != "metal" or variant != "galvanised":
+        raise click.UsageError("maps supports metal with explicit --variant galvanised")
+    dimensions = (size, size) if isinstance(size, int) else size
+    if min(dimensions) < 3:
+        raise click.UsageError("material maps require at least 3 samples per axis")
+    if set(map_names) - set(CANONICAL_CHANNELS):
+        raise click.UsageError(
+            f"unknown map channels: {sorted(set(map_names) - set(CANONICAL_CHANNELS))}"
+        )
+    recipe = _galvanised_recipe(galvanised_preset, size_mm, config_path)
+    for warning in recipe.warnings:
+        click.echo(f"Warning: {warning}", err=True)
+    try:
+        validate_export_profile(profile)
+        if outdir.exists():
+            raise FileExistsError(f"bundle destination already exists: {outdir}")
+        outdir.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(
+            prefix=".galvanised-maps-", dir=outdir.parent
+        ) as working:
+            result = generate_maps(
+                material,
+                size=size,
+                seed=_seed_for(seed),
+                variant=variant,
+                galvanised=recipe,
+                maps=map_names or None,
+                output_dir=working,
+            )
+            manifest_path = export_material(result, outdir, profile=profile)
+            del result
+    except (TypeError, ValueError) as exc:
+        raise click.UsageError(str(exc)) from exc
+    except (OSError, ImportError, MemoryError, RuntimeError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    if as_json:
+        click.echo(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "manifest": str(manifest_path),
+                    "profile": profile,
+                    "maps": manifest["maps"],
+                    "lobes": manifest.get("lobes"),
+                    "metadata": manifest["metadata"],
+                },
+                indent=2,
+            )
+        )
+    else:
+        click.echo(str(manifest_path))
 
 
 @main.command(name="all")

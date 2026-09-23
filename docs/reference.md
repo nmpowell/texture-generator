@@ -4,7 +4,8 @@
 
 Procedural generator for **random but realistic material textures** — metal,
 plastic, wood and paper — as PNGs at any pixel size. Pure `numpy` + `Pillow`,
-no models, no assets, no network. Same seed → byte-identical image on a given
+no models or runtime downloads. Galvanised optical data ships in the package.
+Same seed → byte-identical image on a given
 platform and numpy build.
 
 ## Research grounding
@@ -71,10 +72,26 @@ The full public surface, all importable from `texture_generators`:
 - `VARIANTS_BY_MATERIAL`, `variants(material)`, `all_pairs()` — enumeration
   helpers.
 - `__version__` — the installed version string.
+- `generate_maps(material, size=512, seed=None, variant=None, *, galvanised=None, galvanised_preset=None, maps=None, chunk_size=128, output_dir=None) -> MaterialMaps` —
+  physical channels for explicit `metal/galvanised`; dimensions must be at least 3×3.
+- `render_material(maps, *, preview=None) -> PIL.Image.Image` and
+  `render_material_array(maps, *, preview=None, output="display") -> np.ndarray` —
+  independent lighting of sampled material data; `output="linear"` returns
+  unclipped radiance.
+- `export_material(maps, path, *, profile="lossless", overwrite=False, preview=None) -> Path` —
+  atomic material bundle with a returned manifest path.
+- `load_material(path, *, mmap_mode=None) -> MaterialMaps` and
+  `replay_material(path, *, size=None, maps=None) -> MaterialMaps` — validated
+  stored channels or resampling from the versioned recipe.
+- `MAP_CAPABILITIES` — supported `(material, variant)` pairs for material maps.
+
+The [galvanised guide](galvanised.md) defines physical units, coordinate frames,
+rich angular records, presets, export profiles and current experimental limits.
 
 Contracts: `size` is an int (square) or `(width, height)`. `seed=None` draws
 fresh entropy; an integer seed is fully reproducible. `variant=None` picks a
-variant with the seeded rng. Unknown material or variant raises `ValueError`
+variant with the seeded rng; metal's automatic choices retain the original seven
+variants, so galvanised requires explicit selection. Unknown material or variant raises `ValueError`
 listing the valid names. The package ships `py.typed` (PEP 561), so type
 checkers use the public API's annotations, and mypy passes over the package's
 own internals (see *Development*).
@@ -89,7 +106,7 @@ arguments `material="metal"`, `variant="brushed"`; other combinations raise
 ## CLI
 
 `texture-gen` is a [Click](https://click.palletsprojects.com/) command group:
-one subcommand per material, plus `all`, `sheet`, `samples` and `list`. It is
+one subcommand per material, plus `all`, `sheet`, `samples`, `maps` and `list`. It is
 installed alongside the package, and `python -m texture_generators` is
 identical — down to the program name in `--help`. `-h` is a synonym for
 `--help` and `-V` for `--version`, which prints `texture-gen` and the installed version; an unknown
@@ -112,6 +129,7 @@ texture-gen samples --only wood --count 6             # visual-review set
 | Command | What it renders |
 | --- | --- |
 | `metal`, `plastic`, `wood`, `paper` | one texture of that material, or `-n N` of them |
+| `maps metal --variant galvanised` | a physical material bundle; requires `--outdir` |
 | `all` | every material/variant pair, one PNG each |
 | `sheet` | the labelled contact sheet |
 | `samples` | a visual-review run directory with an `index.html` gallery |

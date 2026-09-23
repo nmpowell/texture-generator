@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "status": "interrupted",
+  "environment": {
+    "python": "3.14.7 (main, Sep  1 2026, 14:05:28) [Clang 22.1.3 ]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "numpy": "2.5.2",
+    "package": "0.6.1"
+  },
+  "generator_version": "galvanised-1",
+  "seed": 42,
+  "size": [
+    8192,
+    8192
+  ],
+  "config": {
+    "preset": "regular",
+    "size_mm": [
+      100.0,
+      100.0
+    ],
+    "spangle_diameter_mm": 8.0,
+    "spangle_cv": 0.28,
+    "placement": "poisson",
+    "texture_strength": 0.45,
+    "crystal_tilt_concentration": 4.0,
+    "dendrite_relief_um": 2.5,
+    "trunk_relief_um": 4.5,
+    "boundary_depth_um": 1.0,
+    "micro_relief_um": 0.4,
+    "roughness": 0.3,
+    "anisotropy": 0.55,
+    "exposure": 0.0,
+    "wetness": 0.0,
+    "confinement": 0.0,
+    "salt_exposure": 0.0,
+    "white_stain": 0.0,
+    "weather_seed": null,
+    "dross_per_cm2": 0.0,
+    "runs_per_cm2": 0.0,
+    "gravity_angle_deg": 90.0,
+    "quality": "production",
+    "representation": "single_lobe",
+    "memory_budget_mb": 512,
+    "schema_version": 1,
+    "preset_revision": "2026-09-22.initial-1",
+    "warnings": [
+      "Preset values are physically grounded authoring defaults, not metrological calibration.",
+      "single_lobe is an explicitly approximate representation of mixed material response."
+    ]
+  },
+  "chunk_size": 128,
+  "stage_seconds": {
+    "state": 1.5299462919938378
+  },
+  "stage_peak_rss_mib": {
+    "state": 91.5625
+  },
+  "material_key": 14276969152011380360,
+  "nuclei": 199,
+  "interrupted_by_parent_before_completion": true,
+  "error": "Benchmark process stopped at parent direction during sampling; no completion or performance claim.",
+  "interpretation": {
+    "timing_may_be_contended": true,
+    "completed_surface_benchmark": false,
+    "acceptance": "Not a performance-gate pass; see docs/galvanised-performance.md."
+  }
+}

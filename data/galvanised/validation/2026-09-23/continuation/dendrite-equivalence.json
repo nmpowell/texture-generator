@@ -1,0 +1,195 @@
+{
+  "fixtures": [
+    {
+      "seed": 0,
+      "diameter_mm": 8.0,
+      "tile": "small",
+      "segments": 4532,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 8.0,
+      "tile": "tall",
+      "segments": 4532,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 8.0,
+      "tile": "wide",
+      "segments": 4532,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 1.5,
+      "tile": "small",
+      "segments": 969,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 1.5,
+      "tile": "tall",
+      "segments": 969,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 1.5,
+      "tile": "wide",
+      "segments": 969,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 0.4,
+      "tile": "small",
+      "segments": 799,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 0.4,
+      "tile": "tall",
+      "segments": 799,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 0,
+      "diameter_mm": 0.4,
+      "tile": "wide",
+      "segments": 799,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 8.0,
+      "tile": "small",
+      "segments": 5211,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 8.0,
+      "tile": "tall",
+      "segments": 5211,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 8.0,
+      "tile": "wide",
+      "segments": 5211,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 1.5,
+      "tile": "small",
+      "segments": 1069,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 1.5,
+      "tile": "tall",
+      "segments": 1069,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 1.5,
+      "tile": "wide",
+      "segments": 1069,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 0.4,
+      "tile": "small",
+      "segments": 870,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 0.4,
+      "tile": "tall",
+      "segments": 870,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 42,
+      "diameter_mm": 0.4,
+      "tile": "wide",
+      "segments": 870,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 8.0,
+      "tile": "small",
+      "segments": 4582,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 8.0,
+      "tile": "tall",
+      "segments": 4582,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 8.0,
+      "tile": "wide",
+      "segments": 4582,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 1.5,
+      "tile": "small",
+      "segments": 970,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 1.5,
+      "tile": "tall",
+      "segments": 970,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 1.5,
+      "tile": "wide",
+      "segments": 970,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 0.4,
+      "tile": "small",
+      "segments": 845,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 0.4,
+      "tile": "tall",
+      "segments": 845,
+      "all_bytes_equal": true
+    },
+    {
+      "seed": 91,
+      "diameter_mm": 0.4,
+      "tile": "wide",
+      "segments": 845,
+      "all_bytes_equal": true
+    }
+  ],
+  "count": 27,
+  "all_passed": true
+}

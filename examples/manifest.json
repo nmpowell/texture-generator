@@ -932,6 +932,931 @@
         "columns": 4
       },
       "sha256": "1ede035891d1f43c2e670f7e94aacc13d159d510843bcf832be9815e17c21d87"
+    },
+    {
+      "path": "images/galvanised/regular-scale.png",
+      "title": "Galvanised prototype, 5 mm scale bar",
+      "section": "Galvanised physical maps",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "scale_bar_mm": 5,
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "2012b4a3b3b96818095de678d4286af38765f8d8b976b1ddb52bc6cc3d05642c"
+    },
+    {
+      "path": "images/galvanised/maps.png",
+      "title": "Galvanised map diagnostics with fixed display ranges",
+      "section": "Galvanised physical maps",
+      "width": 576,
+      "height": 332,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "display_panels": [
+          "height: -2 to 6 um",
+          "signed normal: RGB encode",
+          "uniform zinc F0 (sRGB)",
+          "roughness: 0 to 1",
+          "anisotropy: 0 to 1",
+          "zinc coverage: 0 to 1"
+        ]
+      },
+      "sha256": "3531e4ba5e99fd2cb69bbf0323aaf1884ccf1a23330602115beaf6bea4f43d60"
+    },
+    {
+      "path": "images/galvanised/light-15.png",
+      "title": "Same galvanised surface, light azimuth 15 degrees",
+      "section": "Galvanised relighting",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "oblique",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 15.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "0cf970440a28b6a46eec0cecdd049e9418690e2f8d924dd7079b7b1748630293"
+    },
+    {
+      "path": "images/galvanised/light-105.png",
+      "title": "Same galvanised surface, light azimuth 105 degrees",
+      "section": "Galvanised relighting",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "oblique",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 105.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "f90a7953feffc3818ce541481c146a080b897da995ba41eb1f6490c2d447e5d7"
+    },
+    {
+      "path": "images/galvanised/resolution-48.png",
+      "title": "Same 24 x 18 mm tile at 48 x 36 pixels",
+      "section": "Galvanised resolution diagnostics",
+      "width": 48,
+      "height": 36,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          48,
+          36
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "9db3d5a66900615b37e3cd29045fc0cf34196876d3c97ec2511b473bb310bf4c"
+    },
+    {
+      "path": "images/galvanised/resolution-96.png",
+      "title": "Same 24 x 18 mm tile at 96 x 72 pixels",
+      "section": "Galvanised resolution diagnostics",
+      "width": 96,
+      "height": 72,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          96,
+          72
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "2da73ed02b14c625f325792912ba5b13b01930d4282d07ddfc050744b26cf2d1"
+    },
+    {
+      "path": "images/galvanised/resolution-192.png",
+      "title": "Same 24 x 18 mm tile at 192 x 144 pixels",
+      "section": "Galvanised resolution diagnostics",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "da0a48b689c8a31f220bc976c37a7ee554d259fa8b1d216d4235087987445928"
+    },
+    {
+      "path": "images/galvanised/exposure-0.0.png",
+      "title": "Fixed galvanised substrate, exposure 0.0",
+      "section": "Galvanised weathering",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.9,
+          "confinement": 0.85,
+          "salt_exposure": 0.2,
+          "white_stain": 0.85,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "da0a48b689c8a31f220bc976c37a7ee554d259fa8b1d216d4235087987445928"
+    },
+    {
+      "path": "images/galvanised/exposure-0.5.png",
+      "title": "Fixed galvanised substrate, exposure 0.5",
+      "section": "Galvanised weathering",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.5,
+          "wetness": 0.9,
+          "confinement": 0.85,
+          "salt_exposure": 0.2,
+          "white_stain": 0.85,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "4614d629c01012cb4b80d18e31e79dd8bea444ef75ba3aa680f6687a9ef68bee"
+    },
+    {
+      "path": "images/galvanised/exposure-1.0.png",
+      "title": "Fixed galvanised substrate, exposure 1.0",
+      "section": "Galvanised weathering",
+      "width": 192,
+      "height": 144,
+      "mode": "RGB",
+      "recipe": {
+        "function": "build_state/sample_state/render_material",
+        "seed": 42,
+        "material_key": 14276969152011380360,
+        "size": [
+          192,
+          144
+        ],
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            24.0,
+            18.0
+          ],
+          "spangle_diameter_mm": 8.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 1.0,
+          "wetness": 0.9,
+          "confinement": 0.85,
+          "salt_exposure": 0.2,
+          "white_stain": 0.85,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration."
+          ]
+        },
+        "generator_version": "galvanised-2",
+        "resource_hashes": {
+          "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+          "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+          "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+          "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+          "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+          "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+          "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+        },
+        "surface_resource_hashes": {
+          "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+          "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+        },
+        "renderer_resource_hashes": {
+          "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+          "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+        },
+        "environment": {
+          "python": "3.14.7",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "texture-generator": "0.6.1",
+          "numpy": "2.5.2",
+          "pillow": "12.3.0"
+        },
+        "status": "experimental; visual and LOD acceptance open",
+        "preview": {
+          "rig": "studio",
+          "exposure_stops": 0.0,
+          "normal_strength": 1.0,
+          "light_azimuth_deg": 315.0,
+          "view": [
+            -0.28760623847595074,
+            0.28760623847595074,
+            0.9135454576426009
+          ],
+          "render_samples": 64
+        }
+      },
+      "sha256": "eadae672f99155fef226663da1b2c5567b0972b02d1d7b8854b44aea43d86108"
     }
-  ]
+  ],
+  "galvanised_environment": {
+    "python": "3.14.7",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "texture-generator": "0.6.1",
+    "numpy": "2.5.2",
+    "pillow": "12.3.0"
+  }
 }

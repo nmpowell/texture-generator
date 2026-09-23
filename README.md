@@ -3,7 +3,8 @@
 Generate random material textures with Python: metal, plastic, wood and paper,
 as Pillow images or NumPy arrays. Choose a size and seed to create a reproducible
 texture, then save it as a PNG. Generation runs locally using NumPy and Pillow,
-without models, downloaded assets or network access.
+without models or runtime downloads. Small scientific lookup tables ship with
+the galvanised generator; generation needs no network access.
 
 > ⚠️ Much of this is AI-generated, and not formally reviewed by hand or eye. It's published chiefly for myself: for my own reference, use, and for experimentation with the whole open-source publishing process. I also *use* this code: I dogfood it. It works, for me. I also write tests, and run them to check that it works, and does what it says.
 
@@ -53,6 +54,30 @@ Arrays contain RGB values in `[0, 1]`. The
 [API reference](https://github.com/nmpowell/texture-generator/blob/main/docs/reference.md#python-api)
 covers all public functions and material parameters.
 
+## Galvanised metal
+
+The experimental `metal/galvanised` variant adds physical millimetre dimensions,
+micrometre height maps, independent relighting and lossless material exports.
+Its initial presets are `regular`, `minimised`, `weathered` and `wet_storage`.
+
+```python
+from texture_generators import generate_maps, render_material
+from texture_generators.materials.galvanised import GalvanisedConfig
+
+maps = generate_maps(
+    "metal",
+    variant="galvanised",
+    size=(512, 384),
+    seed=42,
+    galvanised=GalvanisedConfig(size_mm=(100, 75)),
+)
+render_material(maps).save("galvanised.png")
+```
+
+See the [galvanised guide](docs/galvanised.md) for map semantics, export and CLI
+usage, and the [acceptance record](docs/galvanised-implementation.md) for the
+remaining calibration and performance work.
+
 ## Brushing direction
 
 From version 0.4.0, set `brush_angle` for the `brushed` metal variant. Angles are
@@ -99,7 +124,7 @@ It also works with `--count`; JSON reports include the angle when it is supplied
 
 | Material | Variants |
 | --- | --- |
-| Metal | `brushed`, `radial`, `polished`, `heat_tinted`, `oil_film`, `anodised_titanium`, `engine_turned` |
+| Metal | `brushed`, `radial`, `polished`, `heat_tinted`, `oil_film`, `anodised_titanium`, `engine_turned`, `galvanised` (experimental) |
 | Plastic | `glossy`, `matte`, `textured` |
 | Wood | `board`, `planks` |
 | Paper | `white`, `kraft`, `recycled`, `newsprint`, `laid`, `coated` |
@@ -116,7 +141,8 @@ image = generate("wood", size=(640, 480), seed=42, variant="board", species="oak
 The generators combine noise, material anatomy and lighting. Albedo, height and
 roughness share underlying fields so visible features also affect shading.
 These are procedural approximations with documented calibration assumptions.
-Metal, plastic and wood do not tile seamlessly; paper tiles when creases are
+Legacy metal, plastic and wood do not tile seamlessly; galvanised uses periodic
+physical fields. Paper tiles when creases are
 disabled with `creases=0.0`. Wood's relief is carried in real millimetres, so
 the same board shades the same at any render size; the documented workflow is
 to render at 1000 px or more and resample down, which is what
@@ -248,4 +274,8 @@ covers artifact checks and Trusted Publishing.
 
 ## License
 
-[Apache License 2.0](https://github.com/nmpowell/texture-generator/blob/main/LICENSE).
+The code uses the [Apache License 2.0](https://github.com/nmpowell/texture-generator/blob/main/LICENSE).
+Packaged galvanised optical data retain their separate CC0-1.0 and
+CC-BY-SA-4.0 terms; the derived Fresnel and zinc energy tables use CC-BY-SA-4.0.
+Attributions and resource licences are included in the package and described in
+[the source register](docs/galvanised-sources.md).

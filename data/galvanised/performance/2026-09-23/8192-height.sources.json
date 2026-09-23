@@ -1,0 +1,11 @@
+{
+  "git_head": "cf455ee3a4904ac7fbece87948f6a16cb0c8f948",
+  "source_sha256": {
+    "src/texture_generators/materials/galvanised.py": "c593a48219840892fb87c36efa4707946e017699c9f4f41446ac544ce8beebfb",
+    "src/texture_generators/core/dendrites.py": "a4e27f872fba0aff450d342942bc12a3209693830207d199ce8c739a46944b3f",
+    "src/texture_generators/data/galvanised/morphology.json": "6586cf9224747be6b60e2930bbd0f2b427425ce01c491b6104bc698fee93248b"
+  },
+  "notes": "Benchmark began after helper-only galvanised changes; timing may overlap other renderer and test jobs.",
+  "interrupted_by_parent_before_completion": true,
+  "note": "Source fingerprints are for launch. Benchmark intentionally stopped during sampling after parent direction based on 4096 sampling duration; do not treat 8192 as checked."
+}

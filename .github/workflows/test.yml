@@ -58,6 +58,32 @@ jobs:
       - run: uv run --locked --python 3.14 ruff check .
       - run: uv run --locked --python 3.14 ruff format --check .
 
+  professional-export:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.12", "3.14"]
+        dependencies: [locked, minimum]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.10"
+          enable-cache: true
+      - run: uv sync --locked --extra export --python "${{ matrix.python-version }}"
+      - name: Install the minimum professional writer
+        if: matrix.dependencies == 'minimum'
+        run: uv pip install 'tifffile==2025.5.10'
+      - run: uv pip check
+      - run: uv run --no-sync pytest tests/test_galvanised_export.py
+
   typecheck:
     runs-on: ubuntu-latest
     steps:
@@ -133,6 +159,10 @@ jobs:
             uv pip install --python "$artifact_env/bin/python" "$artifact"
             "$artifact_env/bin/python" -c 'from importlib.metadata import version; from texture_generators import __version__, generate, generate_array; assert __version__ == version("texture-generator"); image = generate("wood", size=(640, 480), seed=42, variant="board"); assert (image.mode, image.size) == ("RGB", (640, 480)); assert generate_array("plastic", size=16, seed=7).shape == (16, 16, 3)'
             "$artifact_env/bin/texture-gen" wood --size 48x32 --seed 42 -o artifact-smoke.png
+            "$artifact_env/bin/texture-gen" metal --variant galvanised --size 16x12 --size-mm 12x9 --seed 42 -o galvanised-smoke.png
+            bundle_out="$RUNNER_TEMP/galvanised-${{ matrix.python-version }}-$(basename "$artifact")"
+            "$artifact_env/bin/texture-gen" maps metal --variant galvanised --size 16x12 --size-mm 12x9 --seed 42 --outdir "$bundle_out" --json
+            "$artifact_env/bin/python" -c 'import sys; from texture_generators import load_material, replay_material, render_material; original = load_material(sys.argv[1]); replayed = replay_material(sys.argv[1]); assert original["height_um"].tobytes() == replayed["height_um"].tobytes(); assert render_material(original).size == (16, 12); assert "tifffile" not in sys.modules' "$bundle_out"
             "$artifact_env/bin/python" -m texture_generators list --json
             samples_out="$RUNNER_TEMP/samples-${{ matrix.python-version }}-$(basename "$artifact")"
             "$artifact_env/bin/texture-gen" samples --only plastic/matte --count 2 --size 16 --no-sweeps --jobs 2 --outdir "$samples_out"

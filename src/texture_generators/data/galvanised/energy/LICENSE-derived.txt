@@ -1,0 +1,12 @@
+Derived directional-albedo table
+=================================
+
+ggx_directional_albedo.npz includes a numerical transformation of the zinc
+Fresnel LUT, which is derived from Werner CC0 zinc data and CIE CC BY-SA 4.0
+datasets. The zinc-weighted arrays in this table are distributed under
+CC BY-SA 4.0 with the attribution and share-alike obligations described in
+../optics/LICENSE-derived.txt. The unit-Fresnel and Schlick arrays are
+algorithmic data, included in the same archive for simplicity.
+
+Generation method and archive hash are in manifest.json. Rebuild with
+tools/galvanised/build_energy_tables.py; do not edit the archive by hand.
