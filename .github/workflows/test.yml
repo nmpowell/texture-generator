@@ -82,7 +82,22 @@ jobs:
         if: matrix.dependencies == 'minimum'
         run: uv pip install 'tifffile==2025.5.10'
       - run: uv pip check
-      - run: uv run --no-sync pytest tests/test_galvanised_export.py
+      - run: uv run --no-sync pytest tests/test_galvanised_export.py --junitxml=export-results.xml
+      - name: Annotate export test failures
+        if: failure()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          report = Path("export-results.xml")
+          if report.exists():
+              for case in ElementTree.parse(report).iter("testcase"):
+                  for failure in (*case.findall("failure"), *case.findall("error")):
+                      message = failure.get("message", "test failed")
+                      message = message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                      print(f"::error title={case.get('name', 'export test')}::{message}")
+          PY
 
   typecheck:
     runs-on: ubuntu-latest
