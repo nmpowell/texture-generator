@@ -106,6 +106,14 @@ work. Large rich bundles have substantial storage requirements; consult the
 measured resource record before scheduling concurrent jobs. Automatic gallery
 execution serialises galvanised jobs; explicit `--jobs` remains an override.
 
+### Size limits
+
+The tested size envelope for ordinary RGB and contact-sheet renders is up to
+512 × 384 pixels. There is no hard size cap, but larger renders, such as
+4096², are exploratory, slow and memory-hungry. Pass `output_dir=` for large
+map exports and run one job at a time. See [the performance record](galvanised-performance.md)
+for measured times, memory and the sizes that have not been validated.
+
 Normals use the right-handed frame `X=u`, `Y=Ly-v`, `+Z` out of the surface,
 where raster `u` increases right and `v` increases down. If `p` and `q` are
 physical slopes, the normal is the normalised `(-p, +q, 1)`. Height is in
@@ -158,4 +166,4 @@ explicitly. Existing export destinations require an explicit Python
 
 The zinc/CIE numerical resources have their own attribution and licence notices
 in the installed package. See the [source register](galvanised-sources.md).
-Blender integration is outside this task, following the user's clarification.
+Blender integration is not included in this release.

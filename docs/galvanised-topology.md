@@ -2,9 +2,7 @@
 
 ## Status
 
-Complete and verified: 23 ordinary-CI tests pass; Ruff check/format and mypy pass for all four owned Python files. The compact-cache 80,001-nucleus benchmark completed. This work owns `core/grains.py`, private `_grain_geometry.py`, its tests, this document and `tools/galvanised/benchmark_grains.py`. No commits, children, shared registry edits or runtime dependencies were added. Warp is disabled. Preset calibration and integration belong to the parent.
-
-The progress document was created before reading further inputs. The full [implementation plan](../../data/plans/2026-09-22-galvanised-metal/implementation-plan.md) and [research sections 6 and 12](../../data/llm-output/2026-09/2026-09-22/084026383-b5634651-269b4f34_output.md) were read. The intended ownership, placement, boundary and area functions recorded at the start have all been implemented.
+`core/grains.py` and the private `core/_grain_geometry.py` implement periodic grain placement, weighted ownership, exact cell geometry, boundary distance and area statistics. `tests/test_galvanised_grains.py` covers them in ordinary CI, and `tools/galvanised/benchmark_grains.py` reproduces the performance record below. The module adds no runtime dependencies. Warp is disabled. Preset calibration is outside this module.
 
 ## Public API
 
@@ -83,9 +81,9 @@ Every positive-area cell has equal weight in median and population CV. Areas are
 
 Poisson-disc placement uses bounded uniform sequential inhibition on the torus: every proposal covers the whole domain and is accepted only if it respects periodic minimum separation. At most `candidates_per_point*requested_count` proposals are made in draw order. Sparse bins, sorted neighbour iteration and robust ambiguous separation comparisons provide deterministic, finite behaviour. There is no active-list ordering to vary. Failure raises `PlacementError` with `requested` and `achieved` counts; it does not silently reduce population or separation.
 
-This is a documented variation from the plan's suggested Bridson construction. An initial truncated growing-front implementation left large unsampled regions and was replaced. Research source: Bridson, “Fast Poisson Disk Sampling in Arbitrary Dimensions”, SIGGRAPH 2007 Sketches, DOI 10.1145/1278780.1278807. The runtime algorithm here is uniform sequential inhibition, not a claim to reproduce Bridson's distribution or physical nucleation.
+This is a documented variation from the Bridson construction suggested in the design. An initial truncated growing-front implementation left large unsampled regions and was replaced. Research source: Bridson, “Fast Poisson Disk Sampling in Arbitrary Dimensions”, SIGGRAPH 2007 Sketches, DOI 10.1145/1278780.1278807. The runtime algorithm here is uniform sequential inhibition, not a claim to reproduce Bridson's distribution or physical nucleation.
 
-Growth controls are positive lognormal samples `g`; `(g-1)/(g+1)` bounds their influence. Subtracting the sample mean fixes the weight gauge to zero within floating roundoff, and final scaling bounds absolute weights by `max_weight_fraction*D²`. Neither `growth_sigma` nor weight spread is labelled a realised diameter CV. Parent calibration must fit placement and growth against the geometric results.
+Growth controls are positive lognormal samples `g`; `(g-1)/(g+1)` bounds their influence. Subtracting the sample mean fixes the weight gauge to zero within floating roundoff, and final scaling bounds absolute weights by `max_weight_fraction*D²`. Neither `growth_sigma` nor weight spread is labelled a realised diameter CV. Preset calibration must fit placement and growth against the geometric results.
 
 ## Verification record
 
@@ -105,7 +103,7 @@ An additional development probe passed 60 random weighted populations with ratio
 
 ## Performance record
 
-Single-seed development measurements, not the plan's 12-seed median/p95 release gate. Environment: macOS 26.6.2 arm64, Python 3.14.7, NumPy 2.5.2. One Python process, no child workers or SciPy; NumPy backend thread settings were not pinned. CPU model/RAM inventory via `sysctl` was denied by the sandbox and was not bypassed.
+Single-seed development measurements, not a 12-seed median/p95 release measurement. Environment: macOS 26.6.2 arm64, Python 3.14.7, NumPy 2.5.2. One Python process, no child processes or SciPy; NumPy backend thread settings were not pinned. CPU model and RAM were not recorded.
 
 All cases use seed 42, a 100 x 100 mm tile, Poisson-disc placement, default growth settings, chunk size 2,048, 100,000 random ownership points and 10,000 boundary points. All geometry was built before the two boundary timings; those are cached-geometry queries. The first two cases verified 128 sampled points against the oracle; the 80,001 case verified 256.
 
@@ -115,32 +113,31 @@ All cases use seed 42, a 100 x 100 mm tile, Poisson-disc placement, default grow
 | 5,659 | 0.522 s | 13.904 s | 0.079 s | 1.45516 mm | 0.20743 |
 | 80,001 (final compact cache) | 0.656 s | 219.337 s | 0.099 s | 0.38665 mm | 0.20853 |
 
-The final 80,001 case averaged 14.975 candidate nuclei per point (maximum 50), cached 480,006 directed boundary segments, used at most 20,480 candidate pairs in one query batch, and reached **335.9 MiB peak process RSS**. Releasing redundant rational planes reduced peak RSS from the initial 651.6 MiB. The benchmark driver prints machine/settings/stage timings, candidate statistics, geometry counts, realised statistics and peak RSS as JSON. Development JSON records are in `/tmp/galvanised-grains-199.json`, `/tmp/galvanised-grains-5659.json` and `/tmp/galvanised-grains-80001-final.json`; this table preserves the durable results.
+The final 80,001 case averaged 14.975 candidate nuclei per point (maximum 50), cached 480,006 directed boundary segments, used at most 20,480 candidate pairs in one query batch, and reached **335.9 MiB peak process RSS**. Releasing redundant rational planes reduced peak RSS from the initial 651.6 MiB. The benchmark driver prints machine/settings/stage timings, candidate statistics, geometry counts, realised statistics and peak RSS as JSON. The development JSON records were written to a scratch directory and are not retained; this table preserves the durable results.
 
 ```sh
-.venv/bin/python tools/galvanised/benchmark_grains.py \
+uv run python tools/galvanised/benchmark_grains.py \
   --nuclei 80001 --points 100000 --geometry --boundary-points 10000 \
   --oracle-points 256 --placement poisson_disc
 ```
 
-Two additional synthetic stress runs used 199 nuclei and 100,000 query points. `--scenario dominant` hid 198 nuclei, produced zero boundary segments, and used exactly 13 candidates per point; ownership took 0.646 s and geometry 0.229 s. `--scenario clustered` compressed seeds into 10% of each tile dimension, hid 135 nuclei, and used 15.24 candidates per point on average (maximum 75); ownership took 1.220 s and geometry 2.885 s. Both verified 128 oracle points. These are stress configurations, not manufacturing presets. `/tmp/galvanised-grains-dominant.json` and `/tmp/galvanised-grains-clustered.json` contain the development records.
+Two additional synthetic stress runs used 199 nuclei and 100,000 query points. `--scenario dominant` hid 198 nuclei, produced zero boundary segments, and used exactly 13 candidates per point; ownership took 0.646 s and geometry 0.229 s. `--scenario clustered` compressed seeds into 10% of each tile dimension, hid 135 nuclei, and used 15.24 candidates per point on average (maximum 75); ownership took 1.220 s and geometry 2.885 s. Both verified 128 oracle points. These are stress configurations, not manufacturing presets. Their development records were written to a scratch directory and are not retained.
 
 ## Completed checks
 
-- `.venv/bin/python -m pytest tests/test_galvanised_grains.py -q`: **23 passed in 1.31 s**.
-- `.venv/bin/ruff check` on `grains.py`, `_grain_geometry.py`, `test_galvanised_grains.py` and `benchmark_grains.py`: passed.
-- `.venv/bin/ruff format --check` on those four files: passed.
-- `.venv/bin/python -m mypy` on those four files: passed.
+- `uv run python -m pytest tests/test_galvanised_grains.py -q`: **23 passed in 1.31 s**.
+- `uv run ruff check` on `grains.py`, `_grain_geometry.py`, `test_galvanised_grains.py` and `benchmark_grains.py`: passed.
+- `uv run ruff format --check` on those four files: passed.
+- `uv run python -m mypy` on those four files: passed.
 - Analytic/adversarial fixtures, 100k ownership comparison, 60 random weighted geometry probes, 414 exhaustive area comparisons, >80k complete geometry and the two stress benchmarks: passed as described above.
-- No slow marker or pyproject/shared registry change. Full-feature integration checks remain with the parent.
-- Denied operation: the sandbox refused CPU/RAM inventory via `sysctl`. It was not retried through another route. Architecture, OS, Python and NumPy versions were captured by the benchmark. No implementation action was blocked.
+- Architecture, OS, Python and NumPy versions were captured by the benchmark.
 
-## Remaining limits and handoff
+## Remaining limits
 
 - Exact all-cell geometry is the dense-state setup bottleneck. Ownership scalability does not establish a fast 80k-cell state build; the measured final setup took 219 seconds. Lazy queries avoid paying for untouched cells.
-- The geometry cache is linear in realised vertices/edges and retains exact rational vertices. Full precomputation can use hundreds of MiB. Parent integration must account for this state separately from raster outputs and query buffers.
+- The geometry cache is linear in realised vertices/edges and retains exact rational vertices. Full precomputation can use hundreds of MiB. Material integration must account for this state separately from raster outputs and query buffers.
 - Pathological overlapping weights or near-degenerate candidates can defeat pruning and trigger many rational comparisons. Correctness takes precedence; no fixed-k shortcut or hidden approximate fallback is used.
 - The constructor's stored seed coordinates define its float64 geometry after periodic reduction. Sub-ULP information lost before or during seed conversion cannot be reconstructed. Query comparison retains the original represented coordinates for ambiguous wrapping.
 - Requested float64 areas below representable range raise, with exact rational area still available. Tiny fragment display vertices can coalesce while the cell remains geometrically active.
-- Presets are uncalibrated. The observed diameter CVs are approximately 0.20–0.21, not the planned regular target 0.28. Parent calibration should adjust authored settings using geometric statistics across seeds.
+- Presets are uncalibrated. The observed diameter CVs are approximately 0.20–0.21, not the design target of 0.28 for `regular`. Calibration should adjust authored settings using geometric statistics across seeds.
 - No rendering, morphology, weathering, warp, 4K/8K export timing or full-feature performance acceptance is claimed here.

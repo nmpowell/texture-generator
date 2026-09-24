@@ -1,4 +1,4 @@
-# Galvanised rendering progress
+# Galvanised rendering
 
 Status: numerical renderer implemented and tested on controlled coupons.
 Material-conditioned angular fitting and specimen calibration remain open.
@@ -102,7 +102,7 @@ The current derivative-ceiling validation run passed all 58 tests across
 `test_galvanised_footprint.py` and `test_galvanised_footprint_fitting.py`. Ruff
 and mypy passed for the changed runtime modules and checker.
 
-`PYTHONPATH=src .venv/bin/pytest -q tests/test_galvanised_render.py
+`uv run pytest -q tests/test_galvanised_render.py
 tests/test_galvanised_optics.py` passed 34 tests; Ruff passed on the renderer,
 builder, relight tool and test; mypy passed on the two runtime renderer modules.
 The five-rig relight smoke at 8×8 wrote PNGs, linear arrays and a manifest.

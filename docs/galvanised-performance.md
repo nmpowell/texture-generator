@@ -1,7 +1,7 @@
 # Galvanised performance measurements
 
 These are development measurements on macOS 26.6.2 ARM64, Python 3.14.7 and
-NumPy 2.5.2. They do not meet the plan's latency targets. Some runs overlapped
+NumPy 2.5.2. They do not meet the design's latency targets. Some runs overlapped
 rendering and test work, so wall times may include contention. Peak RSS is
 process-wide and includes resident mapped output pages as well as working data.
 
@@ -9,8 +9,8 @@ The reports and launch-source identities are retained in
 [`data/galvanised/performance/2026-09-23`](../data/galvanised/performance/2026-09-23).
 Every completed case uses regular sheet, seed 42, 100 × 100 mm, 199 nuclei,
 128-pixel processing tiles and mapped output. The morphology resource is
-`2026-09-23.authoring-3`. Full binary bundles remain under
-`/tmp/galvanised-review/current-*` and are not packaged.
+`2026-09-23.authoring-3`. The full binary bundles were written to a scratch
+directory; they are not retained in the repository or packaged.
 
 | Workload | State | Sampling | Preview | Export | Read/validate | Total | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -67,8 +67,8 @@ retains 2 × 2 sampling. Rich production currently retains its provisional
 Run a fresh case with a new output directory:
 
 ```sh
-.venv/bin/python tools/galvanised/benchmark_surface.py \
-  --size 512 --preview --out /tmp/galvanised-512-new
+uv run python tools/galvanised/benchmark_surface.py \
+  --size 512 --preview --out galvanised-512-new
 ```
 
 Use `--representation single_lobe --map height_um --map normal_ts` to reproduce
@@ -83,7 +83,13 @@ the measured 500/2,000-nucleus records matched frozen sources exactly. The
 complete state's geometry and other buffers remain outside this measurement.
 The reproducible runner is `tools/galvanised/diagnose_dendrite_builder.py`.
 
-## Ordinary RGB generation on the release branch
+## Ordinary RGB generation in the release
+
+The measurements in this section, including its size guidance, are developer
+measurements without a retained record in
+[`data/galvanised/performance/`](../data/galvanised/performance). The headline
+512 × 384 figure was re-measured at about 20.3 s and 236 MiB peak RSS during
+release review on 2026-09-24.
 
 An uncontended `generate_array("metal", (512, 384), 42,
 "galvanised")` profile on the developer machine took **45.73 s wall / 45.40 s
@@ -109,8 +115,8 @@ completed in **20.30 s wall time** at **241.5 MiB peak RSS**. This is the
 release's ordinary RGB measurement; the 35 s figure above describes the
 intermediate comparison revision, not its final latency.
 
-The identical-map rendering comparison and PNGs are retained in
-`/tmp/galvanised-light-comparison-2026-09-23` on the development machine.
+The identical-map rendering comparison and its PNGs were written to a scratch
+directory on the development machine and are not retained.
 Using 16 emitter directions reduced the new renderer to 10.47 s, but changed
 the default image visibly (display RGB mean 0.587 versus 0.625; RMSE 0.0393).
 The release keeps 36 directions. Increasing the light batch above four gave no
@@ -159,24 +165,28 @@ sequence took 16.50 s, the bundle occupied 110.3 MB, and process peak RSS was
 1 GiB process headroom for that workflow on this machine; it is guidance, not
 a hard memory guarantee.
 
-The conservative release envelope is **up to 512 × 384 for ordinary rich RGB
-and complete rich map sampling/export** across the four release presets. The
-older 1024² rich measurement in the table above predates both the final
-generator and its weathered lobe counts, so it does not qualify 1024² as a
-release-wide supported size. These are measured workload envelopes, not
-physical image-size validators or hard memory guarantees. The earlier
-4096² selected height/normal case used an older 2 × 2 single-lobe sampler;
-current production single-lobe sampling is 4 × 4, so that result does not
-qualify 4K on this branch. Full rich 4K and 8K bundles and RGB previews are
-**unsupported for this release** pending completed latency and memory runs.
-The code enforces at least 3 pixels on each map
-axis, a 512 MiB default *temporary-work* budget, a bounded sample tile and a
-32-bit rich-lobe pixel index. The budget does not include final resident arrays,
-mapped files, renderer scratch or operating-system page cache. Plan ordinary
-RGB/contact-sheet work at up to 512 × 384 and run jobs serially on a
-machine of this class. For exploratory larger map exports, pass `output_dir` to
-map outputs and keep a single job active. No larger rich size is claimed
-supported by the current measurements.
+The tested size envelope is **up to 512 × 384 for ordinary rich RGB,
+contact-sheet renders and complete rich map sampling/export** across the four
+release presets. The older 1024² rich measurement in the table above predates
+both the final generator and its weathered lobe counts, so it does not qualify
+1024² as a release-wide supported size. These are measured workload envelopes,
+not physical image-size validators or hard memory guarantees.
+
+Larger sizes, including 4096², can still be requested; there is no fixed
+maximum image size. Pass `output_dir` for large map exports. A selected
+height/normal 4096² export completed in about 464 s at 645 MiB peak RSS, but
+on an earlier sampler revision with 2 × 2 single-lobe sampling. Current
+production single-lobe sampling is 4 × 4, so that result does not qualify 4K
+for this release. Full rich 4K and 8K bundles and RGB previews have **not been
+validated or timed** and are outside the tested size envelope.
+
+The code enforces at least 3 pixels on each map axis, a 512 MiB default
+*temporary-work* budget, a bounded sample tile and a 32-bit rich-lobe pixel
+index. The budget does not include final resident arrays, mapped files,
+renderer scratch or operating-system page cache. Keep ordinary RGB/contact-sheet
+work within the tested size envelope and run jobs serially on a machine of this
+class. For exploratory larger map exports, keep a single job active. No larger
+rich size is claimed supported by the current measurements.
 
 A rich lobe record occupies 45 bytes. Four zinc records per pixel alone need
 2.81 GiB at 4096² and 11.25 GiB at 8192²; three visible materials can raise

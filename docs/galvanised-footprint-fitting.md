@@ -135,14 +135,14 @@ same key/config and confirms that `state_sha256` changes.
 Run the checker from a source checkout with development dependencies:
 
 ```sh
-PYTHONPATH=src .venv/bin/python tools/galvanised/check_physical_footprints.py \
+uv run python tools/galvanised/check_physical_footprints.py \
   --seed 42 --size-mm 8 6 --diameter-mm 3 \
   --center-mm 5.1875 5.4375 --center-mm 2.0625 2.4375 \
-  --output /tmp/physical-regular-new
+  --output physical-regular-new
 
-PYTHONPATH=src .venv/bin/python tools/galvanised/check_physical_footprints.py \
+uv run python tools/galvanised/check_physical_footprints.py \
   --preset wet_storage --center-mm 0.0625 0.8125 \
-  --center-mm 6.6875 0.4375 --output /tmp/physical-wet-new
+  --center-mm 6.6875 0.4375 --output physical-wet-new
 ```
 
 The output directory must be new. Each footprint writes an NPZ archive of its
@@ -151,9 +151,8 @@ report updated after each coupon. Any rejected coupon makes the command exit
 with status 1 while preserving the evidence. For example, the recorded regular
 centre `(2,2)` with `--footprint-mm 1 1` rejects spatial convergence.
 
-Current authoring4 evidence is under
-`/tmp/galvanised-physical-footprints/cap8-{regular,wet-storage,coarse}`.
-The compact current reports are archived for
+The full authoring-4 evidence, including NPZ archives, was written to a
+scratch directory and is not retained. The compact current reports are archived for
 [regular coupons](../data/galvanised/validation/2026-09-23/continuation/physical-footprints-regular.json),
 [wet-storage coupons](../data/galvanised/validation/2026-09-23/continuation/physical-footprints-wet-storage.json)
 and the [coarse rejection](../data/galvanised/validation/2026-09-23/continuation/physical-footprints-coarse.json).

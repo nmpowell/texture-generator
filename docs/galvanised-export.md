@@ -4,7 +4,7 @@
 the path to `material.json`. `load_material(outdir, mmap_mode="r")` verifies and
 loads it. `replay_material(outdir, size=(width, height), maps=(...))` reconstructs
 the physical state from the stored resolved configuration and concrete material
-key. The user seed is provenance; the key is what controls replay. Read-only
+key. The supplied seed is provenance; the key is what controls replay. Read-only
 memory mapping applies to NPY and to the uncompressed TIFF maps written here.
 
 The **lossless** profile stores each requested sampled channel as NPY without
@@ -17,8 +17,9 @@ state at another resolution. Optional diagnostic IDs live under `diagnostics/`.
 
 The optional **tiff** profile writes float32, uncompressed IEEE TIFF for float
 maps and retains NPY for integer diagnostics and structured lobe records. Install
-`texture-generator[export]` to enable it. `validate_export_profile("tiff")` checks
-the optional dependency before the surface is generated. TIFF samples have no
+`texture-generator[export]` to enable it.
+`texture_generators.export.validate_export_profile("tiff")` checks the optional
+dependency before the surface is generated. TIFF samples have no
 per-image scaling, clipping, colour transform or tone curve. `base_color_linear`
 is linear RGB; all other channels are data. Three-component maps use contiguous
 RGB samples and two-component maps use contiguous data samples. A standard

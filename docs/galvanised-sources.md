@@ -1,8 +1,8 @@
 # Galvanised source and calibration register
 
 Status: numerical optical sources are pinned; appearance calibration is incomplete.
-The supplied research and design are implementation inputs, not substitutes for
-their cited measurements. No photograph is distributed as a package resource.
+The unpublished design and research notes are implementation inputs, not
+substitutes for their cited measurements. No photograph is distributed as a package resource.
 
 ## Numerical resources
 
@@ -26,15 +26,15 @@ contrast. Grain contrast must arise from surface/lobe structure and lighting.
 
 | Source | Evidence actually available | Permitted calibration use and gap |
 | --- | --- | --- |
-| Kim et al. (2019), [Dendritic Morphologies of Hot-Dip Galvanized Zn–0.2 Wt Pct Al Coatings](https://link.springer.com/article/10.1007/s11661-019-05263-4) | Publisher abstract and figure images acquired into the external plan's `reference-assets` directory; Fig. 9 and Fig. 15 inspected during implementation | Fine attached branching and orientation-family structure; illustrations do not establish a universal family probability, RGB colour or roughness parameter |
+| Kim et al. (2019), [Dendritic Morphologies of Hot-Dip Galvanized Zn–0.2 Wt Pct Al Coatings](https://link.springer.com/article/10.1007/s11661-019-05263-4) | Publisher abstract and figure images acquired locally for comparison and not redistributed; Fig. 9 and Fig. 15 inspected during implementation | Fine attached branching and orientation-family structure; illustrations do not establish a universal family probability, RGB colour or roughness parameter |
 | Strutzenberger and Faderl (1998), [Solidification and spangle formation](https://link.springer.com/article/10.1007/s11661-998-0144-8) | Named source and cited research account; full raw profilometry not acquired | Micron-scale relief is an initial envelope; no claim to have fitted original specimen height samples |
 | [American Galvanizers Association: Wet Storage Stain](https://galvanizeit.org/education-and-resources/publications/wet-storage-stain) | Industry guidance and appearance descriptions | Qualitative moisture/confinement and deposit appearance; not a calibrated temporal corrosion model |
 | [American Galvanizers Association: Hot-Dip Galvanized Coating Appearance](https://galvanizeit.org/uploads/publications/Galvanized_Coating_Appearance.pdf), pp. 2, 5 and 7 | Spangle, atmospheric weathering and wet-storage photographs and descriptions; inspected for the September 2026 release tuning | Qualitative grain contrast, dull grey patina and uneven pale deposits; uncontrolled photographs do not determine numerical roughness, reflectance or corrosion rates |
-| Supplied research §10 | Explicitly labelled rendering defaults | Initial diameter, roughness, anisotropy and deposit-height authoring ranges; not universal metrology |
+| Unpublished design research notes | Explicitly labelled rendering defaults | Initial diameter, roughness, anisotropy and deposit-height authoring ranges; not universal metrology |
 
 Publisher figures are for inspection, with their original publication rights.
 They are not copied into this repository, wheel, notebook or example gallery.
-The acquisition manifest in the external plan records source URLs and checksums.
+Their source URLs and checksums were recorded locally when they were acquired.
 
 ## Calibration sequence and missing evidence
 

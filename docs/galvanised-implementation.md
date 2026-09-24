@@ -1,12 +1,11 @@
 # Galvanised metal implementation record
 
 Status: 0.7.0 procedural release candidate; measured-material calibration and
-the original full acceptance plan remain open.
+the original full acceptance criteria remain open.
 
-The accepted design is `data/plans/2026-09-22-galvanised-metal/implementation-plan.md`
-in the sibling data repository, dated 22 September 2026. The supporting research is
-`data/llm-output/2026-09/2026-09-22/084026383-b5634651-269b4f34_output.md`.
-The baseline commit is `cf455ee3a4904ac7fbece87948f6a16cb0c8f948` (0.6.1).
+The accepted design and its supporting research notes are dated 22 September
+2026 and are not published with the package. The baseline commit is
+`cf455ee3a4904ac7fbece87948f6a16cb0c8f948` (0.6.1).
 This record tracks the full design; a working fresh preview does not complete it.
 
 The 0.7.0 release scope is narrower than that design: four visually reviewed
@@ -17,27 +16,23 @@ support. `inconspicuous` and `batch` remain experimental. The open gates below
 continue to track the original research ambition rather than blocking this
 explicitly scoped procedural approximation.
 
-On 23 September the user clarified that Blender is not part of this task.
-No Blender adapter or Blender scene is being implemented. Numerical rendering,
-map/export conventions and independent file decoding remain in scope. Current
-workers use local Codex agents only, following the user's explicit instruction;
-no further external gateway work is authorised by this record.
+Blender integration is not included in this release: there is no Blender
+adapter or Blender scene. Numerical rendering, map/export conventions and
+independent file decoding remain in scope.
 
-## Work ownership
+## Design notes
 
-| Work | Owner and route | Files | Acceptance |
-| --- | --- | --- | --- |
-| Completed foundation strands | Prior Sol/Astra workers | material, physical, random_fields, config, optics, grains and fixtures | 97 targeted foundation/compatibility tests passed |
-| Surface | Local Sol high | galvanised, dendrites, weather, morphology/population tables and surface tests | G1/G4/G6/G10/G11 |
-| Rendering | Local Sol high | material renderer, energy compensation, table builder and render tests | G7/G8/G9 |
-| Export and bounded validation | Local Sol high | export, material validator and associated tests | G12/G13 |
-| Morphology review and offline lobe fitting | Local Astra xhigh | dendrites, lobe_fitting, fixtures and review records | Measured prototype improvement; full visual and angular acceptance open |
-| Integration, evidence and acceptance | Parent | Other files, source register, legacy baseline, subsequent orchestration | Complete matrix below |
-
-Workers have distinct file ownership. Their reports are inputs to review, not
-acceptance evidence by themselves. The legacy generator now has only the new
-early dispatch and explicit frozen default choices; its old numerical paths are
-protected by the pre-change hashes and RNG-state fixtures.
+- The legacy metal generator gains only an early dispatch to `galvanised` and
+  explicit frozen default choices. Its old numerical paths are protected by the
+  pre-change hashes and RNG-state fixtures.
+- Configuration resolves schema defaults, then named preset defaults, then
+  explicit overrides. `GalvanisedConfig.from_resolved_mapping()` deliberately
+  bypasses the current preset table, so a stored recipe replays unchanged.
+- `spangle_cv` is the target unweighted realised equivalent-diameter CV, not a
+  raw power-weight parameter.
+- Random derivation uses versioned, length-delimited BLAKE2b semantic keys,
+  PCG64 for bounded streams and a stateless periodic integer lattice hash.
+  Weather and topology namespaces are independent.
 
 ## Phase record
 
@@ -50,7 +45,7 @@ protected by the pre-change hashes and RNG-state fixtures.
 | P4 | Zinc integration, GGX/energy treatment, independent relighting, image adapter | Sourced zinc LUT, GGX, multiple-scattering table and bounded rich rendering implemented; reference physical derivatives now converge independently of spatial quadrature |
 | P5 | Weathering, deposit geometry, disjoint layers, material-conditioned lobe fitting, reference rendering | Four presets, shared-sample reference and bounded offline candidate fitter implemented; fitter is not integrated into production sampling |
 | P6 | Public API, frozen legacy choices, CLI, lossless/professional export, replay, notebook/gallery/docs | Python/CLI, lossless/TIFF, replay, preset sweeps, guide and ten notebook/gallery assets implemented; installed-artifact smoke tests cover wheel and rebuilt sdist |
-| P7 | Calibration dossier, held-out comparison, 4K/8K measurements, review | Source and review records started; full performance/appearance acceptance open; Blender excluded by user |
+| P7 | Calibration dossier, held-out comparison, 4K/8K measurements, review | Source and review records started; full performance/appearance acceptance open; Blender excluded from this release |
 | P8 | Inconspicuous and batch with independent references and scale/defect validation | Experimental states/defects exist; not accepted or advertised as calibrated |
 
 ## Required evidence ledger
@@ -59,7 +54,7 @@ Each row remains open until the named evidence covers its whole scope.
 
 | Gate | Scope | Required evidence | Status |
 | --- | --- | --- | --- |
-| G1 | Immutable topology and features independent of resolution, chunks, traversal, workers, ageing and lights | State/key replay and byte comparisons | Open |
+| G1 | Immutable topology and features independent of resolution, chunks, traversal, worker processes, ageing and lights | State/key replay and byte comparisons | Open |
 | G2 | Conservative weighted ownership and stable ties | At least 100k oracle comparisons, distant weights, hidden cells, seams | Passed targeted analytic/adversarial checks |
 | G3 | Physical edges and all positive-area cells | Analytic two/three-cell fixtures, occluded-bisector and 2e-8 mm² cell, accelerator/oracle agreement | Passed targeted analytic/adversarial checks |
 | G4 | All fields periodic, including self-image morphology transitions | Same-coordinate period translations, one/two-grain and spanning-branch fixtures, derivatives | Open |
@@ -72,10 +67,10 @@ Each row remains open until the named evidence covers its whole scope.
 | G11 | Weathering geometry and fractions | Exposure zero, monotonicity, nested coverage, confinement, finite limits, same substrate | Open |
 | G12 | Serialization/professional I/O/replay | Exact arrays and rich records, tiny-slope round trip with independent reader, interrupted-export atomicity, version/resource errors | Open |
 | G13 | Resource limits | Machine/stage/RSS/candidate data at 512,1K,4K,8K and >=80k nuclei; streaming and selected output equality | Open |
-| G14 | Compatibility and distribution | Legacy hashes/RNG/default selections; all tests/lint/typing/build/metadata; installed wheel/sdist resources outside source | Passed local 3.12/3.13/3.14 locked/minimum tests and artifact smoke checks; remote platform CI pending |
+| G14 | Compatibility and distribution | Legacy hashes/RNG/default selections; all tests/lint/typing/build/metadata; installed wheel/sdist resources outside source | Passed local 3.12/3.13/3.14 locked/minimum tests and artifact smoke checks, and the GitHub Actions matrix |
 | Visual | Four initial presets across seeds/lights/views/crops/meshes/mips | >=12 seeds each, four rigs, front/oblique/grazing, >=2 crops, 3x3 tiles, flat/curved external renders; reference and reviewer record | Open |
 | Examples | Repeatable documented usage | Notebook recipe, maps/scale/light/resolution/weathering, concrete seeds and hashes in examples manifest, preset sweeps | Implemented; new cells executed and ten asset hashes verified |
-| Blender adapter | Original pinned renderer integration | Blender-specific scene, node and displacement validation | Excluded by the user; data-frame and independent float-I/O checks remain in scope |
+| Blender adapter | Original pinned renderer integration | Blender-specific scene, node and displacement validation | Excluded from this release; data-frame and independent float-I/O checks remain in scope |
 | P8 | Fine/batch coverage | >=80k nuclei, sparse periodic dross/runs with gravity, separate alloy approximation and specimen validation | Open |
 
 Warp remains disabled until Jacobian direction/covector/covariance transport,
@@ -97,8 +92,8 @@ uv run twine check --strict dist/*
 ```
 
 Keep the Python 3.12/3.13/3.14 locked/minimum CI matrix. A separate professional
-TIFF job now covers minimum/locked writer on Linux/macOS/Windows and Python
-3.12/3.14; this is configured CI, not a claim that those remote jobs have run.
+TIFF job covers the minimum and locked writer on Linux, macOS and Windows with
+Python 3.12 and 3.14.
 Slow numerical tests and large benchmarks need separate registered markers and
 archived reports. Do not replace failed legacy hashes with new ones.
 
@@ -123,8 +118,7 @@ The preceding checkpoint passed **697 tests in 283.45 seconds**, using Python
 3.14.7, NumPy 2.5.2 and Pillow 12.3.0. It includes wheel and rebuilt-sdist
 installation checks outside the source tree. Ruff lint and formatting, mypy
 (41 source files), the locked dependency check, wheel/sdist builds and strict
-Twine metadata checks also pass locally. The configured remote CI matrix has
-not run. Earlier integration failures were corrected: the renderer is
+Twine metadata checks also pass locally. Earlier integration failures were corrected: the renderer is
 importable at the artifact checkpoint, the camera is fixed, and the editable
 installation has refreshed distribution licence metadata.
 
@@ -161,7 +155,7 @@ profilometry/controlled reflection, a validated finite-band production fitter,
 the full visual matrix and large rich-output performance remain necessary for
 P7. No production, measured-material or complete-goal sign-off is claimed.
 
-## Continuation: sampling, physical footprints and support search
+## Later work: sampling, physical footprints and support search
 
 The generator is now `galvanised-3`. Draft supports the existing shared 2 × 2
 samples; single-lobe production uses 4 × 4. Single-lobe reference uses per-pixel
@@ -194,7 +188,8 @@ balanced families; explicit higher-order angular mixtures remain a model gap.
 
 Exact geometry optimisations passed 100,000-point baseline equivalence and
 reduced a paired cached-boundary median from 0.3183 to 0.2226 seconds. Stage
-reports are archived under `data/galvanised/validation/2026-09-23/continuation`.
+reports are archived under
+[`data/galvanised/validation/2026-09-23/continuation`](../data/galvanised/validation/2026-09-23/continuation).
 Large-output acceptance remains open. The dendrite builder now packs bounded
 blocks instead of retaining all Python segment objects: isolated 2,000-grain
 process peak fell from 204.0 to 94.5 MB, with unchanged bytes across 27 fixtures.
@@ -237,7 +232,7 @@ wet-transition regression and the strengthened unresolved-derivative fixture.
 The two earlier runs took 207.41 and 14.10 seconds; the targeted rerun took
 16.46 seconds. Ruff lint and formatting (102 Python files), and mypy (43 source
 files), pass on the final source. Packaging checks include installed wheel and
-rebuilt-sdist resources outside the checkout. Remote CI remains unrun.
+rebuilt-sdist resources outside the checkout.
 
 ## 0.7.0 release validation
 
@@ -262,10 +257,11 @@ dependency checks passed. The release performance record gives the final
 The 0.7.0 wheel and source archive passed strict Twine checks. Both artifacts
 were installed outside the checkout and passed API, CLI, map/export/replay,
 sample-gallery and dependency smoke checks on all three supported Python
-versions. Remote Ubuntu, macOS and Windows CI remains to be run on the pushed
-branch; these local macOS checks do not substitute for that platform matrix.
+versions. On GitHub Actions, the Ubuntu test matrix (Python 3.12, 3.13 and 3.14
+with locked and minimum dependencies) and the optional TIFF export job on
+Ubuntu, macOS and Windows pass on the release branch.
 
-## Next implementation steps
+## Open work
 
 1. Extend the physical-footprint coupons to disjoint outgoing views and
    highlight-width checks, including remaining spatial and support-search

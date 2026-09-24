@@ -76,9 +76,16 @@ maps = generate_maps(
 render_material(maps).save("galvanised.png")
 ```
 
-See the [galvanised guide](docs/galvanised.md) for map semantics, export and CLI
-usage and limits. The [implementation record](docs/galvanised-implementation.md)
+See the [galvanised guide](https://github.com/nmpowell/texture-generator/blob/main/docs/galvanised.md) for map semantics, export and CLI
+usage and limits. The [implementation record](https://github.com/nmpowell/texture-generator/blob/main/docs/galvanised-implementation.md)
 tracks the separate calibration and performance ambitions.
+
+Galvanised renders are much slower than the other variants: a 512 × 384 render
+takes about 20 seconds. That size is the tested envelope for ordinary renders.
+Larger sizes, including 4096², can be requested but have not been validated for
+full rich exports; the
+[performance record](https://github.com/nmpowell/texture-generator/blob/main/docs/galvanised-performance.md)
+has the measurements.
 
 ## Brushing direction
 
@@ -282,4 +289,4 @@ The code uses the [Apache License 2.0](https://github.com/nmpowell/texture-gener
 Packaged galvanised optical data retain their separate CC0-1.0 and
 CC-BY-SA-4.0 terms; the derived Fresnel and zinc energy tables use CC-BY-SA-4.0.
 Attributions and resource licences are included in the package and described in
-[the source register](docs/galvanised-sources.md).
+[the source register](https://github.com/nmpowell/texture-generator/blob/main/docs/galvanised-sources.md).

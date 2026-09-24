@@ -55,10 +55,10 @@ surface failure while keeping their absolute error visible.
 Example:
 
 ```sh
-PYTHONPATH=src .venv/bin/python tools/galvanised/check_lod.py \
+uv run python tools/galvanised/check_lod.py \
   --seed 4 --preset regular --size-mm 24 18 \
   --resolutions 32x24 64x48 128x96 --render-size 8x6 \
-  --output /tmp/galvanised-lod-regular-seed4.json
+  --output galvanised-lod-regular-seed4.json
 ```
 
 ## Current version-3 examples
@@ -69,14 +69,15 @@ The seed-4 regular 24×18 mm production `single_lobe` height-only run used
 0.05945 µm for 32→64 and 0.03775 µm for 64→128; normal RMS was 0.00663°
 and 0.00880°. Both pairs passed the provisional 0.1 µm and 0.1° gates on
 this one state. It took 1.08 s on the developer machine. Report:
-`/tmp/galvanised-lod-v3-height-regular4.json`.
+[`lod-height.json`](../data/galvanised/validation/2026-09-23/continuation/lod-height.json).
 
 A tiny 3×3→6×6 rich run on the same preset/seed retained 2×2 height
 quadrature and crosschecked at 0.0 µm. Its coarse height gate failed. On a
 3×3 render, studio and oblique 4×4→8×8 spatial-reference relative radiance
 RMS were 2.11% and 4.60%; rich versus 8×8 was 2.95% and 2.74%. Derivative
 convergence passed, but these nonzero spatial differences preclude an angular
-accuracy claim. Report: `/tmp/galvanised-lod-v3-rich-regular4.json`.
+accuracy claim. Report:
+[`lod-rich.json`](../data/galvanised/validation/2026-09-23/continuation/lod-rich.json).
 
 ## Historical height results
 
@@ -130,5 +131,6 @@ four rigs at 4×4 and 8×8 passed the pointwise derivative test in one halving,
 with no points needing further refinement. The studio and oblique 4×4→8×8
 relative radiance RMS were 1.19% and 1.96% respectively, so this smoke does
 not establish spatial convergence. Its coarse height target failed. The JSON
-report is `/tmp/galvanised-lod-derivative-small.json` on the developer machine;
+report is archived as
+[`reference-derivative-smoke.json`](../data/galvanised/validation/2026-09-23/reference-derivative-smoke.json);
 it is a bounded diagnostic, not an acceptance claim.

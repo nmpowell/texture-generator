@@ -4,7 +4,7 @@
 selects at most four actual candidate lobes **per material**, preserves their
 frames, widths and optical parameters, and fits only their nonnegative weights.
 It is not connected to material sampling or the `draft`, `production` and
-`reference` quality selectors. These results do not establish the plan's full
+`reference` quality selectors. These results do not establish the design's full
 footprint-filtering or visual acceptance gates.
 
 ## Input and output contract
@@ -84,7 +84,7 @@ thresholds. Overall absolute RMS and maximum lit-sample relative error are
 reported as diagnostics, without additional acceptance thresholds. The dark
 threshold and floor depend on the declared response scale; they are not
 exposure-independent physical constants. Angular response RMS does not itself
-establish the plan's highlight-width criterion.
+establish the design's highlight-width criterion.
 
 Failure raises `LobeFitError`; its `.result` retains the chosen support and
 diagnostics. A caller must handle rejection explicitly. Returning these weights
@@ -152,22 +152,23 @@ normal. Zinc widths are `(0.16, 0.045)`; patina uses `(0.4096, 0.4096)`. These
 controlled response coupons do not sample a complete continuous material
 footprint or cover all grazing views.
 
-Local evidence is preserved outside the repository:
+The development run wrote its fuller evidence to a scratch directory, which is
+not retained in the repository:
 
-- `/tmp/galvanised-fitting-next/report.md`: baseline, search decisions,
-  adversarial exploration and integration proposal.
-- `/tmp/galvanised-fitting-next/coupons/report.json`: timings, diagnostics,
-  angular choices, source hashes, environment and optical resource hashes.
-- `/tmp/galvanised-fitting-next/coupons/responses.npz`: actual response matrices,
-  targets and fit responses for independent inspection.
+- a Markdown report: baseline, search decisions, adversarial exploration and
+  integration proposal;
+- `report.json`: timings, diagnostics, angular choices, source hashes,
+  environment and optical resource hashes;
+- `responses.npz`: actual response matrices, targets and fit responses for
+  independent inspection.
 
 The durable runner is `tools/galvanised/check_lobe_fitting.py`. It imports the
 controlled fixtures from `tests/test_galvanised_lobe_fitting.py` and needs the
 source checkout's development environment:
 
 ```sh
-.venv/bin/python tools/galvanised/check_lobe_fitting.py \
-  --output /tmp/galvanised-fitting-new
+uv run python tools/galvanised/check_lobe_fitting.py \
+  --output galvanised-fitting-new
 ```
 
 It requires a new output directory and writes `report.json` and `responses.npz`.
@@ -214,6 +215,5 @@ multiple disjoint outgoing views and grazing angles, highlight profiles,
 serialization/rerender error, and a declared finite domain with an explicit
 failure policy. Any candidate/response caching must be keyed by immutable
 physical state and the declared angular grid; batching must leave candidate
-order, responses and pointwise convergence decisions unchanged. The broader
-working design is recorded in `/tmp/galvanised-quality-design.md`. No quality
+order, responses and pointwise convergence decisions unchanged. No quality
 tier is enabled by this offline experiment.
