@@ -1,0 +1,175 @@
+{
+  "check_version": "3",
+  "created_utc": "2026-09-23T09:54:11.801161+00:00",
+  "generator_version": "galvanised-2",
+  "seed": 4,
+  "material_key": 17396314626642683726,
+  "config": {
+    "preset": "regular",
+    "size_mm": [
+      24.0,
+      18.0
+    ],
+    "spangle_diameter_mm": 8.0,
+    "spangle_cv": 0.28,
+    "placement": "poisson",
+    "texture_strength": 0.45,
+    "crystal_tilt_concentration": 4.0,
+    "dendrite_relief_um": 2.5,
+    "trunk_relief_um": 4.5,
+    "boundary_depth_um": 1.0,
+    "micro_relief_um": 0.4,
+    "roughness": 0.3,
+    "anisotropy": 0.55,
+    "exposure": 0.0,
+    "wetness": 0.0,
+    "confinement": 0.0,
+    "salt_exposure": 0.0,
+    "white_stain": 0.0,
+    "weather_seed": null,
+    "dross_per_cm2": 0.0,
+    "runs_per_cm2": 0.0,
+    "gravity_angle_deg": 90.0,
+    "quality": "production",
+    "representation": "single_lobe",
+    "memory_budget_mb": 512,
+    "schema_version": 1,
+    "preset_revision": "2026-09-22.initial-1",
+    "warnings": [
+      "Preset values are physically grounded authoring defaults, not metrological calibration.",
+      "single_lobe is an explicitly approximate representation of mixed material response."
+    ]
+  },
+  "resolutions": [
+    [
+      32,
+      24
+    ],
+    [
+      64,
+      48
+    ],
+    [
+      128,
+      96
+    ]
+  ],
+  "render_size": null,
+  "pixel_limits": {
+    "height": 1000000,
+    "render": 108
+  },
+  "height_sampling": {
+    "quadrature_per_axis": 4,
+    "rule": "resolved immutable config quality and representation",
+    "method": "independent phase-aligned physical midpoint grid in bounded 2D tiles",
+    "point_limit_per_tile": 65536,
+    "physical_extent_mm": [
+      24.0,
+      18.0
+    ]
+  },
+  "height_pairs": [
+    {
+      "low_size": [
+        32,
+        24
+      ],
+      "high_size": [
+        64,
+        48
+      ],
+      "block_factor": 2,
+      "height_rms_um": 0.059452510024287114,
+      "height_rms_fraction_of_declared_relief": 0.011890502004857422,
+      "normal_rms_deg": 0.006631520733594777,
+      "height_target_um": 0.1,
+      "normal_target_deg": 0.1,
+      "height_failed": false,
+      "normal_failed": false,
+      "normal_method": "periodic central differences on high block-mean and direct low height, both at low physical spacing"
+    },
+    {
+      "low_size": [
+        64,
+        48
+      ],
+      "high_size": [
+        128,
+        96
+      ],
+      "block_factor": 2,
+      "height_rms_um": 0.037752620016311654,
+      "height_rms_fraction_of_declared_relief": 0.007550524003262331,
+      "normal_rms_deg": 0.008800290433604979,
+      "height_target_um": 0.1,
+      "normal_target_deg": 0.1,
+      "height_failed": false,
+      "normal_failed": false,
+      "normal_method": "periodic central differences on high block-mean and direct low height, both at low physical spacing"
+    }
+  ],
+  "render_error": {},
+  "reference_derivative": {
+    "requested_step_mm": null,
+    "initial_step_mm": [
+      0.00016876099649537006,
+      0.00016876099649537006
+    ],
+    "step_source": "immutable physical feature scales",
+    "spatial_rates_per_axis": [],
+    "convergence_by_rig_and_rate": {},
+    "component_tolerance": 1e-05,
+    "maximum_halvings": 4
+  },
+  "render_height_sampler_crosscheck_rms_um": 0.0,
+  "height_sampler_crosscheck_rms_um": 0.0,
+  "height_sampler_crosscheck_size": [
+    8,
+    6
+  ],
+  "height_sampler_crosscheck_tolerance_um": 1e-06,
+  "resource_hashes": {
+    "surface": {
+      "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+      "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+    },
+    "optics": {
+      "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+      "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+      "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+      "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+      "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+      "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+      "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+    },
+    "renderer": {
+      "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+      "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+    },
+    "energy_table_sha256": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3"
+  },
+  "stage_cost_seconds": {
+    "build_state": 0.05006945802597329,
+    "height_32x24": 0.1163092500064522,
+    "height_64x48": 0.2349928340408951,
+    "height_128x96": 0.5992197499726899,
+    "sample_height_crosscheck_map": 0.04399162495974451,
+    "height_sampler_crosscheck": 0.038819000008516014
+  },
+  "total_seconds": 1.0840471659903415,
+  "runtime": {
+    "python": "3.14.7",
+    "numpy": "2.5.2",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O"
+  },
+  "fail_flags": {
+    "height_target_failed": false,
+    "normal_target_failed": false,
+    "height_sampler_crosscheck_failed": false,
+    "derivative_convergence_failed": false,
+    "reference_convergence_target_undefined": true,
+    "render_accuracy_target_undefined": true,
+    "render_not_run": true
+  }
+}

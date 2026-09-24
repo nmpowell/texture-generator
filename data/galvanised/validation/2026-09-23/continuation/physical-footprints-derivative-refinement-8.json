@@ -1,0 +1,889 @@
+{
+  "adapter_version": "physical-footprint-normal-view-1",
+  "fitter_version": "candidate-simplex-swap-2",
+  "generator_version": "galvanised-2",
+  "material_key": 14276969152011380360,
+  "seed": 42,
+  "config": {
+    "preset": "wet_storage",
+    "size_mm": [
+      8.0,
+      6.0
+    ],
+    "spangle_diameter_mm": 3.0,
+    "spangle_cv": 0.28,
+    "placement": "poisson",
+    "texture_strength": 0.45,
+    "crystal_tilt_concentration": 4.0,
+    "dendrite_relief_um": 2.5,
+    "trunk_relief_um": 4.5,
+    "boundary_depth_um": 1.0,
+    "micro_relief_um": 0.4,
+    "roughness": 0.3,
+    "anisotropy": 0.55,
+    "exposure": 1.0,
+    "wetness": 0.95,
+    "confinement": 0.9,
+    "salt_exposure": 0.25,
+    "white_stain": 0.9,
+    "weather_seed": null,
+    "dross_per_cm2": 0.0,
+    "runs_per_cm2": 0.0,
+    "gravity_angle_deg": 90.0,
+    "quality": "production",
+    "representation": "rich",
+    "memory_budget_mb": 512,
+    "schema_version": 1,
+    "preset_revision": "2026-09-22.initial-1",
+    "warnings": [
+      "Preset values are physically grounded authoring defaults, not metrological calibration.",
+      "spangle_diameter_mm is outside the preset's initial visual fitting range."
+    ]
+  },
+  "center_mm": [
+    0.0625,
+    0.8125
+  ],
+  "footprint_mm": [
+    0.125,
+    0.125
+  ],
+  "angle_grid_version": "normal-view-disjoint-coupon-1",
+  "angle_grid": {
+    "training_polar_rad": [
+      0.04,
+      0.12,
+      0.25,
+      0.5
+    ],
+    "training_azimuth_count": 16,
+    "training_azimuth_phase": 0.0,
+    "held_out_polar_rad": [
+      0.07,
+      0.18,
+      0.4,
+      0.8
+    ],
+    "held_out_azimuth_count": 19,
+    "held_out_azimuth_phase": 0.37
+  },
+  "captured_state": {
+    "arrays": {
+      "micro_spectrum": {
+        "shape": [
+          12,
+          3
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "44a88f2b6e87bfe3f248d225d7c39f971a8a340a7835d3ccf7c84860a60a8852"
+      },
+      "defects": {
+        "shape": [
+          0
+        ],
+        "dtype": [
+          [
+            "kind",
+            "|u1"
+          ],
+          [
+            "position_mm",
+            "<f8",
+            [
+              2
+            ]
+          ],
+          [
+            "radius_mm",
+            "<f8"
+          ],
+          [
+            "height_um",
+            "<f8"
+          ],
+          [
+            "length_mm",
+            "<f8"
+          ],
+          [
+            "angle_rad",
+            "<f8"
+          ]
+        ],
+        "sha256": "0e95efd15d3e48edefdfff32a7d5d8b120c1638566426420f70b86c9c2c094de"
+      },
+      "partition.points_mm": {
+        "shape": [
+          7,
+          2
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "e24328fbc6ab3adab3f71e83410e31a8c1ea5e8f942dcf36e5d5e4f310c9b685"
+      },
+      "partition.weights_mm2": {
+        "shape": [
+          7
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "55031536b36c5bbf49ab9fe1c7279c54be53abcbccdabd4a0d1bb389df71ac7a"
+      },
+      "partition.nucleus_ids": {
+        "shape": [
+          7
+        ],
+        "dtype": [
+          [
+            "",
+            "<u4"
+          ]
+        ],
+        "sha256": "56fe285c12975f2a56b59682cd7120998dba433fd1c3786e4e4c56f25f4c0779"
+      },
+      "dendrites.azimuth_rad": {
+        "shape": [
+          7
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "5e8b263c253e1970d175eb1c6c5cd37d2d880946450d5d9019e5441da681f0c5"
+      },
+      "dendrites.tilt_rad": {
+        "shape": [
+          7
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "5e7325c81a8917cd8e4e5f36dc4ada3c4bac143017ff1e0dd637f943aa196fb9"
+      },
+      "dendrites.family_id": {
+        "shape": [
+          7
+        ],
+        "dtype": [
+          [
+            "",
+            "|u1"
+          ]
+        ],
+        "sha256": "798745481db943b8079c75639a7833635b2df86cf2de9e2e82512950b7e1de0c"
+      },
+      "dendrites.segments": {
+        "shape": [
+          1723
+        ],
+        "dtype": [
+          [
+            "grain_id",
+            "<u4"
+          ],
+          [
+            "start_mm",
+            "<f8",
+            [
+              2
+            ]
+          ],
+          [
+            "end_mm",
+            "<f8",
+            [
+              2
+            ]
+          ],
+          [
+            "width_mm",
+            "<f8"
+          ],
+          [
+            "amplitude",
+            "<f8"
+          ],
+          [
+            "period_mm",
+            "<f8"
+          ],
+          [
+            "kind",
+            "|u1"
+          ],
+          [
+            "phase",
+            "<f8"
+          ]
+        ],
+        "sha256": "d2df39d6c3835cf039f41179a666b8bbb153f1a3336c9f8ec7e0a037e1ae53c0"
+      },
+      "weather.frequency": {
+        "shape": [
+          3,
+          4,
+          2
+        ],
+        "dtype": [
+          [
+            "",
+            "<i2"
+          ]
+        ],
+        "sha256": "2b370bb1ea4e95ec436a493941bb96fd95a5ab756e13aa43ef22bcb977743389"
+      },
+      "weather.phase": {
+        "shape": [
+          3,
+          4
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "459fbafe4b3342429cf27b04a16e52f04907985d1852d1ce87d3956e6c01f679"
+      },
+      "weather.amplitude": {
+        "shape": [
+          3,
+          4
+        ],
+        "dtype": [
+          [
+            "",
+            "<f8"
+          ]
+        ],
+        "sha256": "70df3cd0857b616d60bc2f0a6086473fbdc3d139149f6e1172bf0cdcc7805828"
+      }
+    },
+    "record_metadata": {
+      "population_mapping_version": "2026-09-23.area12-v1",
+      "partition_size_mm": [
+        8.0,
+        6.0
+      ],
+      "dendrites.family_names": [
+        "six",
+        "eight",
+        "X",
+        "X+C",
+        "two",
+        "four"
+      ],
+      "dendrites.table_version": "2026-09-23.authoring-4",
+      "dendrites.direction_support_floor": 0.12,
+      "weather.size_mm": [
+        8.0,
+        6.0
+      ],
+      "weather.weather_key": 14276969152011380360
+    },
+    "config": {
+      "preset": "wet_storage",
+      "size_mm": [
+        8.0,
+        6.0
+      ],
+      "spangle_diameter_mm": 3.0,
+      "spangle_cv": 0.28,
+      "placement": "poisson",
+      "texture_strength": 0.45,
+      "crystal_tilt_concentration": 4.0,
+      "dendrite_relief_um": 2.5,
+      "trunk_relief_um": 4.5,
+      "boundary_depth_um": 1.0,
+      "micro_relief_um": 0.4,
+      "roughness": 0.3,
+      "anisotropy": 0.55,
+      "exposure": 1.0,
+      "wetness": 0.95,
+      "confinement": 0.9,
+      "salt_exposure": 0.25,
+      "white_stain": 0.9,
+      "weather_seed": null,
+      "dross_per_cm2": 0.0,
+      "runs_per_cm2": 0.0,
+      "gravity_angle_deg": 90.0,
+      "quality": "production",
+      "representation": "rich",
+      "memory_budget_mb": 512,
+      "schema_version": 1,
+      "preset_revision": "2026-09-22.initial-1",
+      "warnings": [
+        "Preset values are physically grounded authoring defaults, not metrological calibration.",
+        "spangle_diameter_mm is outside the preset's initial visual fitting range."
+      ]
+    },
+    "material_key": 14276969152011380360
+  },
+  "state_sha256": "3884bd5504a2177d75919670ecc0fd08f71c7ac2907174e84d3fa0f4feb4a0b8",
+  "view": [
+    0.0,
+    0.0,
+    1.0
+  ],
+  "response_scale": "linear RGB BSDF times positive local incident cosine; no exposure or environment radiance",
+  "source_sha256": {
+    "core/footprint_fitting.py": "44c785fb39d3384b20ac873e889b4b3359e3d8384bfd3fd52979313b0e521047",
+    "core/lobe_fitting.py": "8afd9b65b1ac9ccb945823931890d73f1cd37776eecdaeacf04ebbc04d39ee2b",
+    "core/material_render.py": "7043cddc4c680d5a025a068eed411e8ae951b68ca300a5e11cc383965d2ed129",
+    "core/microfacet.py": "ef3d55c07c0cd17ca94cf60e4e8d40e79320d363c611884528da70c510de3b25",
+    "core/energy_compensation.py": "c1d689b4af4ddf37a583ef46d73bd7818d6976eb2074ff06748647f825a38e95",
+    "core/conductor.py": "63a9db731f50247ad3c65b1aa37c801b36e86d133e5b8209ae1067b6bf492ed2",
+    "core/dendrites.py": "acb51de5ec9d61a96aac2437e3395a9e5d8add24a6c15b29f68eac7f4307ef56",
+    "core/galvanised_weather.py": "b03a646e9b942a5520f95c62b331d0a46d4d7ee09a30c6c8c89994a32c81179a",
+    "core/grains.py": "9e65aba4c06f8798109163571bae978659f7f69302b48d4cb50685ae59a2df5b",
+    "core/_grain_geometry.py": "9e810148640184ea02214c12586e2cb2eed0b64eee4c6fbcaae85a86f325be47",
+    "core/random_fields.py": "081d39fa0425c8f5c9d41febc399f04fda5f13acdb4fa4e4e6817fe2d4c1c729",
+    "core/physical.py": "0ceaa9586ba923f2a4b7a5214d97c697714a4fb157121f3682ce25164ca33361",
+    "core/material.py": "90efe9e0547ca34e3061de5d448b694370a870d7a3e343d4aa7fa83741ac0d0b",
+    "materials/galvanised.py": "9de5cb0fd09a0bdb4cd950907987e636c02f9b5d0f89038b52dae38aba3c3ec4",
+    "materials/galvanised_config.py": "250a9004c3060cd04ed5f86e13457d1314cf2f4e1cf30f34fa3bfe3006b8e771"
+  },
+  "surface_resource_hashes": {
+    "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+    "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+  },
+  "optical_resource_hashes": {
+    "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+    "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+    "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+    "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+    "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+    "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+    "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+  },
+  "renderer_resource_hashes": {
+    "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+    "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+  },
+  "accepted": true,
+  "stage": "accepted",
+  "spatial_checks": [
+    {
+      "rate": 16,
+      "successive": {
+        "coverage_maximum_change": 1.542935388146316e-05,
+        "response_errors": {
+          "training_0": {
+            "relative_rms": 0.013171359826829937,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.05163920620824421,
+            "maximum_relative_error": 0.02480268588232888,
+            "passed": false
+          },
+          "training_1": {
+            "relative_rms": 0.00010422448343984242,
+            "dark_absolute_rms": 1.6006952105104644e-06,
+            "absolute_rms": 2.6035658755652996e-06,
+            "maximum_relative_error": 0.0001289663717298356,
+            "passed": true
+          },
+          "training_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 2.271063442194406e-06,
+            "absolute_rms": 2.271063442194406e-06,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "training_total": {
+            "relative_rms": 0.013004130901288782,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.05163943225103851,
+            "maximum_relative_error": 0.024641870943687253,
+            "passed": false
+          },
+          "held_out_0": {
+            "relative_rms": 0.013370675429859504,
+            "dark_absolute_rms": 1.206153220321464e-05,
+            "absolute_rms": 0.035544405715148615,
+            "maximum_relative_error": 0.025042570049498784,
+            "passed": false
+          },
+          "held_out_1": {
+            "relative_rms": 0.00010288217479634428,
+            "dark_absolute_rms": 1.783909034691542e-06,
+            "absolute_rms": 2.436140796024868e-06,
+            "maximum_relative_error": 0.0001239491858131952,
+            "passed": true
+          },
+          "held_out_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 2.1459213915434892e-06,
+            "absolute_rms": 2.1459213915434892e-06,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "held_out_total": {
+            "relative_rms": 0.011403555000741738,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.035544558368185694,
+            "maximum_relative_error": 0.024848311090922105,
+            "passed": false
+          }
+        },
+        "passed": false
+      },
+      "independent": {
+        "coverage_maximum_change": 2.2596138200547955e-06,
+        "response_errors": {
+          "training_0": {
+            "relative_rms": 0.0005795260266750464,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.002280830479593074,
+            "maximum_relative_error": 0.0012624981426148805,
+            "passed": true
+          },
+          "training_1": {
+            "relative_rms": 8.60145423903848e-06,
+            "dark_absolute_rms": 2.2486290001021072e-07,
+            "absolute_rms": 2.1601414339665786e-07,
+            "maximum_relative_error": 1.7420605995114507e-05,
+            "passed": true
+          },
+          "training_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 1.3131124372257004e-07,
+            "absolute_rms": 1.3131124372257004e-07,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "training_total": {
+            "relative_rms": 0.0005714049839464701,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.002280817039751509,
+            "maximum_relative_error": 0.001254579536647366,
+            "passed": true
+          },
+          "held_out_0": {
+            "relative_rms": 0.0007392009414325627,
+            "dark_absolute_rms": 1.463692892145438e-06,
+            "absolute_rms": 0.002337386437946884,
+            "maximum_relative_error": 0.001440682792470069,
+            "passed": true
+          },
+          "held_out_1": {
+            "relative_rms": 8.616653181403955e-06,
+            "dark_absolute_rms": 2.3394508437961214e-07,
+            "absolute_rms": 2.2053669210236182e-07,
+            "maximum_relative_error": 1.6157198623895446e-05,
+            "passed": true
+          },
+          "held_out_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 1.2527714305397054e-07,
+            "absolute_rms": 1.2527714305397054e-07,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "held_out_total": {
+            "relative_rms": 0.0006321179241224349,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.0023373860590138414,
+            "maximum_relative_error": 0.0014303745402918125,
+            "passed": true
+          }
+        },
+        "passed": true
+      }
+    },
+    {
+      "rate": 32,
+      "successive": {
+        "coverage_maximum_change": 2.435446549983039e-06,
+        "response_errors": {
+          "training_0": {
+            "relative_rms": 0.00039982195423516557,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.0015727136824926877,
+            "maximum_relative_error": 0.0009502367080199965,
+            "passed": true
+          },
+          "training_1": {
+            "relative_rms": 1.3342897129342672e-05,
+            "dark_absolute_rms": 2.3143595054243173e-07,
+            "absolute_rms": 3.318126205414733e-07,
+            "maximum_relative_error": 2.0990475836372218e-05,
+            "passed": true
+          },
+          "training_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 5.825351323567437e-07,
+            "absolute_rms": 5.825351323567437e-07,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "training_total": {
+            "relative_rms": 0.000393953947784527,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.0015726694437477636,
+            "maximum_relative_error": 0.000944257436829736,
+            "passed": true
+          },
+          "held_out_0": {
+            "relative_rms": 0.0004885223876882975,
+            "dark_absolute_rms": 1.285061027369785e-06,
+            "absolute_rms": 0.0015136119803225542,
+            "maximum_relative_error": 0.0008980692667983459,
+            "passed": true
+          },
+          "held_out_1": {
+            "relative_rms": 1.31948585277993e-05,
+            "dark_absolute_rms": 2.6282658991076063e-07,
+            "absolute_rms": 3.1759659172604086e-07,
+            "maximum_relative_error": 1.984553059444736e-05,
+            "passed": true
+          },
+          "held_out_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 5.505589697521815e-07,
+            "absolute_rms": 5.505589697521815e-07,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "held_out_total": {
+            "relative_rms": 0.0004177077452155211,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 0.00151359648410997,
+            "maximum_relative_error": 0.0008921224548837893,
+            "passed": true
+          }
+        },
+        "passed": true
+      },
+      "independent": {
+        "coverage_maximum_change": 1.3150770927783384e-07,
+        "response_errors": {
+          "training_0": {
+            "relative_rms": 2.1015863833222633e-05,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 4.800998831108121e-05,
+            "maximum_relative_error": 4.6745268138052324e-05,
+            "passed": true
+          },
+          "training_1": {
+            "relative_rms": 6.171674492440381e-07,
+            "dark_absolute_rms": 2.1713448509526877e-08,
+            "absolute_rms": 1.5567713121706407e-08,
+            "maximum_relative_error": 1.5837501531518054e-06,
+            "passed": true
+          },
+          "training_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 1.4433886679549371e-08,
+            "absolute_rms": 1.4433886679549371e-08,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "training_total": {
+            "relative_rms": 1.9650607549457778e-05,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 4.8013759511045835e-05,
+            "maximum_relative_error": 4.5832803333444577e-05,
+            "passed": true
+          },
+          "held_out_0": {
+            "relative_rms": 2.3575975174168735e-05,
+            "dark_absolute_rms": 2.0062613432255983e-07,
+            "absolute_rms": 4.444376867752627e-05,
+            "maximum_relative_error": 5.267384874111847e-05,
+            "passed": true
+          },
+          "held_out_1": {
+            "relative_rms": 6.227557745403418e-07,
+            "dark_absolute_rms": 2.441192675124465e-08,
+            "absolute_rms": 1.800513601044739e-08,
+            "maximum_relative_error": 1.4353454176835536e-06,
+            "passed": true
+          },
+          "held_out_2": {
+            "relative_rms": 0.0,
+            "dark_absolute_rms": 1.3821708897421064e-08,
+            "absolute_rms": 1.3821708897421064e-08,
+            "maximum_relative_error": 0.0,
+            "passed": true
+          },
+          "held_out_total": {
+            "relative_rms": 1.943764708036078e-05,
+            "dark_absolute_rms": 0.0,
+            "absolute_rms": 4.4440537801860745e-05,
+            "maximum_relative_error": 4.826976635639286e-05,
+            "passed": true
+          }
+        },
+        "passed": true
+      }
+    }
+  ],
+  "integration": [
+    {
+      "rate": 8,
+      "points": 64,
+      "max_derivative_halvings": 1,
+      "max_derivative_component_difference": 5.150664977304764e-07
+    },
+    {
+      "rate": 16,
+      "points": 256,
+      "max_derivative_halvings": 1,
+      "max_derivative_component_difference": 7.034134401201486e-07
+    },
+    {
+      "rate": 17,
+      "points": 289,
+      "max_derivative_halvings": 3,
+      "max_derivative_component_difference": 6.547522654609672e-07
+    },
+    {
+      "rate": 32,
+      "points": 1024,
+      "max_derivative_halvings": 4,
+      "max_derivative_component_difference": 6.1235977625584415e-06
+    },
+    {
+      "rate": 33,
+      "points": 1089,
+      "max_derivative_halvings": 5,
+      "max_derivative_component_difference": 4.8820245949349195e-06
+    }
+  ],
+  "material_fits": {
+    "0": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 0,
+      "candidate_indices": [
+        5,
+        11,
+        53,
+        63
+      ],
+      "weights": [
+        0.11742463834964935,
+        0.03565097614742484,
+        0.14518083536383397,
+        0.5018126615231184
+      ],
+      "coverage": 0.8000691113840266,
+      "candidate_count": 64,
+      "trial_count": 1450,
+      "refinement_sweeps": 5,
+      "max_refinement_sweeps": 8,
+      "search_termination": "local_optimum",
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 0.017101265692155056,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 0.04440926504841232,
+        "maximum_relative_error": 0.04424659815277738,
+        "passed": true
+      },
+      "validation_error": {
+        "relative_rms": 0.015497317454017523,
+        "dark_absolute_rms": 0.00017725660273852314,
+        "absolute_rms": 0.026895638549406763,
+        "maximum_relative_error": 0.03501926370637496,
+        "passed": true
+      }
+    },
+    "1": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 1,
+      "candidate_indices": [
+        3,
+        26,
+        50,
+        55
+      ],
+      "weights": [
+        0.024460868990747432,
+        0.014622652328446164,
+        0.12708385930036076,
+        0.012050614620508021
+      ],
+      "coverage": 0.17821799524006238,
+      "candidate_count": 64,
+      "trial_count": 1210,
+      "refinement_sweeps": 4,
+      "max_refinement_sweeps": 8,
+      "search_termination": "local_optimum",
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 1.220334139645667e-05,
+        "dark_absolute_rms": 3.6503715117658766e-07,
+        "absolute_rms": 2.974219430456009e-07,
+        "maximum_relative_error": 2.9841475435656293e-05,
+        "passed": true
+      },
+      "validation_error": {
+        "relative_rms": 1.2940356873929252e-05,
+        "dark_absolute_rms": 3.3532621052085135e-07,
+        "absolute_rms": 3.1778146291941354e-07,
+        "maximum_relative_error": 3.0115310401846142e-05,
+        "passed": true
+      }
+    },
+    "2": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 2,
+      "candidate_indices": [
+        3,
+        8,
+        40,
+        61
+      ],
+      "weights": [
+        0.0036449283731280627,
+        0.01091752536734478,
+        0.0007272015988763626,
+        0.00642323803656188
+      ],
+      "coverage": 0.021712893375911084,
+      "candidate_count": 64,
+      "trial_count": 1210,
+      "refinement_sweeps": 4,
+      "max_refinement_sweeps": 8,
+      "search_termination": "local_optimum",
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 0.0,
+        "dark_absolute_rms": 1.0031442137504045e-09,
+        "absolute_rms": 1.0031442137504045e-09,
+        "maximum_relative_error": 0.0,
+        "passed": true
+      },
+      "validation_error": {
+        "relative_rms": 0.0,
+        "dark_absolute_rms": 6.9620519527085555e-09,
+        "absolute_rms": 6.9620519527085555e-09,
+        "maximum_relative_error": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "derivative_initial_step_mm": [
+    6.330467147037847e-05,
+    6.330467147037847e-05
+  ],
+  "spatial_policy": {
+    "relative_rms": 0.01,
+    "dark_absolute_rms": 0.0002,
+    "radiance_floor": 0.02,
+    "coverage_component_max": 0.001,
+    "candidate_rate": 8,
+    "rates": [
+      8,
+      16,
+      17,
+      32,
+      33
+    ],
+    "max_point_batch": 64
+  },
+  "accepted_spatial_rate": 32,
+  "coverage": [
+    0.8000691113840266,
+    0.17821799524006238,
+    0.021712893375911084
+  ],
+  "storage_errors": {
+    "training_0": {
+      "relative_rms": 0.017101251408414262,
+      "dark_absolute_rms": 0.0,
+      "absolute_rms": 0.044409145605659395,
+      "maximum_relative_error": 0.04424655657154694,
+      "passed": true
+    },
+    "training_1": {
+      "relative_rms": 1.2214446096318443e-05,
+      "dark_absolute_rms": 3.658808318228779e-07,
+      "absolute_rms": 2.976761153250791e-07,
+      "maximum_relative_error": 2.9885920300385818e-05,
+      "passed": true
+    },
+    "training_2": {
+      "relative_rms": 0.0,
+      "dark_absolute_rms": 1.0088741356257729e-09,
+      "absolute_rms": 1.0088741356257729e-09,
+      "maximum_relative_error": 0.0,
+      "passed": true
+    },
+    "training_total": {
+      "relative_rms": 0.016302873075898776,
+      "dark_absolute_rms": 0.0,
+      "absolute_rms": 0.044409184259545174,
+      "maximum_relative_error": 0.04323752514933032,
+      "passed": true
+    },
+    "held_out_0": {
+      "relative_rms": 0.015497310999935503,
+      "dark_absolute_rms": 0.00017725649905193144,
+      "absolute_rms": 0.026895603271927405,
+      "maximum_relative_error": 0.03501925966744172,
+      "passed": true
+    },
+    "held_out_1": {
+      "relative_rms": 1.295611876142675e-05,
+      "dark_absolute_rms": 3.3556395710286863e-07,
+      "absolute_rms": 3.180955026683157e-07,
+      "maximum_relative_error": 3.0158468325740335e-05,
+      "passed": true
+    },
+    "held_out_2": {
+      "relative_rms": 0.0,
+      "dark_absolute_rms": 6.9793337327012915e-09,
+      "absolute_rms": 6.9793337327012915e-09,
+      "maximum_relative_error": 0.0,
+      "passed": true
+    },
+    "held_out_total": {
+      "relative_rms": 0.012914280842109514,
+      "dark_absolute_rms": 0.0,
+      "absolute_rms": 0.026895586008392997,
+      "maximum_relative_error": 0.03168181282251285,
+      "passed": true
+    }
+  },
+  "record_count": 12,
+  "claim": "spatially checked normal-view coupon only; no grazing-view, highlight-width or production-quality certification",
+  "scratch_runtime_override": {
+    "module": "core.material_render",
+    "name": "_MAX_DERIVATIVE_HALVINGS",
+    "value": 8,
+    "source_value": 4,
+    "tolerance_unchanged": 1e-05
+  },
+  "seconds": 1.8975465830299072
+}

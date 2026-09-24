@@ -1,0 +1,252 @@
+{
+  "orthogonal_32x32": {
+    "pixels": 1024,
+    "candidate_count": 4,
+    "training_scalar_samples": 192,
+    "held_out_scalar_samples": 228,
+    "seconds": 0.3885034170234576,
+    "per_pixel_seconds": 0.0003793978681869703,
+    "fit": {
+      "fit_version": "candidate-simplex-greedy-1",
+      "material_id": 0,
+      "candidate_indices": [
+        0,
+        2
+      ],
+      "weights": [
+        0.4999999999999999,
+        0.5000000000000001
+      ],
+      "coverage": 1.0,
+      "candidate_count": 4,
+      "trial_count": 9,
+      "tolerances": {
+        "relative_rms": 1e-08,
+        "dark_absolute_rms": 1e-09,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 1.4810743971402377e-16,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 4.0142671942973077e-16,
+        "maximum_relative_error": 2.9266513913723256e-16,
+        "passed": true
+      },
+      "validation_error": {
+        "relative_rms": 1.5441993858062246e-16,
+        "dark_absolute_rms": 1.8885277159868314e-18,
+        "absolute_rms": 3.188138526920412e-16,
+        "maximum_relative_error": 3.483151061065945e-16,
+        "passed": true
+      }
+    }
+  },
+  "slope_original": {
+    "fits": [
+      {
+        "fit_version": "candidate-simplex-greedy-1",
+        "material_id": 0,
+        "candidate_indices": [
+          0
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      },
+      {
+        "fit_version": "candidate-simplex-greedy-1",
+        "material_id": 1,
+        "candidate_indices": [
+          1
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      }
+    ]
+  },
+  "slope_swapped": {
+    "fits": [
+      {
+        "fit_version": "candidate-simplex-greedy-1",
+        "material_id": 0,
+        "candidate_indices": [
+          1
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      },
+      {
+        "fit_version": "candidate-simplex-greedy-1",
+        "material_id": 1,
+        "candidate_indices": [
+          0
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      }
+    ]
+  },
+  "candidate64": {
+    "pixels": 1,
+    "candidate_count": 64,
+    "seconds": 0.02209391602082178,
+    "status": "rejected",
+    "source_indices": [
+      0,
+      17,
+      42,
+      63
+    ],
+    "source_weights": [
+      0.15,
+      0.25,
+      0.35,
+      0.25
+    ],
+    "fit": {
+      "fit_version": "candidate-simplex-greedy-1",
+      "material_id": 0,
+      "candidate_indices": [
+        9,
+        42,
+        48,
+        63
+      ],
+      "weights": [
+        0.3188094451447493,
+        0.3456439752497199,
+        0.18052750436468787,
+        0.1550190752408429
+      ],
+      "coverage": 1.0,
+      "candidate_count": 64,
+      "trial_count": 250,
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 0.20545152181199858,
+        "dark_absolute_rms": 0.0005123933390129495,
+        "absolute_rms": 0.3672762357027729,
+        "maximum_relative_error": 0.6103297980495825,
+        "passed": false
+      },
+      "validation_error": {
+        "relative_rms": 0.22875827317437197,
+        "dark_absolute_rms": 0.0012831897958312294,
+        "absolute_rms": 0.34817905028371005,
+        "maximum_relative_error": 0.6899633876481841,
+        "passed": false
+      }
+    }
+  },
+  "provenance": {
+    "fit_version": "candidate-simplex-greedy-1",
+    "module_sha256": "ed595a726f15f73c65cf67d8096452207b63e254a5fe6c779bd118dee170c341",
+    "optical_hashes": {
+      "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+      "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+      "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+      "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+      "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+      "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+      "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+    },
+    "training": "4 polar angles [0.04,0.12,0.25,0.50]rad x16 azimuths, zero phase; linear RGB*positive incident cosine",
+    "held_out": "4 disjoint polar angles [0.07,0.18,0.40,0.80]rad x19 azimuths, phase0.37; normal outgoing view",
+    "purpose": "controlled coupons only; not sampler integration, not highlight-width or full G7 acceptance"
+  }
+}

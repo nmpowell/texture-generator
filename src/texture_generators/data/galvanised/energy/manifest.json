@@ -1,0 +1,12 @@
+{
+  "method": "Heitz 2018 GGX visible-normal QMC; height-correlated Smith G2/G1 ratio",
+  "samples_per_direction": 8192,
+  "directions": "cos(theta) and first-quadrant azimuth; tangent and bitangent widths tabulated independently",
+  "table_sha256": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+  "quantity": "unit-Fresnel single-scattering directional hemispherical reflectance",
+  "additional_quantities": [
+    "Schlick (1-cos_half)^5 directional albedo",
+    "pinned D65 zinc Fresnel directional albedo",
+    "first outgoing directional moments of each single-scattering term"
+  ]
+}

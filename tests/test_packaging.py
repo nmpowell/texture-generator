@@ -40,9 +40,15 @@ def runtime_files() -> frozenset[str]:
     """Name every source module that must remain usable after installation."""
     source = PROJECT_ROOT / "src"
     modules = source.glob("texture_generators/**/*.py")
-    return frozenset(path.relative_to(source).as_posix() for path in modules) | {
-        "texture_generators/py.typed"
-    }
+    return (
+        frozenset(path.relative_to(source).as_posix() for path in modules)
+        | {"texture_generators/py.typed"}
+        | frozenset(
+            path.relative_to(source).as_posix()
+            for path in (source / "texture_generators/data/galvanised").rglob("*")
+            if path.is_file()
+        )
+    )
 
 
 def test_version_matches_distribution() -> None:
@@ -64,8 +70,14 @@ def test_distribution_metadata_describes_public_project() -> None:
     """Expose the public project's licence and support links to installers."""
     metadata = importlib.metadata.metadata("texture-generator")
 
-    assert metadata["License-Expression"] == "Apache-2.0"
-    assert metadata.get_all("License-File") == ["LICENSE"]
+    assert metadata["License-Expression"] == "Apache-2.0 AND CC-BY-SA-4.0 AND CC0-1.0"
+    assert set(metadata.get_all("License-File")) == {
+        "LICENSE",
+        "src/texture_generators/data/galvanised/optics/LICENSE-CIE.txt",
+        "src/texture_generators/data/galvanised/optics/LICENSE-Werner.txt",
+        "src/texture_generators/data/galvanised/optics/LICENSE-derived.txt",
+        "src/texture_generators/data/galvanised/energy/LICENSE-derived.txt",
+    }
     assert set(metadata.get_all("Project-URL", [])) == {
         "Homepage, https://github.com/nmpowell/texture-generator",
         "Issues, https://github.com/nmpowell/texture-generator/issues",
@@ -244,6 +256,44 @@ def test_wheel_excludes_tests(tmp_path: Path, runtime_files: frozenset[str]) -> 
         entry_point_text = wheel.read(entry_points[0]).decode("utf-8")
         assert "texture-gen = texture_generators.cli:main" in entry_point_text
 
+    _exercise_built_wheel(wheel_path, tmp_path / "wheel-smoke")
+
+
+def _exercise_built_wheel(wheel_path: Path | str, directory: Path) -> None:
+    """Load only the built package, with no source-tree resource fallback."""
+    package = directory / "package"
+    package.mkdir(parents=True)
+    with zipfile.ZipFile(wheel_path) as wheel:
+        wheel.extractall(package)
+    script = """
+import sys
+from pathlib import Path
+sys.path.insert(0, sys.argv[1])
+import texture_generators as tg
+assert Path(tg.__file__).is_relative_to(Path(sys.argv[1]))
+from texture_generators.materials.galvanised import GalvanisedConfig
+recipe = GalvanisedConfig(size_mm=(12, 9))
+maps = tg.generate_maps('metal', variant='galvanised', size=(12, 9), seed=42,
+                        galvanised=recipe)
+image = tg.render_material(maps)
+assert image.size == (12, 9) and image.mode == 'RGB'
+assert tg.generate('metal', variant='galvanised', size=(12, 9), seed=42,
+                   galvanised=recipe).tobytes() == image.tobytes()
+manifest = tg.export_material(maps, 'bundle')
+loaded = tg.load_material(manifest)
+assert loaded['height_um'].tobytes() == maps['height_um'].tobytes()
+assert tg.replay_material(manifest)['height_um'].tobytes() == maps['height_um'].tobytes()
+assert 'tifffile' not in sys.modules
+"""
+    result = subprocess.run(
+        [sys.executable, "-I", "-c", script, str(package)],
+        cwd=directory,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
 
 def test_source_distribution_rebuilds_complete_wheel(
     tmp_path: Path, runtime_files: frozenset[str]
@@ -278,6 +328,8 @@ def test_source_distribution_rebuilds_complete_wheel(
 
     with zipfile.ZipFile(wheel_path) as wheel:
         assert runtime_files <= set(wheel.namelist())
+
+    _exercise_built_wheel(wheel_path, tmp_path / "sdist-smoke")
 
 
 def test_samples_default_outdir_rule(

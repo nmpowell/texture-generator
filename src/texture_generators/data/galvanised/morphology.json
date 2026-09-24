@@ -1,0 +1,139 @@
+{
+  "version": "2026-09-23.authoring-4",
+  "status": "authoring templates informed by Kim et al. 2019; projected angles, dimensions and family frequencies uncalibrated",
+  "reference": "Kim et al., Dendritic morphologies of hot-dip galvanized Zn-0.2 wt pct Al coatings (2019)",
+  "family_quantiles": [
+    0.27,
+    0.45,
+    0.61,
+    0.73,
+    0.86,
+    1.0
+  ],
+  "construction": {
+    "status": "bounded authoring model; not dimensions extracted from microscopy",
+    "primary_extent_diameters": 0.95,
+    "primary_amplitude": 0.26,
+    "secondary_spacing_mm": 0.135,
+    "secondary_amplitude": 0.34,
+    "direction_support_floor": 0.12,
+    "max_secondary_per_side": 48,
+    "tertiary_probability": 0.28,
+    "primary_width_mm": 0.045,
+    "secondary_width_mm": 0.029,
+    "tertiary_width_mm": 0.018,
+    "secondary_extent_diameters": 0.65,
+    "support_radius_diameters": 1.15,
+    "tertiary_reach_spacings": 0.65
+  },
+  "families": [
+    {
+      "name": "six",
+      "angles_deg": [
+        0,
+        60,
+        120,
+        180,
+        240,
+        300
+      ],
+      "lengths": [
+        1,
+        0.9,
+        1,
+        0.9,
+        1,
+        0.9
+      ],
+      "secondary_angle_deg": 60
+    },
+    {
+      "name": "eight",
+      "angles_deg": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "lengths": [
+        1,
+        0.74,
+        0.9,
+        0.74,
+        1,
+        0.74,
+        0.9,
+        0.74
+      ],
+      "secondary_angle_deg": 45
+    },
+    {
+      "name": "X",
+      "angles_deg": [
+        20,
+        160,
+        200,
+        340
+      ],
+      "lengths": [
+        1,
+        0.87,
+        1,
+        0.87
+      ],
+      "secondary_angle_deg": 56
+    },
+    {
+      "name": "X+C",
+      "angles_deg": [
+        20,
+        90,
+        160,
+        200,
+        270,
+        340
+      ],
+      "lengths": [
+        1,
+        0.58,
+        0.9,
+        1,
+        0.58,
+        0.9
+      ],
+      "secondary_angle_deg": 52
+    },
+    {
+      "name": "two",
+      "angles_deg": [
+        0,
+        180
+      ],
+      "lengths": [
+        1,
+        0.89
+      ],
+      "secondary_angle_deg": 38
+    },
+    {
+      "name": "four",
+      "angles_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "lengths": [
+        1,
+        0.83,
+        1,
+        0.83
+      ],
+      "secondary_angle_deg": 48
+    }
+  ]
+}

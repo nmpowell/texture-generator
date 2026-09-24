@@ -1,0 +1,11 @@
+Derived zinc Fresnel table
+===========================
+
+zinc_fresnel_lut.csv is a numerical transformation of the Werner CC0 zinc
+data and the CIE CC BY-SA 4.0 datasets identified in the adjacent notices.
+It is therefore distributed separately under CC BY-SA 4.0. Attribution and
+share-alike obligations for the CIE-derived table remain in force; the source
+repository's Apache-2.0 licence is not a replacement for those terms.
+
+Generation method and exact source identities are in manifest.json. Rebuild
+with tools/galvanised/build_optics.py; do not edit the table by hand.

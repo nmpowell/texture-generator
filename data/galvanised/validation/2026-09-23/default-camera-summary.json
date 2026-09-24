@@ -1,0 +1,53 @@
+{
+  "status": "complete",
+  "render_count": 48,
+  "presets": [
+    "regular",
+    "minimised",
+    "weathered",
+    "wet_storage"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "all_rgb_finite": true,
+  "total_render_seconds": 656.043,
+  "contact_sheets": [
+    "/tmp/galvanised-preview-default-review/regular-contact.png",
+    "/tmp/galvanised-preview-default-review/minimised-contact.png",
+    "/tmp/galvanised-preview-default-review/weathered-contact.png",
+    "/tmp/galvanised-preview-default-review/wet_storage-contact.png"
+  ],
+  "resource_sha256_pre_sweep": {
+    "src/texture_generators/materials/galvanised.py": "c593a48219840892fb87c36efa4707946e017699c9f4f41446ac544ce8beebfb",
+    "src/texture_generators/materials/galvanised_config.py": "250a9004c3060cd04ed5f86e13457d1314cf2f4e1cf30f34fa3bfe3006b8e771",
+    "src/texture_generators/core/material_render.py": "6acf79f64868b04ef27bfc9d0c512c1cdec0268d4ac897dc4d1e852b37eac6a5",
+    "src/texture_generators/core/grains.py": "9e65aba4c06f8798109163571bae978659f7f69302b48d4cb50685ae59a2df5b",
+    "src/texture_generators/core/_grain_geometry.py": "e8cac42bc512b06516d8226456925cb2cd67ee4afd8ddb6af0e2ec6f2248973a",
+    "src/texture_generators/data/galvanised/morphology.json": "6586cf9224747be6b60e2930bbd0f2b427425ce01c491b6104bc698fee93248b"
+  },
+  "resource_sha256_post_sweep": {
+    "src/texture_generators/materials/galvanised.py": "1aa4c6705f1d09f808ccce45e168918de390204bfd776fb549b0dd1377e6280a",
+    "src/texture_generators/materials/galvanised_config.py": "250a9004c3060cd04ed5f86e13457d1314cf2f4e1cf30f34fa3bfe3006b8e771",
+    "src/texture_generators/core/material_render.py": "7043cddc4c680d5a025a068eed411e8ae951b68ca300a5e11cc383965d2ed129",
+    "src/texture_generators/core/grains.py": "9e65aba4c06f8798109163571bae978659f7f69302b48d4cb50685ae59a2df5b",
+    "src/texture_generators/core/_grain_geometry.py": "e8cac42bc512b06516d8226456925cb2cd67ee4afd8ddb6af0e2ec6f2248973a",
+    "src/texture_generators/data/galvanised/morphology.json": "6586cf9224747be6b60e2930bbd0f2b427425ce01c491b6104bc698fee93248b"
+  },
+  "diagnostic_note": "Normalized per-channel std > 0.005 is a non-flat diagnostic only, not a physical-accuracy gate.",
+  "normalization": "RGB channel values divided by 255, range 0..1.",
+  "normalized_std_rgb_threshold": 0.005,
+  "normalized_std_rgb_all_above_threshold": true,
+  "minimum_normalized_channel_std": 0.007819311065157944
+}

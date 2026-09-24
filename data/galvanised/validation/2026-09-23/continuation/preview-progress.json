@@ -1,0 +1,877 @@
+{
+  "status": "complete",
+  "git_head": "cf455ee3a4904ac7fbece87948f6a16cb0c8f948",
+  "python": "3.14.7 (main, Sep  1 2026, 14:05:28) [Clang 22.1.3 ]",
+  "numpy": "2.5.2",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "generator_version_imported_at_start": "galvanised-2",
+  "size": [
+    128,
+    128
+  ],
+  "size_mm": [
+    100.0,
+    100.0
+  ],
+  "preview_config": {
+    "rig": "studio",
+    "exposure_stops": 0.0,
+    "normal_strength": 1.0,
+    "light_azimuth_deg": 315.0,
+    "view": [
+      -0.28760623847595074,
+      0.28760623847595074,
+      0.9135454576426009
+    ],
+    "render_samples": 64
+  },
+  "launch_source_sha256": {
+    "src/texture_generators/materials/galvanised.py": "9de5cb0fd09a0bdb4cd950907987e636c02f9b5d0f89038b52dae38aba3c3ec4",
+    "src/texture_generators/materials/galvanised_config.py": "250a9004c3060cd04ed5f86e13457d1314cf2f4e1cf30f34fa3bfe3006b8e771",
+    "src/texture_generators/core/material_render.py": "7043cddc4c680d5a025a068eed411e8ae951b68ca300a5e11cc383965d2ed129",
+    "src/texture_generators/core/dendrites.py": "acb51de5ec9d61a96aac2437e3395a9e5d8add24a6c15b29f68eac7f4307ef56",
+    "src/texture_generators/core/grains.py": "9e65aba4c06f8798109163571bae978659f7f69302b48d4cb50685ae59a2df5b",
+    "src/texture_generators/core/_grain_geometry.py": "9e810148640184ea02214c12586e2cb2eed0b64eee4c6fbcaae85a86f325be47",
+    "src/texture_generators/core/galvanised_weather.py": "b03a646e9b942a5520f95c62b331d0a46d4d7ee09a30c6c8c89994a32c81179a",
+    "src/texture_generators/data/galvanised/morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+    "src/texture_generators/data/galvanised/population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147",
+    "src/texture_generators/data/galvanised/optics/manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a",
+    "src/texture_generators/data/galvanised/energy/manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+  },
+  "completed": 48,
+  "total": 48,
+  "results": [
+    {
+      "name": "regular-seed00",
+      "status": "complete",
+      "elapsed_seconds": 4.352383624995127,
+      "normalized_std_rgb": [
+        0.013473709816536674,
+        0.01342935894550298,
+        0.013465900245146123
+      ],
+      "material_key": 11749869230777074271,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed01",
+      "status": "complete",
+      "elapsed_seconds": 4.47657200001413,
+      "normalized_std_rgb": [
+        0.013664275086394952,
+        0.013626097378707172,
+        0.013643913746987407
+      ],
+      "material_key": 9441442522235856127,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed02",
+      "status": "complete",
+      "elapsed_seconds": 4.371566375019029,
+      "normalized_std_rgb": [
+        0.013843684063516984,
+        0.013808135643499853,
+        0.013814503738655346
+      ],
+      "material_key": 4825892087074085057,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed03",
+      "status": "complete",
+      "elapsed_seconds": 4.345175167021807,
+      "normalized_std_rgb": [
+        0.01322955281741171,
+        0.013207788737248562,
+        0.013211994118436597
+      ],
+      "material_key": 1579948266424812280,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed04",
+      "status": "complete",
+      "elapsed_seconds": 4.444431249983609,
+      "normalized_std_rgb": [
+        0.01369531758440418,
+        0.013633484227606045,
+        0.013661859380105112
+      ],
+      "material_key": 17396314626642683726,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed05",
+      "status": "complete",
+      "elapsed_seconds": 4.423972958989907,
+      "normalized_std_rgb": [
+        0.013952711526544129,
+        0.013945741654880116,
+        0.013947008668744546
+      ],
+      "material_key": 14849682912918955432,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed06",
+      "status": "complete",
+      "elapsed_seconds": 4.57175666699186,
+      "normalized_std_rgb": [
+        0.01334502992980253,
+        0.013344691431576013,
+        0.013344700238872555
+      ],
+      "material_key": 9927380061196813054,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed07",
+      "status": "complete",
+      "elapsed_seconds": 4.33360679197358,
+      "normalized_std_rgb": [
+        0.013798325221190972,
+        0.01378776057808225,
+        0.013782409902705637
+      ],
+      "material_key": 11530976094092348043,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed08",
+      "status": "complete",
+      "elapsed_seconds": 4.318163041956723,
+      "normalized_std_rgb": [
+        0.013304983564537326,
+        0.013251750213664131,
+        0.013277789186794264
+      ],
+      "material_key": 6031573905740948468,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed09",
+      "status": "complete",
+      "elapsed_seconds": 4.413750124978833,
+      "normalized_std_rgb": [
+        0.013452338317265592,
+        0.013433421201056932,
+        0.013472138996127021
+      ],
+      "material_key": 16053264345985615649,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed10",
+      "status": "complete",
+      "elapsed_seconds": 4.297972625005059,
+      "normalized_std_rgb": [
+        0.013392074370193333,
+        0.01336422132512342,
+        0.013363954791053262
+      ],
+      "material_key": 17635118871554501016,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "regular-seed11",
+      "status": "complete",
+      "elapsed_seconds": 4.360031458956655,
+      "normalized_std_rgb": [
+        0.01304953516976311,
+        0.013059363067792666,
+        0.013052874991904754
+      ],
+      "material_key": 2371701625988369486,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed00",
+      "status": "complete",
+      "elapsed_seconds": 28.59385416598525,
+      "normalized_std_rgb": [
+        0.007876954990127721,
+        0.007818520586291282,
+        0.00784813277936671
+      ],
+      "material_key": 11749869230777074271,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed01",
+      "status": "complete",
+      "elapsed_seconds": 28.56774691696046,
+      "normalized_std_rgb": [
+        0.007913684045175642,
+        0.007891556874145552,
+        0.00789084230120188
+      ],
+      "material_key": 9441442522235856127,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed02",
+      "status": "complete",
+      "elapsed_seconds": 28.57165945903398,
+      "normalized_std_rgb": [
+        0.007916377079550622,
+        0.00786301947613279,
+        0.007871705764500124
+      ],
+      "material_key": 4825892087074085057,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed03",
+      "status": "complete",
+      "elapsed_seconds": 29.15480004204437,
+      "normalized_std_rgb": [
+        0.007935748707309146,
+        0.007882668162587939,
+        0.00790655369750147
+      ],
+      "material_key": 1579948266424812280,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed04",
+      "status": "complete",
+      "elapsed_seconds": 29.137527416984085,
+      "normalized_std_rgb": [
+        0.008035587436595385,
+        0.007995727011138036,
+        0.008010182791047035
+      ],
+      "material_key": 17396314626642683726,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed05",
+      "status": "complete",
+      "elapsed_seconds": 28.419947165995836,
+      "normalized_std_rgb": [
+        0.007901524582386198,
+        0.00786304914839668,
+        0.007850427776706465
+      ],
+      "material_key": 14849682912918955432,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed06",
+      "status": "complete",
+      "elapsed_seconds": 28.31402558402624,
+      "normalized_std_rgb": [
+        0.007902585493548725,
+        0.007899948801309545,
+        0.007886586058690992
+      ],
+      "material_key": 9927380061196813054,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed07",
+      "status": "complete",
+      "elapsed_seconds": 28.345961957995314,
+      "normalized_std_rgb": [
+        0.007903972343317498,
+        0.007887976636587099,
+        0.007890825264817542
+      ],
+      "material_key": 11530976094092348043,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed08",
+      "status": "complete",
+      "elapsed_seconds": 28.31014854100067,
+      "normalized_std_rgb": [
+        0.007948908069628892,
+        0.007915884143658214,
+        0.00792527928345524
+      ],
+      "material_key": 6031573905740948468,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed09",
+      "status": "complete",
+      "elapsed_seconds": 28.109434208017774,
+      "normalized_std_rgb": [
+        0.007867155729651236,
+        0.007832853675389499,
+        0.007838692995402591
+      ],
+      "material_key": 16053264345985615649,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed10",
+      "status": "complete",
+      "elapsed_seconds": 28.513818999985233,
+      "normalized_std_rgb": [
+        0.007961506872718337,
+        0.007912624893600924,
+        0.007944482856162597
+      ],
+      "material_key": 17635118871554501016,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "minimised-seed11",
+      "status": "complete",
+      "elapsed_seconds": 28.811127832974307,
+      "normalized_std_rgb": [
+        0.007971775365702162,
+        0.007909776116452768,
+        0.007928006620722027
+      ],
+      "material_key": 2371701625988369486,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed00",
+      "status": "complete",
+      "elapsed_seconds": 5.615085957979318,
+      "normalized_std_rgb": [
+        0.02279397323320634,
+        0.022371552572280774,
+        0.023633163070989324
+      ],
+      "material_key": 11749869230777074271,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed01",
+      "status": "complete",
+      "elapsed_seconds": 5.880963707983028,
+      "normalized_std_rgb": [
+        0.019056544642233737,
+        0.018806131841254046,
+        0.019589942690729743
+      ],
+      "material_key": 9441442522235856127,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed02",
+      "status": "complete",
+      "elapsed_seconds": 5.763618500030134,
+      "normalized_std_rgb": [
+        0.02071519628318254,
+        0.02042496309911367,
+        0.02134560147965926
+      ],
+      "material_key": 4825892087074085057,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed03",
+      "status": "complete",
+      "elapsed_seconds": 5.996930249966681,
+      "normalized_std_rgb": [
+        0.01947432590470641,
+        0.01920940540354002,
+        0.020031409958560672
+      ],
+      "material_key": 1579948266424812280,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed04",
+      "status": "complete",
+      "elapsed_seconds": 5.92823054199107,
+      "normalized_std_rgb": [
+        0.02245810293022647,
+        0.022069082757264467,
+        0.023266490800336548
+      ],
+      "material_key": 17396314626642683726,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed05",
+      "status": "complete",
+      "elapsed_seconds": 5.78340733400546,
+      "normalized_std_rgb": [
+        0.02198434532595159,
+        0.021666423937329073,
+        0.022713549386725145
+      ],
+      "material_key": 14849682912918955432,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed06",
+      "status": "complete",
+      "elapsed_seconds": 5.949808792036492,
+      "normalized_std_rgb": [
+        0.020299907827214622,
+        0.02002906497546195,
+        0.020928902508050462
+      ],
+      "material_key": 9927380061196813054,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed07",
+      "status": "complete",
+      "elapsed_seconds": 5.833752124977764,
+      "normalized_std_rgb": [
+        0.01957205570746379,
+        0.01930020600375324,
+        0.02014644070151144
+      ],
+      "material_key": 11530976094092348043,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed08",
+      "status": "complete",
+      "elapsed_seconds": 5.946607000019867,
+      "normalized_std_rgb": [
+        0.018549617328642867,
+        0.01828255062363878,
+        0.01912385757774839
+      ],
+      "material_key": 6031573905740948468,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed09",
+      "status": "complete",
+      "elapsed_seconds": 5.894084875006229,
+      "normalized_std_rgb": [
+        0.020638276480131886,
+        0.020288540821904795,
+        0.021309212966372348
+      ],
+      "material_key": 16053264345985615649,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed10",
+      "status": "complete",
+      "elapsed_seconds": 5.78970595903229,
+      "normalized_std_rgb": [
+        0.020654402987803678,
+        0.020359527491475144,
+        0.021355912595707384
+      ],
+      "material_key": 17635118871554501016,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "weathered-seed11",
+      "status": "complete",
+      "elapsed_seconds": 5.940875167027116,
+      "normalized_std_rgb": [
+        0.01898101745613756,
+        0.01867444649512474,
+        0.019509403099618527
+      ],
+      "material_key": 2371701625988369486,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed00",
+      "status": "complete",
+      "elapsed_seconds": 7.048834041983355,
+      "normalized_std_rgb": [
+        0.045514467186709165,
+        0.044016923682622056,
+        0.04781897457004994
+      ],
+      "material_key": 11749869230777074271,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed01",
+      "status": "complete",
+      "elapsed_seconds": 7.477438833040651,
+      "normalized_std_rgb": [
+        0.03808758836293945,
+        0.03699603573792144,
+        0.03993754712292769
+      ],
+      "material_key": 9441442522235856127,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed02",
+      "status": "complete",
+      "elapsed_seconds": 7.203195125039201,
+      "normalized_std_rgb": [
+        0.041485164030623106,
+        0.04027150512139123,
+        0.04354620909885816
+      ],
+      "material_key": 4825892087074085057,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed03",
+      "status": "complete",
+      "elapsed_seconds": 7.458910792018287,
+      "normalized_std_rgb": [
+        0.03967371837824305,
+        0.03854670786093146,
+        0.04160353123651171
+      ],
+      "material_key": 1579948266424812280,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed04",
+      "status": "complete",
+      "elapsed_seconds": 7.382094624976162,
+      "normalized_std_rgb": [
+        0.042602787309561775,
+        0.04121809408313723,
+        0.04472456990234951
+      ],
+      "material_key": 17396314626642683726,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed05",
+      "status": "complete",
+      "elapsed_seconds": 7.182697292009834,
+      "normalized_std_rgb": [
+        0.04328753622538692,
+        0.04199250257057946,
+        0.04547246011798678
+      ],
+      "material_key": 14849682912918955432,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed06",
+      "status": "complete",
+      "elapsed_seconds": 7.415419917029794,
+      "normalized_std_rgb": [
+        0.041279132491295945,
+        0.0400922964517432,
+        0.04332943451704258
+      ],
+      "material_key": 9927380061196813054,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed07",
+      "status": "complete",
+      "elapsed_seconds": 7.402237125032116,
+      "normalized_std_rgb": [
+        0.03881052240933228,
+        0.03767441991791251,
+        0.040723550448040824
+      ],
+      "material_key": 11530976094092348043,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed08",
+      "status": "complete",
+      "elapsed_seconds": 7.441725499986205,
+      "normalized_std_rgb": [
+        0.03887141746477729,
+        0.037729369794149675,
+        0.04087620374528997
+      ],
+      "material_key": 6031573905740948468,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed09",
+      "status": "complete",
+      "elapsed_seconds": 7.245047083008103,
+      "normalized_std_rgb": [
+        0.04124406427400368,
+        0.03995139884281983,
+        0.04330162605615908
+      ],
+      "material_key": 16053264345985615649,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed10",
+      "status": "complete",
+      "elapsed_seconds": 7.17714695900213,
+      "normalized_std_rgb": [
+        0.04103570760976313,
+        0.03980546982661982,
+        0.04311493645365785
+      ],
+      "material_key": 17635118871554501016,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    },
+    {
+      "name": "wet_storage-seed11",
+      "status": "complete",
+      "elapsed_seconds": 7.382356291986071,
+      "normalized_std_rgb": [
+        0.03876662503448379,
+        0.03763224429068998,
+        0.04067561957151515
+      ],
+      "material_key": 2371701625988369486,
+      "generator_version": "galvanised-2",
+      "decoded_png_rgb_finite": true,
+      "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness",
+      "normalized_std_rgb_threshold": 0.005,
+      "normalized_std_rgb_gt_threshold_diagnostic": true
+    }
+  ],
+  "contact_sheets": [
+    "/tmp/galvanised-preview-authoring4/regular-contact.png",
+    "/tmp/galvanised-preview-authoring4/minimised-contact.png",
+    "/tmp/galvanised-preview-authoring4/weathered-contact.png",
+    "/tmp/galvanised-preview-authoring4/wet_storage-contact.png"
+  ],
+  "post_sweep_source_sha256": {
+    "src/texture_generators/materials/galvanised.py": "9de5cb0fd09a0bdb4cd950907987e636c02f9b5d0f89038b52dae38aba3c3ec4",
+    "src/texture_generators/materials/galvanised_config.py": "250a9004c3060cd04ed5f86e13457d1314cf2f4e1cf30f34fa3bfe3006b8e771",
+    "src/texture_generators/core/material_render.py": "7043cddc4c680d5a025a068eed411e8ae951b68ca300a5e11cc383965d2ed129",
+    "src/texture_generators/core/dendrites.py": "acb51de5ec9d61a96aac2437e3395a9e5d8add24a6c15b29f68eac7f4307ef56",
+    "src/texture_generators/core/grains.py": "9e65aba4c06f8798109163571bae978659f7f69302b48d4cb50685ae59a2df5b",
+    "src/texture_generators/core/_grain_geometry.py": "9e810148640184ea02214c12586e2cb2eed0b64eee4c6fbcaae85a86f325be47",
+    "src/texture_generators/core/galvanised_weather.py": "b03a646e9b942a5520f95c62b331d0a46d4d7ee09a30c6c8c89994a32c81179a",
+    "src/texture_generators/data/galvanised/morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+    "src/texture_generators/data/galvanised/population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147",
+    "src/texture_generators/data/galvanised/optics/manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a",
+    "src/texture_generators/data/galvanised/energy/manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+  },
+  "all_rgb_finite": true,
+  "normalized_std_rgb_threshold": 0.005,
+  "all_normalized_channel_std_above_threshold": true,
+  "minimum_normalized_channel_std": 0.007818520586291282,
+  "post_run_resource_identity_check": {
+    "label": "post-run verification; these resource identities were not captured in per-case generation metadata",
+    "verified_after_render_sweep": true,
+    "unchanged_since_launch_checks": {
+      "optical_manifest_unchanged_since_launch": true,
+      "renderer_manifest_unchanged_since_launch": true,
+      "morphology_unchanged_since_launch": true,
+      "population_surface_input_unchanged_since_launch": true
+    },
+    "all_relevant_launch_post_hashes_unchanged": true,
+    "package_resource_integrity_verified_by_loader": true,
+    "packaged_optical_resource_hashes": {
+      "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+      "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+      "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+      "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+      "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+      "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+      "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+    },
+    "packaged_renderer_resource_hashes": {
+      "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+      "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+    },
+    "packaged_surface_resource_hashes": {
+      "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+      "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+    },
+    "morphology_table_version_current": "2026-09-23.authoring-4",
+    "package_identity_matches_launch_hashes": {
+      "optical_manifest_matches_launch_source_sha256": true,
+      "renderer_manifest_matches_launch_source_sha256": true,
+      "morphology_resource_matches_launch_source_sha256": true,
+      "population_resource_matches_launch_source_sha256": true
+    },
+    "all_package_identity_matches_launch_hashes": true,
+    "passed": true
+  },
+  "decoded_png_rgb_finite": true,
+  "finite_check_scope": "decoded 8-bit PNG RGB data only; does not establish unclipped linear-render finiteness"
+}

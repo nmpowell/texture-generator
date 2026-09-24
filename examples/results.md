@@ -16,7 +16,7 @@ on the dependency versions and platform. The saved floating-point array is
   "python": "3.14.7",
   "platform": "darwin",
   "architecture": "arm64",
-  "texture-generator": "0.5.0",
+  "texture-generator": "0.7.0",
   "numpy": "2.5.2",
   "pillow": "12.3.0"
 }
@@ -87,6 +87,12 @@ their displayed brightness is not a physical unit.
 384 x 384 · RGB
 
 ![metal / engine_turned](images/variants/metal-engine_turned.png)
+
+### metal / galvanised
+
+384 x 384 · RGB
+
+![metal / galvanised](images/variants/metal-galvanised.png)
 
 ## All variants — plastic
 
@@ -319,6 +325,106 @@ their displayed brightness is not a physical unit.
 384 x 384 · RGB
 
 ![Paper / formation — normalised greyscale preview](images/paper-formation.png)
+
+## Galvanised physical maps
+
+### Galvanised prototype, 5 mm scale bar
+
+192 x 144 · RGB
+
+![Galvanised prototype, 5 mm scale bar](images/galvanised/regular-scale.png)
+
+### Galvanised map diagnostics with fixed display ranges
+
+576 x 332 · RGB
+
+![Galvanised map diagnostics with fixed display ranges](images/galvanised/maps.png)
+
+## Galvanised presets
+
+### Galvanised / regular preset
+
+192 x 144 · RGB
+
+![Galvanised / regular preset](images/galvanised/preset-regular.png)
+
+### Galvanised / minimised preset
+
+192 x 144 · RGB
+
+![Galvanised / minimised preset](images/galvanised/preset-minimised.png)
+
+### Galvanised / weathered preset
+
+192 x 144 · RGB
+
+![Galvanised / weathered preset](images/galvanised/preset-weathered.png)
+
+### Galvanised / wet_storage preset
+
+192 x 144 · RGB
+
+![Galvanised / wet_storage preset](images/galvanised/preset-wet_storage.png)
+
+### Galvanised — four presets, one seed and light
+
+408 x 360 · RGB
+
+![Galvanised — four presets, one seed and light](images/galvanised/preset-comparison.png)
+
+## Galvanised relighting
+
+### Same galvanised surface, light azimuth 15 degrees
+
+192 x 144 · RGB
+
+![Same galvanised surface, light azimuth 15 degrees](images/galvanised/light-15.png)
+
+### Same galvanised surface, light azimuth 105 degrees
+
+192 x 144 · RGB
+
+![Same galvanised surface, light azimuth 105 degrees](images/galvanised/light-105.png)
+
+## Galvanised resolution diagnostics
+
+### Same 24 x 18 mm tile at 48 x 36 pixels
+
+48 x 36 · RGB
+
+![Same 24 x 18 mm tile at 48 x 36 pixels](images/galvanised/resolution-48.png)
+
+### Same 24 x 18 mm tile at 96 x 72 pixels
+
+96 x 72 · RGB
+
+![Same 24 x 18 mm tile at 96 x 72 pixels](images/galvanised/resolution-96.png)
+
+### Same 24 x 18 mm tile at 192 x 144 pixels
+
+192 x 144 · RGB
+
+![Same 24 x 18 mm tile at 192 x 144 pixels](images/galvanised/resolution-192.png)
+
+## Galvanised weathering
+
+### Fixed galvanised substrate, exposure 0.0
+
+192 x 144 · RGB
+
+![Fixed galvanised substrate, exposure 0.0](images/galvanised/exposure-0.0.png)
+
+### Fixed galvanised substrate, exposure 0.5
+
+192 x 144 · RGB
+
+![Fixed galvanised substrate, exposure 0.5](images/galvanised/exposure-0.5.png)
+
+### Fixed galvanised substrate, exposure 1.0
+
+192 x 144 · RGB
+
+![Fixed galvanised substrate, exposure 1.0](images/galvanised/exposure-1.0.png)
 
 ## Contact sheet
 

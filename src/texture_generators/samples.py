@@ -143,6 +143,14 @@ class Sweep:
 # species.
 SWEEPS: list[Sweep] = [
     Sweep(
+        "galvanised presets",
+        "metal",
+        "galvanised",
+        "galvanised_preset",
+        ["regular", "minimised", "weathered", "wet_storage"],
+        valid_attr="GALVANISED_PRESETS",
+    ),
+    Sweep(
         "wood species",
         "wood",
         "board",
@@ -361,7 +369,9 @@ def run(
 
     Returns the run directory, which also contains ``index.html`` and (for
     unfiltered runs) ``sheet.png``. ``workers=None`` uses one process per CPU;
-    ``workers=1`` renders serially in-process.
+    ``workers=1`` renders serially in-process. With automatic worker selection,
+    galvanised jobs run serially after the other materials because each carries
+    physical map and angular-lobe buffers in addition to its preview.
 
     ``sweeps=False`` skips the :data:`SWEEPS` parameter rows; ``sweep_defs``
     replaces them. Sweeps honour ``only`` and share the pairs' process pool.
@@ -412,7 +422,10 @@ def run(
             cells.append((value, name))
         sweep_rows.append((sweep, seed, cells))
 
+    serial_jobs: list[Job] = []
     if workers is None:
+        serial_jobs = [job for job in jobs if job[:2] == ("metal", "galvanised")]
+        jobs = [job for job in jobs if job[:2] != ("metal", "galvanised")]
         workers = min(len(jobs), os.cpu_count() or 1)
     if workers <= 1:
         for job in jobs:
@@ -420,6 +433,9 @@ def run(
     else:
         with ProcessPoolExecutor(max_workers=workers) as pool:
             list(pool.map(_render_one, jobs, chunksize=1))
+
+    for job in serial_jobs:
+        _render_one(job)
 
     sheet_name = None
     if sheet and not only:

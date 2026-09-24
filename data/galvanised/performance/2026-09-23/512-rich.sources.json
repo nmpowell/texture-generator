@@ -1,0 +1,7 @@
+{
+  "git_head": "cf455ee3a4904ac7fbece87948f6a16cb0c8f948",
+  "galvanised_py_sha256": "323626fc52e26f10d1b6d6628370e01cb30634894386abe639e6da39e19c04d6",
+  "morphology_json_sha256": "6586cf9224747be6b60e2930bbd0f2b427425ce01c491b6104bc698fee93248b",
+  "recorded_before_run": true,
+  "notes": "Initial checkout source fingerprints recorded before benchmark."
+}

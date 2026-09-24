@@ -16,22 +16,35 @@ same seed always yields byte-identical output.
 from __future__ import annotations
 
 from importlib.metadata import version as _distribution_version
+from os import PathLike
+from pathlib import Path
+from typing import Literal
 
 import numpy as np
 from PIL import Image, ImageDraw
 
+from .core.material import MaterialMaps
+from .material_api import MAP_CAPABILITIES, generate_maps
 from .materials import MATERIALS, Material
+from .materials.galvanised_config import PreviewConfig
 
 __version__ = _distribution_version("texture-generator")
 
 __all__ = [
+    "MAP_CAPABILITIES",
     "MATERIALS",
     "VARIANTS_BY_MATERIAL",
     "Material",
     "__version__",
     "all_pairs",
+    "export_material",
     "generate",
     "generate_array",
+    "generate_maps",
+    "load_material",
+    "render_material",
+    "render_material_array",
+    "replay_material",
     "resolve_variant",
     "sample_sheet",
     "to_image",
@@ -49,6 +62,12 @@ def variants(material: str) -> list[str]:
 def all_pairs() -> list[tuple[str, str]]:
     """Every ``(material, variant)`` combination, in registry order."""
     return [(m, v) for m, mod in MATERIALS.items() for v in mod.VARIANTS]
+
+
+def _default_variants(material: str) -> tuple[str, ...]:
+    """Variants a seeded ``variant=None`` call can choose for ``material``."""
+    mod = MATERIALS[material]
+    return tuple(getattr(mod, "DEFAULT_VARIANTS", mod.VARIANTS))
 
 
 def _module(material: str):
@@ -81,7 +100,8 @@ def _pick_variant(mod: Material, rng: np.random.Generator) -> str:
     The single place the default variant is chosen, so a caller can learn which
     variant a seed selects without duplicating (or perturbing) the draw.
     """
-    return str(mod.VARIANTS[int(rng.integers(0, len(mod.VARIANTS)))])
+    choices = getattr(mod, "DEFAULT_VARIANTS", mod.VARIANTS)
+    return str(choices[int(rng.integers(0, len(choices)))])
 
 
 def resolve_variant(
@@ -146,6 +166,12 @@ def generate_array(
         ValueError: on an unknown material or variant.
     """
     mod = _module(material)
+    if any(
+        name in params for name in ("galvanised", "galvanised_preset", "preview")
+    ) and (material != "metal" or variant != "galvanised"):
+        raise ValueError(
+            "galvanised controls require material='metal' and explicit variant='galvanised'"
+        )
     if params.get("brush_angle") is not None and (
         material != "metal" or variant != "brushed"
     ):
@@ -198,6 +224,62 @@ def generate(
     return to_image(generate_array(material, size, seed, variant, **params))
 
 
+def render_material(
+    maps: MaterialMaps, *, preview: PreviewConfig | None = None
+) -> Image.Image:
+    """Render a sampled material with independent preview lighting."""
+    from .core.material_render import render_material as render
+
+    return render(maps, preview=preview)
+
+
+def render_material_array(
+    maps: MaterialMaps,
+    *,
+    preview: PreviewConfig | None = None,
+    output: Literal["display", "linear"] = "display",
+) -> np.ndarray:
+    """Render display RGB, or unclipped radiance with ``output='linear'``."""
+    from .core.material_render import render_material_array as render
+
+    return render(maps, preview=preview, output=output)
+
+
+def export_material(
+    maps: MaterialMaps,
+    path: str | PathLike[str],
+    *,
+    profile: str = "lossless",
+    overwrite: bool = False,
+    preview: Image.Image | None = None,
+) -> Path:
+    """Atomically export physical maps and their replay manifest."""
+    from .export import export_material as export
+
+    return export(maps, path, profile=profile, overwrite=overwrite, preview=preview)
+
+
+def load_material(
+    path: str | PathLike[str], *, mmap_mode: str | None = None
+) -> MaterialMaps:
+    """Validate and load an exported material bundle."""
+    from .export import load_material as load
+
+    return load(path, mmap_mode=mmap_mode)
+
+
+def replay_material(
+    path: str | PathLike[str],
+    *,
+    size: tuple[int, int] | None = None,
+    maps: tuple[str, ...] | None = None,
+) -> MaterialMaps:
+    """Reconstruct a material from its versioned export recipe."""
+    from .export import replay_material as replay
+
+    return replay(path, size=size, maps=maps)
+
+
 def sample_sheet(
     size: int | tuple[int, int] = 256,
     seed: int | None = None,
@@ -208,10 +290,20 @@ def sample_sheet(
     """Contact sheet with one labelled tile per material x variant.
 
     ``size`` is the per-tile size: ``N`` for square tiles or
-    ``(width, height)``.
+    ``(width, height)``. ``params`` apply to the variants seeded selection can
+    choose; opt-in variants such as ``metal/galvanised`` render with their
+    defaults.
     """
     pairs = all_pairs()
     rng = np.random.default_rng(seed)
+    # Opt-in variants draw their tile seeds after every default variant, so
+    # the default tiles keep the seeds they had before those variants existed.
+    opt_in = {(m, v) for m, v in pairs if v not in _default_variants(m)}
+    tile_seeds = {
+        pair: int(rng.integers(0, 2**31 - 1))
+        for pair in [p for p in pairs if p not in opt_in]
+        + [p for p in pairs if p in opt_in]
+    }
     cols = columns or min(4, len(pairs))
     rows = (len(pairs) + cols - 1) // cols
 
@@ -224,8 +316,9 @@ def sample_sheet(
     draw = ImageDraw.Draw(sheet)
 
     for i, (material, variant) in enumerate(pairs):
-        tile_seed = int(rng.integers(0, 2**31 - 1))
-        tile = generate(material, size, seed=tile_seed, variant=variant, **params)
+        tile_seed = tile_seeds[(material, variant)]
+        tile_params = {} if (material, variant) in opt_in else params
+        tile = generate(material, size, seed=tile_seed, variant=variant, **tile_params)
         cx = pad + (i % cols) * cell_w
         cy = pad + (i // cols) * cell_h
         sheet.paste(tile, (cx, cy))

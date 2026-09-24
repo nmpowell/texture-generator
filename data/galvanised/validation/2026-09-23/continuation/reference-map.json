@@ -1,0 +1,37 @@
+{
+  "generator_version": "galvanised-2",
+  "python": "3.14.7",
+  "numpy": "2.5.2",
+  "source_hashes": {
+    "src/texture_generators/materials/galvanised.py": "9de5cb0fd09a0bdb4cd950907987e636c02f9b5d0f89038b52dae38aba3c3ec4",
+    "src/texture_generators/core/dendrites.py": "acb51de5ec9d61a96aac2437e3395a9e5d8add24a6c15b29f68eac7f4307ef56"
+  },
+  "status": "passed",
+  "filtering": {
+    "quadrature": "8 to 16 to 32 per axis; independent 17/33 checks",
+    "height_normal": "periodic central difference from exported float32 height",
+    "policy_version": "shared-midpoint-2",
+    "quality": "reference",
+    "spatial_convergence_checked": true,
+    "finite_band_certified": false,
+    "maximum_sample_points_per_batch": 65536,
+    "accepted_rate_pixel_counts": {
+      "16": 3072,
+      "32": 0
+    },
+    "absolute_component_tolerances": {
+      "height_um": 0.005,
+      "substrate_height_um": 0.005,
+      "deposit_height_um": 0.005,
+      "metallic": 0.001,
+      "patina_coverage": 0.001,
+      "white_stain_coverage": 0.001,
+      "roughness": 0.002,
+      "anisotropy_vector": 0.002
+    },
+    "pixel_limit": 4096
+  },
+  "height_rms_um": 0.33020320534706116,
+  "normal_max_unit_error": 5.960464477539063e-08,
+  "sampling_seconds": 1.2860919169615954
+}

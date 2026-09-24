@@ -7,8 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-24
+
+### Added
+
+- `metal/galvanised`, a physically scaled procedural hot-dip galvanised zinc
+  texture with `regular`, `minimised`, `weathered` and `wet_storage` presets.
+  It must be selected explicitly: seeded `variant=None` metal selection keeps
+  its previous results. It works through `generate()`, `generate_array()`, the
+  CLI, sample galleries and contact sheets.
+- Physical material maps and relighting: `generate_maps()`,
+  `render_material()`, `render_material_array()` and `MAP_CAPABILITIES`, with
+  `GalvanisedConfig` and `PreviewConfig` for the recipe and preview lighting.
+- Versioned material bundles: `export_material()`, `load_material()` and
+  `replay_material()`, with checksums and resource and generator identity
+  checks. The new `texture-gen maps` subcommand writes a bundle, and the
+  `metal` command gains `--galvanised-preset`, `--size-mm` and `--config`.
+- An optional `export` extra (`pip install "texture-generator[export]"`) adds
+  `tifffile` for the TIFF export profile.
+- Galvanised examples: a metal gallery tile, a four-preset comparison,
+  relighting, weathering and resolution examples, and notebook recipes.
+
 ### Changed
 
+- The package now bundles optical data under its own terms, so the licence
+  expression is `Apache-2.0 AND CC-BY-SA-4.0 AND CC0-1.0`. The code remains
+  Apache-2.0. The CIE D65 and CIE 1931 datasets and the derived zinc Fresnel and
+  energy tables are CC BY-SA 4.0, and the Werner zinc optical constants are
+  CC0. Their notices ship in the wheel.
+- The wheel grows from about 0.2 MB to 4 MB, mostly from a precomputed
+  directional-albedo table.
+- `sample_sheet()`, `texture-gen sheet`, `texture-gen all` and
+  `texture-gen samples` include a galvanised tile, which makes them slower.
+  Tiles for the other variants keep the seeds they had in 0.6.0. Material
+  params passed to `sample_sheet()` apply to those tiles, and the galvanised
+  tile renders with its defaults.
+- Galvanised renders take about 20 seconds at 512 × 384, the tested size
+  envelope. Larger sizes have no hard cap, but full rich 4K and 8K exports have
+  not been validated. See `docs/galvanised-performance.md`.
 - mypy is now clean over the package internals and is a CI gate: a `typecheck`
   job runs it against Python 3.12, the oldest supported interpreter, and
   `[tool.mypy]` pins `python_version = "3.12"` to match. The preset tables in

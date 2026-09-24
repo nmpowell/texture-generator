@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "texture-generator"
-version = "0.6.1"
+version = "0.7.0"
 description = "Procedural generator for random but realistic material textures (metal, plastic, wood, paper) as PNGs or numpy arrays"
 readme = "README.md"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = "Apache-2.0 AND CC-BY-SA-4.0 AND CC0-1.0"
+license-files = ["LICENSE", "src/texture_generators/data/galvanised/**/LICENSE*.txt"]
 requires-python = ">=3.12"
 authors = [{ name = "Nick Powell" }]
 keywords = ["procedural", "texture", "noise", "material", "pbr", "numpy"]
@@ -29,6 +29,9 @@ dependencies = [
     "numpy>=2.0",
     "pillow>=10.0",
 ]
+
+[project.optional-dependencies]
+export = ["tifffile>=2025.5.10"]
 
 [project.scripts]
 texture-gen = "texture_generators.cli:main"
@@ -62,7 +65,7 @@ where = ["src"]
 include = ["texture_generators", "texture_generators.*"]
 
 [tool.setuptools.package-data]
-texture_generators = ["py.typed"]
+texture_generators = ["py.typed", "data/galvanised/**/*"]
 
 [tool.pytest.ini_options]
 minversion = "8"

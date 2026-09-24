@@ -1,0 +1,400 @@
+{
+  "orthogonal_32x32": {
+    "pixels": 1024,
+    "candidate_count": 4,
+    "training_scalar_samples": 192,
+    "held_out_scalar_samples": 228,
+    "seconds": 0.27646687504602596,
+    "per_pixel_seconds": 0.00026998718266213473,
+    "fit": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 0,
+      "candidate_indices": [
+        0,
+        2
+      ],
+      "weights": [
+        0.4999999999999999,
+        0.5000000000000001
+      ],
+      "coverage": 1.0,
+      "candidate_count": 4,
+      "trial_count": 9,
+      "refinement_sweeps": 0,
+      "max_refinement_sweeps": 8,
+      "search_termination": "numerical_zero",
+      "tolerances": {
+        "relative_rms": 1e-08,
+        "dark_absolute_rms": 1e-09,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 1.4810743971402377e-16,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 4.0142671942973077e-16,
+        "maximum_relative_error": 2.9266513913723256e-16,
+        "passed": true
+      },
+      "validation_error": {
+        "relative_rms": 1.5441993858062246e-16,
+        "dark_absolute_rms": 1.8885277159868314e-18,
+        "absolute_rms": 3.188138526920412e-16,
+        "maximum_relative_error": 3.483151061065945e-16,
+        "passed": true
+      }
+    }
+  },
+  "slope_original": {
+    "fits": [
+      {
+        "fit_version": "candidate-simplex-swap-2",
+        "material_id": 0,
+        "candidate_indices": [
+          0
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "refinement_sweeps": 0,
+        "max_refinement_sweeps": 8,
+        "search_termination": "numerical_zero",
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      },
+      {
+        "fit_version": "candidate-simplex-swap-2",
+        "material_id": 1,
+        "candidate_indices": [
+          1
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "refinement_sweeps": 0,
+        "max_refinement_sweeps": 8,
+        "search_termination": "numerical_zero",
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      }
+    ]
+  },
+  "slope_swapped": {
+    "fits": [
+      {
+        "fit_version": "candidate-simplex-swap-2",
+        "material_id": 0,
+        "candidate_indices": [
+          1
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "refinement_sweeps": 0,
+        "max_refinement_sweeps": 8,
+        "search_termination": "numerical_zero",
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      },
+      {
+        "fit_version": "candidate-simplex-swap-2",
+        "material_id": 1,
+        "candidate_indices": [
+          0
+        ],
+        "weights": [
+          0.5
+        ],
+        "coverage": 0.5,
+        "candidate_count": 2,
+        "trial_count": 3,
+        "refinement_sweeps": 0,
+        "max_refinement_sweeps": 8,
+        "search_termination": "numerical_zero",
+        "tolerances": {
+          "relative_rms": 1e-08,
+          "dark_absolute_rms": 1e-09,
+          "radiance_floor": 0.02
+        },
+        "training_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        },
+        "validation_error": {
+          "relative_rms": 0.0,
+          "dark_absolute_rms": 0.0,
+          "absolute_rms": 0.0,
+          "maximum_relative_error": 0.0,
+          "passed": true
+        }
+      }
+    ]
+  },
+  "candidate64": {
+    "pixels": 1,
+    "candidate_count": 64,
+    "seconds": 0.1015546249691397,
+    "status": "accepted",
+    "source_indices": [
+      0,
+      17,
+      42,
+      63
+    ],
+    "source_weights": [
+      0.15,
+      0.25,
+      0.35,
+      0.25
+    ],
+    "fit": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 0,
+      "candidate_indices": [
+        0,
+        17,
+        42,
+        63
+      ],
+      "weights": [
+        0.14999999999999988,
+        0.2500000000000001,
+        0.3500000000000001,
+        0.2499999999999999
+      ],
+      "coverage": 1.0,
+      "candidate_count": 64,
+      "trial_count": 730,
+      "refinement_sweeps": 2,
+      "max_refinement_sweeps": 8,
+      "search_termination": "numerical_zero",
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 2.3641991908208487e-16,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 3.2496706185617075e-16,
+        "maximum_relative_error": 7.492111543625396e-16,
+        "passed": true
+      },
+      "validation_error": {
+        "relative_rms": 2.7156846890703723e-16,
+        "dark_absolute_rms": 2.0341435826643242e-18,
+        "absolute_rms": 3.4328231251036308e-16,
+        "maximum_relative_error": 7.421256548670999e-16,
+        "passed": true
+      }
+    }
+  },
+  "candidate64_local_minimum": {
+    "pixels": 1,
+    "candidate_count": 64,
+    "seconds": 0.05860150000080466,
+    "status": "rejected",
+    "source_indices": [
+      2,
+      9,
+      12,
+      30
+    ],
+    "source_weights": [
+      0.31507729041159366,
+      0.3215818310722124,
+      0.15036227833922555,
+      0.21297860017696849
+    ],
+    "fit": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 0,
+      "candidate_indices": [
+        1,
+        10,
+        12,
+        30
+      ],
+      "weights": [
+        0.39829455713730805,
+        0.20418573348262758,
+        0.1610286023743916,
+        0.23649110700567277
+      ],
+      "coverage": 1.0,
+      "candidate_count": 64,
+      "trial_count": 490,
+      "refinement_sweeps": 1,
+      "max_refinement_sweeps": 8,
+      "search_termination": "local_optimum",
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 0.16610222922300333,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 0.16242419684746193,
+        "maximum_relative_error": 0.660081957530754,
+        "passed": false
+      },
+      "validation_error": {
+        "relative_rms": 0.22389571334391523,
+        "dark_absolute_rms": 0.0004580108872293271,
+        "absolute_rms": 0.2658474865630992,
+        "maximum_relative_error": 1.1007398269894215,
+        "passed": false
+      }
+    },
+    "interpretation": "An exact four-source solution exists; rejection exposes the single-swap search limit."
+  },
+  "synthetic_local_minimum": {
+    "pixels": 1,
+    "candidate_count": 6,
+    "seconds": 0.00219520804239437,
+    "status": "rejected",
+    "source_indices": [
+      4,
+      5
+    ],
+    "source_weights": [
+      0.5,
+      0.5
+    ],
+    "fit": {
+      "fit_version": "candidate-simplex-swap-2",
+      "material_id": 0,
+      "candidate_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "weights": [
+        0.2499999999999999,
+        0.25,
+        0.2499999999999999,
+        0.2500000000000002
+      ],
+      "coverage": 1.0,
+      "candidate_count": 6,
+      "trial_count": 26,
+      "refinement_sweeps": 1,
+      "max_refinement_sweeps": 8,
+      "search_termination": "local_optimum",
+      "tolerances": {
+        "relative_rms": 0.05,
+        "dark_absolute_rms": 0.001,
+        "radiance_floor": 0.02
+      },
+      "training_error": {
+        "relative_rms": 0.07499999999999996,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 0.1499999999999999,
+        "maximum_relative_error": 0.1499999999999999,
+        "passed": false
+      },
+      "validation_error": {
+        "relative_rms": 0.07499999999999996,
+        "dark_absolute_rms": 0.0,
+        "absolute_rms": 0.1499999999999999,
+        "maximum_relative_error": 0.1499999999999999,
+        "passed": false
+      }
+    },
+    "interpretation": "Four tetrahedral decoys trap single replacements despite an exact two-source solution."
+  },
+  "provenance": {
+    "fit_version": "candidate-simplex-swap-2",
+    "module_sha256": "8afd9b65b1ac9ccb945823931890d73f1cd37776eecdaeacf04ebbc04d39ee2b",
+    "source_sha256": {
+      "src/texture_generators/core/lobe_fitting.py": "8afd9b65b1ac9ccb945823931890d73f1cd37776eecdaeacf04ebbc04d39ee2b",
+      "src/texture_generators/core/material_render.py": "7043cddc4c680d5a025a068eed411e8ae951b68ca300a5e11cc383965d2ed129",
+      "src/texture_generators/core/microfacet.py": "ef3d55c07c0cd17ca94cf60e4e8d40e79320d363c611884528da70c510de3b25",
+      "src/texture_generators/core/energy_compensation.py": "c1d689b4af4ddf37a583ef46d73bd7818d6976eb2074ff06748647f825a38e95",
+      "tests/test_galvanised_lobe_fitting.py": "25cc83cab29a8ecd17187105c1fce38b8c9e40871a01e6e2d6770996c0ad1dea",
+      "tools/galvanised/check_lobe_fitting.py": "5a9acc9c614ad91f2ee7e0d3e7a8e557f7fdde973b33d7fa4f379f91b9ddb9b9"
+    },
+    "environment": {
+      "python": "3.14.7",
+      "numpy": "2.5.2",
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "machine": "arm64"
+    },
+    "optical_hashes": {
+      "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+      "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+      "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+      "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+      "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+      "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+      "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+    },
+    "training": "4 polar angles [0.04,0.12,0.25,0.50]rad x16 azimuths, zero phase; linear RGB*positive incident cosine",
+    "held_out": "4 disjoint polar angles [0.07,0.18,0.40,0.80]rad x19 azimuths, phase0.37; normal outgoing view",
+    "purpose": "controlled coupons only; not sampler integration, not highlight-width or full G7 acceptance"
+  }
+}

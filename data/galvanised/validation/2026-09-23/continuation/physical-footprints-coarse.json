@@ -1,0 +1,716 @@
+{
+  "adapter_version": "physical-footprint-normal-view-1",
+  "environment": {
+    "python": "3.14.7",
+    "numpy": "2.5.2",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  },
+  "state_build_seconds": 0.03060245799133554,
+  "point_batch_size": 64,
+  "coupons": [
+    {
+      "adapter_version": "physical-footprint-normal-view-1",
+      "fitter_version": "candidate-simplex-swap-2",
+      "generator_version": "galvanised-2",
+      "material_key": 14276969152011380360,
+      "seed": 42,
+      "config": {
+        "preset": "regular",
+        "size_mm": [
+          8.0,
+          6.0
+        ],
+        "spangle_diameter_mm": 3.0,
+        "spangle_cv": 0.28,
+        "placement": "poisson",
+        "texture_strength": 0.45,
+        "crystal_tilt_concentration": 4.0,
+        "dendrite_relief_um": 2.5,
+        "trunk_relief_um": 4.5,
+        "boundary_depth_um": 1.0,
+        "micro_relief_um": 0.4,
+        "roughness": 0.3,
+        "anisotropy": 0.55,
+        "exposure": 0.0,
+        "wetness": 0.0,
+        "confinement": 0.0,
+        "salt_exposure": 0.0,
+        "white_stain": 0.0,
+        "weather_seed": null,
+        "dross_per_cm2": 0.0,
+        "runs_per_cm2": 0.0,
+        "gravity_angle_deg": 90.0,
+        "quality": "production",
+        "representation": "rich",
+        "memory_budget_mb": 512,
+        "schema_version": 1,
+        "preset_revision": "2026-09-22.initial-1",
+        "warnings": [
+          "Preset values are physically grounded authoring defaults, not metrological calibration.",
+          "spangle_diameter_mm is outside the preset's initial visual fitting range."
+        ]
+      },
+      "center_mm": [
+        2.0,
+        2.0
+      ],
+      "footprint_mm": [
+        1.0,
+        1.0
+      ],
+      "angle_grid_version": "normal-view-disjoint-coupon-1",
+      "angle_grid": {
+        "training_polar_rad": [
+          0.04,
+          0.12,
+          0.25,
+          0.5
+        ],
+        "training_azimuth_count": 16,
+        "training_azimuth_phase": 0.0,
+        "held_out_polar_rad": [
+          0.07,
+          0.18,
+          0.4,
+          0.8
+        ],
+        "held_out_azimuth_count": 19,
+        "held_out_azimuth_phase": 0.37
+      },
+      "captured_state": {
+        "arrays": {
+          "micro_spectrum": {
+            "shape": [
+              12,
+              3
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "44a88f2b6e87bfe3f248d225d7c39f971a8a340a7835d3ccf7c84860a60a8852"
+          },
+          "defects": {
+            "shape": [
+              0
+            ],
+            "dtype": [
+              [
+                "kind",
+                "|u1"
+              ],
+              [
+                "position_mm",
+                "<f8",
+                [
+                  2
+                ]
+              ],
+              [
+                "radius_mm",
+                "<f8"
+              ],
+              [
+                "height_um",
+                "<f8"
+              ],
+              [
+                "length_mm",
+                "<f8"
+              ],
+              [
+                "angle_rad",
+                "<f8"
+              ]
+            ],
+            "sha256": "0e95efd15d3e48edefdfff32a7d5d8b120c1638566426420f70b86c9c2c094de"
+          },
+          "partition.points_mm": {
+            "shape": [
+              7,
+              2
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "e24328fbc6ab3adab3f71e83410e31a8c1ea5e8f942dcf36e5d5e4f310c9b685"
+          },
+          "partition.weights_mm2": {
+            "shape": [
+              7
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "55031536b36c5bbf49ab9fe1c7279c54be53abcbccdabd4a0d1bb389df71ac7a"
+          },
+          "partition.nucleus_ids": {
+            "shape": [
+              7
+            ],
+            "dtype": [
+              [
+                "",
+                "<u4"
+              ]
+            ],
+            "sha256": "56fe285c12975f2a56b59682cd7120998dba433fd1c3786e4e4c56f25f4c0779"
+          },
+          "dendrites.azimuth_rad": {
+            "shape": [
+              7
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "5e8b263c253e1970d175eb1c6c5cd37d2d880946450d5d9019e5441da681f0c5"
+          },
+          "dendrites.tilt_rad": {
+            "shape": [
+              7
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "5e7325c81a8917cd8e4e5f36dc4ada3c4bac143017ff1e0dd637f943aa196fb9"
+          },
+          "dendrites.family_id": {
+            "shape": [
+              7
+            ],
+            "dtype": [
+              [
+                "",
+                "|u1"
+              ]
+            ],
+            "sha256": "798745481db943b8079c75639a7833635b2df86cf2de9e2e82512950b7e1de0c"
+          },
+          "dendrites.segments": {
+            "shape": [
+              1723
+            ],
+            "dtype": [
+              [
+                "grain_id",
+                "<u4"
+              ],
+              [
+                "start_mm",
+                "<f8",
+                [
+                  2
+                ]
+              ],
+              [
+                "end_mm",
+                "<f8",
+                [
+                  2
+                ]
+              ],
+              [
+                "width_mm",
+                "<f8"
+              ],
+              [
+                "amplitude",
+                "<f8"
+              ],
+              [
+                "period_mm",
+                "<f8"
+              ],
+              [
+                "kind",
+                "|u1"
+              ],
+              [
+                "phase",
+                "<f8"
+              ]
+            ],
+            "sha256": "d2df39d6c3835cf039f41179a666b8bbb153f1a3336c9f8ec7e0a037e1ae53c0"
+          },
+          "weather.frequency": {
+            "shape": [
+              3,
+              4,
+              2
+            ],
+            "dtype": [
+              [
+                "",
+                "<i2"
+              ]
+            ],
+            "sha256": "2b370bb1ea4e95ec436a493941bb96fd95a5ab756e13aa43ef22bcb977743389"
+          },
+          "weather.phase": {
+            "shape": [
+              3,
+              4
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "459fbafe4b3342429cf27b04a16e52f04907985d1852d1ce87d3956e6c01f679"
+          },
+          "weather.amplitude": {
+            "shape": [
+              3,
+              4
+            ],
+            "dtype": [
+              [
+                "",
+                "<f8"
+              ]
+            ],
+            "sha256": "70df3cd0857b616d60bc2f0a6086473fbdc3d139149f6e1172bf0cdcc7805828"
+          }
+        },
+        "record_metadata": {
+          "population_mapping_version": "2026-09-23.area12-v1",
+          "partition_size_mm": [
+            8.0,
+            6.0
+          ],
+          "dendrites.family_names": [
+            "six",
+            "eight",
+            "X",
+            "X+C",
+            "two",
+            "four"
+          ],
+          "dendrites.table_version": "2026-09-23.authoring-4",
+          "dendrites.direction_support_floor": 0.12,
+          "weather.size_mm": [
+            8.0,
+            6.0
+          ],
+          "weather.weather_key": 14276969152011380360
+        },
+        "config": {
+          "preset": "regular",
+          "size_mm": [
+            8.0,
+            6.0
+          ],
+          "spangle_diameter_mm": 3.0,
+          "spangle_cv": 0.28,
+          "placement": "poisson",
+          "texture_strength": 0.45,
+          "crystal_tilt_concentration": 4.0,
+          "dendrite_relief_um": 2.5,
+          "trunk_relief_um": 4.5,
+          "boundary_depth_um": 1.0,
+          "micro_relief_um": 0.4,
+          "roughness": 0.3,
+          "anisotropy": 0.55,
+          "exposure": 0.0,
+          "wetness": 0.0,
+          "confinement": 0.0,
+          "salt_exposure": 0.0,
+          "white_stain": 0.0,
+          "weather_seed": null,
+          "dross_per_cm2": 0.0,
+          "runs_per_cm2": 0.0,
+          "gravity_angle_deg": 90.0,
+          "quality": "production",
+          "representation": "rich",
+          "memory_budget_mb": 512,
+          "schema_version": 1,
+          "preset_revision": "2026-09-22.initial-1",
+          "warnings": [
+            "Preset values are physically grounded authoring defaults, not metrological calibration.",
+            "spangle_diameter_mm is outside the preset's initial visual fitting range."
+          ]
+        },
+        "material_key": 14276969152011380360
+      },
+      "state_sha256": "4cce10e5f306c224c1f4c624cd1ad63fcc618923e2a0e547e2021fe408c8d6f1",
+      "view": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "response_scale": "linear RGB BSDF times positive local incident cosine; no exposure or environment radiance",
+      "source_sha256": {
+        "core/footprint_fitting.py": "44c785fb39d3384b20ac873e889b4b3359e3d8384bfd3fd52979313b0e521047",
+        "core/lobe_fitting.py": "8afd9b65b1ac9ccb945823931890d73f1cd37776eecdaeacf04ebbc04d39ee2b",
+        "core/material_render.py": "e2a842247de6375a9aa9a6b53007873253c5a1f81513ee770a9f117582250e2e",
+        "core/microfacet.py": "ef3d55c07c0cd17ca94cf60e4e8d40e79320d363c611884528da70c510de3b25",
+        "core/energy_compensation.py": "c1d689b4af4ddf37a583ef46d73bd7818d6976eb2074ff06748647f825a38e95",
+        "core/conductor.py": "63a9db731f50247ad3c65b1aa37c801b36e86d133e5b8209ae1067b6bf492ed2",
+        "core/dendrites.py": "acb51de5ec9d61a96aac2437e3395a9e5d8add24a6c15b29f68eac7f4307ef56",
+        "core/galvanised_weather.py": "b03a646e9b942a5520f95c62b331d0a46d4d7ee09a30c6c8c89994a32c81179a",
+        "core/grains.py": "9e65aba4c06f8798109163571bae978659f7f69302b48d4cb50685ae59a2df5b",
+        "core/_grain_geometry.py": "9e810148640184ea02214c12586e2cb2eed0b64eee4c6fbcaae85a86f325be47",
+        "core/random_fields.py": "081d39fa0425c8f5c9d41febc399f04fda5f13acdb4fa4e4e6817fe2d4c1c729",
+        "core/physical.py": "0ceaa9586ba923f2a4b7a5214d97c697714a4fb157121f3682ce25164ca33361",
+        "core/material.py": "90efe9e0547ca34e3061de5d448b694370a870d7a3e343d4aa7fa83741ac0d0b",
+        "materials/galvanised.py": "9de5cb0fd09a0bdb4cd950907987e636c02f9b5d0f89038b52dae38aba3c3ec4",
+        "materials/galvanised_config.py": "250a9004c3060cd04ed5f86e13457d1314cf2f4e1cf30f34fa3bfe3006b8e771"
+      },
+      "surface_resource_hashes": {
+        "morphology.json": "3cec8c607833f511652e623d31567ff3f9eb166a9b3021344ac445aa2faa9b77",
+        "population_calibration.json": "1510c9a178d3aedc688f89785b7f44df5f409a52e1104db0ae4c6bac80e5b147"
+      },
+      "optical_resource_hashes": {
+        "CIE_std_illum_D65.csv": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+        "CIE_xyz_1931_2deg.csv": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+        "Werner.yml": "c29023bed42520fbf3cec2272c9f31080429508073edf9124a0e76cbcaee6abf",
+        "CIE_std_illum_D65.csv_metadata_v2.json": "71994379b81c65db111f652e747a00b599b5456c2a8242e9a0d6f379f560a14e",
+        "CIE_xyz_1931_2deg.csv_metadata.json": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+        "zinc_fresnel_lut.csv": "ad2cb079b3ab59b193b63812c1ca30478a1831096e19f7b10a37b3177c89afcb",
+        "manifest.json": "94671e2926005ba28a277b6fb68085610a73969771c3e91c1251eb1c3e64e14a"
+      },
+      "renderer_resource_hashes": {
+        "ggx_directional_albedo.npz": "145db3eeb55404c88ee433cb1d9e67bff4bdca980d9e952d94a556b214133bc3",
+        "manifest.json": "9e61ec6d50eee0ada974118a2d2a51c3dcc69c1a4db9b9ed85435c4b2ff9f96d"
+      },
+      "accepted": false,
+      "stage": "spatial",
+      "spatial_checks": [
+        {
+          "rate": 16,
+          "successive": {
+            "coverage_maximum_change": 0.0,
+            "response_errors": {
+              "training_0": {
+                "relative_rms": 0.03433334629517277,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.08872820370544851,
+                "maximum_relative_error": 0.10748009450143337,
+                "passed": false
+              },
+              "training_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_total": {
+                "relative_rms": 0.03433334629517277,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.08872820370544851,
+                "maximum_relative_error": 0.10748009450143337,
+                "passed": false
+              },
+              "held_out_0": {
+                "relative_rms": 0.03335509191779185,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.07706716820689108,
+                "maximum_relative_error": 0.08284781655241844,
+                "passed": false
+              },
+              "held_out_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_total": {
+                "relative_rms": 0.03335509191779185,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.07706716820689108,
+                "maximum_relative_error": 0.08284781655241844,
+                "passed": false
+              }
+            },
+            "passed": false
+          },
+          "independent": {
+            "coverage_maximum_change": 0.0,
+            "response_errors": {
+              "training_0": {
+                "relative_rms": 0.03256642597640584,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.15880863587996014,
+                "maximum_relative_error": 0.07676317231283797,
+                "passed": false
+              },
+              "training_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_total": {
+                "relative_rms": 0.03256642597640584,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.15880863587996014,
+                "maximum_relative_error": 0.07676317231283797,
+                "passed": false
+              },
+              "held_out_0": {
+                "relative_rms": 0.02809045422632172,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.11000492458433808,
+                "maximum_relative_error": 0.08381444799256647,
+                "passed": false
+              },
+              "held_out_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_total": {
+                "relative_rms": 0.02809045422632172,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.11000492458433808,
+                "maximum_relative_error": 0.08381444799256647,
+                "passed": false
+              }
+            },
+            "passed": false
+          }
+        },
+        {
+          "rate": 32,
+          "successive": {
+            "coverage_maximum_change": 0.0,
+            "response_errors": {
+              "training_0": {
+                "relative_rms": 0.019197328449514793,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.04762634077581973,
+                "maximum_relative_error": 0.04940492401284527,
+                "passed": false
+              },
+              "training_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_total": {
+                "relative_rms": 0.019197328449514793,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.04762634077581973,
+                "maximum_relative_error": 0.04940492401284527,
+                "passed": false
+              },
+              "held_out_0": {
+                "relative_rms": 0.020100225989740123,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.03484914953866903,
+                "maximum_relative_error": 0.05869766072833061,
+                "passed": false
+              },
+              "held_out_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_total": {
+                "relative_rms": 0.020100225989740123,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.03484914953866903,
+                "maximum_relative_error": 0.05869766072833061,
+                "passed": false
+              }
+            },
+            "passed": false
+          },
+          "independent": {
+            "coverage_maximum_change": 0.0,
+            "response_errors": {
+              "training_0": {
+                "relative_rms": 0.0043200159158700725,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.012064147516605641,
+                "maximum_relative_error": 0.01254976770428827,
+                "passed": true
+              },
+              "training_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "training_total": {
+                "relative_rms": 0.0043200159158700725,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.012064147516605641,
+                "maximum_relative_error": 0.01254976770428827,
+                "passed": true
+              },
+              "held_out_0": {
+                "relative_rms": 0.005704847709731398,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.011097998960046618,
+                "maximum_relative_error": 0.023055691406046908,
+                "passed": true
+              },
+              "held_out_1": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_2": {
+                "relative_rms": 0.0,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.0,
+                "maximum_relative_error": 0.0,
+                "passed": true
+              },
+              "held_out_total": {
+                "relative_rms": 0.005704847709731398,
+                "dark_absolute_rms": 0.0,
+                "absolute_rms": 0.011097998960046618,
+                "maximum_relative_error": 0.023055691406046908,
+                "passed": true
+              }
+            },
+            "passed": true
+          }
+        }
+      ],
+      "integration": [
+        {
+          "rate": 8,
+          "points": 64,
+          "max_derivative_halvings": 1,
+          "max_derivative_component_difference": 3.809085430156456e-06
+        },
+        {
+          "rate": 16,
+          "points": 256,
+          "max_derivative_halvings": 1,
+          "max_derivative_component_difference": 5.181655713684674e-06
+        },
+        {
+          "rate": 17,
+          "points": 289,
+          "max_derivative_halvings": 1,
+          "max_derivative_component_difference": 4.132877657742062e-06
+        },
+        {
+          "rate": 32,
+          "points": 1024,
+          "max_derivative_halvings": 1,
+          "max_derivative_component_difference": 9.021913554514704e-06
+        },
+        {
+          "rate": 33,
+          "points": 1089,
+          "max_derivative_halvings": 1,
+          "max_derivative_component_difference": 5.908299193585487e-06
+        }
+      ],
+      "material_fits": {},
+      "derivative_initial_step_mm": [
+        6.330467147037847e-05,
+        6.330467147037847e-05
+      ],
+      "spatial_policy": {
+        "relative_rms": 0.01,
+        "dark_absolute_rms": 0.0002,
+        "radiance_floor": 0.02,
+        "coverage_component_max": 0.001,
+        "candidate_rate": 8,
+        "rates": [
+          8,
+          16,
+          17,
+          32,
+          33
+        ],
+        "max_point_batch": 64
+      },
+      "reason": "target quadrature did not converge within 32/33 samples per axis",
+      "seconds": 0.772566208965145,
+      "index": 0,
+      "center_fields": {
+        "grain_id": 5.0,
+        "boundary_distance_mm": 0.26779206274332285,
+        "metallic": 1.0,
+        "patina_coverage": 0.0,
+        "white_stain_coverage": 0.0
+      },
+      "arrays": "footprint-00.npz"
+    }
+  ],
+  "all_accepted": false
+}

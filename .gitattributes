@@ -1,0 +1,2 @@
+# Preserve the exact source and derived bytes used by the optical resource manifest.
+src/texture_generators/data/galvanised/optics/** -text

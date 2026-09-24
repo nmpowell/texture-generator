@@ -1,0 +1,62 @@
+[
+  {
+    "nuclei": 3,
+    "points": 20000,
+    "ownership_fields_exact": {
+      "ids": true,
+      "image_offsets": true,
+      "metric_mm2": true,
+      "displacement_mm": true
+    },
+    "boundary_inf_equal": true,
+    "boundary_max_abs_mm": 0.0
+  },
+  {
+    "nuclei": 17,
+    "points": 20000,
+    "ownership_fields_exact": {
+      "ids": true,
+      "image_offsets": true,
+      "metric_mm2": true,
+      "displacement_mm": true
+    },
+    "boundary_inf_equal": true,
+    "boundary_max_abs_mm": 0.0
+  },
+  {
+    "nuclei": 65,
+    "points": 20000,
+    "ownership_fields_exact": {
+      "ids": true,
+      "image_offsets": true,
+      "metric_mm2": true,
+      "displacement_mm": true
+    },
+    "boundary_inf_equal": true,
+    "boundary_max_abs_mm": 0.0
+  },
+  {
+    "nuclei": 129,
+    "points": 20000,
+    "ownership_fields_exact": {
+      "ids": true,
+      "image_offsets": true,
+      "metric_mm2": true,
+      "displacement_mm": true
+    },
+    "boundary_inf_equal": true,
+    "boundary_max_abs_mm": 0.0
+  },
+  {
+    "nuclei": 64,
+    "points": 20000,
+    "ownership_fields_exact": {
+      "ids": true,
+      "image_offsets": true,
+      "metric_mm2": true,
+      "displacement_mm": true
+    },
+    "boundary_inf_equal": true,
+    "boundary_max_abs_mm": 0.0
+  }
+]

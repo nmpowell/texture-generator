@@ -4,7 +4,8 @@
 
 Procedural generator for **random but realistic material textures** — metal,
 plastic, wood and paper — as PNGs at any pixel size. Pure `numpy` + `Pillow`,
-no models, no assets, no network. Same seed → byte-identical image on a given
+no models or runtime downloads. Galvanised optical data ships in the package.
+Same seed → byte-identical image on a given
 platform and numpy build.
 
 ## Research grounding
@@ -71,10 +72,30 @@ The full public surface, all importable from `texture_generators`:
 - `VARIANTS_BY_MATERIAL`, `variants(material)`, `all_pairs()` — enumeration
   helpers.
 - `__version__` — the installed version string.
+- `generate_maps(material, size=512, seed=None, variant=None, *, galvanised=None, galvanised_preset=None, maps=None, chunk_size=128, output_dir=None) -> MaterialMaps` —
+  physical channels for explicit `metal/galvanised`; dimensions must be at least 3×3.
+- `render_material(maps, *, preview=None) -> PIL.Image.Image` and
+  `render_material_array(maps, *, preview=None, output="display") -> np.ndarray` —
+  independent lighting of sampled material data; `output="linear"` returns
+  unclipped radiance.
+- `export_material(maps, path, *, profile="lossless", overwrite=False, preview=None) -> Path` —
+  atomic material bundle with a returned manifest path.
+- `load_material(path, *, mmap_mode=None) -> MaterialMaps` and
+  `replay_material(path, *, size=None, maps=None) -> MaterialMaps` — validated
+  stored channels or resampling from the versioned recipe.
+- `MAP_CAPABILITIES` — supported `(material, variant)` pairs for material maps.
+- `GalvanisedConfig` and `PreviewConfig` — frozen dataclasses for the
+  galvanised recipe and its preview lighting, importable from
+  `texture_generators.materials.galvanised_config`. `PreviewConfig` is also
+  exported from `texture_generators`.
+
+The [galvanised guide](galvanised.md) defines physical units, coordinate frames,
+rich angular records, presets, export profiles and current experimental limits.
 
 Contracts: `size` is an int (square) or `(width, height)`. `seed=None` draws
 fresh entropy; an integer seed is fully reproducible. `variant=None` picks a
-variant with the seeded rng. Unknown material or variant raises `ValueError`
+variant with the seeded rng; metal's automatic choices retain the original seven
+variants, so galvanised requires explicit selection. Unknown material or variant raises `ValueError`
 listing the valid names. The package ships `py.typed` (PEP 561), so type
 checkers use the public API's annotations, and mypy passes over the package's
 own internals (see *Development*).
@@ -89,7 +110,7 @@ arguments `material="metal"`, `variant="brushed"`; other combinations raise
 ## CLI
 
 `texture-gen` is a [Click](https://click.palletsprojects.com/) command group:
-one subcommand per material, plus `all`, `sheet`, `samples` and `list`. It is
+one subcommand per material, plus `all`, `sheet`, `samples`, `maps` and `list`. It is
 installed alongside the package, and `python -m texture_generators` is
 identical — down to the program name in `--help`. `-h` is a synonym for
 `--help` and `-V` for `--version`, which prints `texture-gen` and the installed version; an unknown
@@ -112,6 +133,7 @@ texture-gen samples --only wood --count 6             # visual-review set
 | Command | What it renders |
 | --- | --- |
 | `metal`, `plastic`, `wood`, `paper` | one texture of that material, or `-n N` of them |
+| `maps metal --variant galvanised` | a physical material bundle; requires `--outdir` |
 | `all` | every material/variant pair, one PNG each |
 | `sheet` | the labelled contact sheet |
 | `samples` | a visual-review run directory with an `index.html` gallery |
@@ -143,6 +165,14 @@ Non-finite values, other variants or an omitted variant are usage errors
 texture-gen metal --variant brushed --brush-angle 90 --size 640x480 --seed 42 -o vertical.png
 texture-gen metal --variant brushed --brush-angle 45 --seed 42 --count 3 --outdir diagonal --json
 ```
+
+With explicit `--variant galvanised`, `metal` and `maps` also accept
+`--galvanised-preset` (`regular`, `minimised`, `weathered` or `wet_storage`),
+`--size-mm WIDTHxHEIGHT` for the physical tile extent in millimetres, and
+`--config FILE`, a strict JSON `GalvanisedConfig` recipe that cannot be combined
+with the preset or size flags. `maps` also takes `--profile lossless|tiff`
+(default `lossless`) and a repeatable `--map` channel selector. See the
+[galvanised guide](galvanised.md#cli-and-exports).
 
 ### JSON output
 
@@ -255,6 +285,7 @@ pairs, and `--no-sweeps` skips them.
 | | `oil_film` | a transparent oil film whose thickness and angle control interference colour, including desaturation as thicker fringes average spectrally |
 | | `anodised_titanium` | a titania interference film over metal, using the same spectral integration with its own optical system and thickness preset |
 | | `engine_turned` | overlapping radial swirl marks in per-cell local frames, composited in machining order so each disc cuts a crescent from the previous one |
+| | `galvanised` | opt-in only, never chosen by seeded variant selection: a separate, physically scaled hot-dip zinc generator with periodic weighted grain topology, attached dendritic branches, sourced zinc optics and optional weathering presets. Its physical fields are periodic, so the tile repeats seamlessly. See the [galvanised guide](galvanised.md) |
 | `plastic` | `glossy` | flat albedo (±2% mottling) + broad shallow "orange peel", tight specular; gloss is sold by the *reflection*: a flat-topped additive white streak whose edges wobble with the peel field, over a soft multiplicative fill |
 | | `matte` | bead-blast Worley craters (not white noise) + weak wide specular, wide soft sheen band |
 | | `textured` | two-scale Worley stipple kept separated, low relief, cavity-shadowed hollows — moulded-equipment finish |
@@ -659,6 +690,11 @@ the sampling density; `_felt_stack` caps the canvas it computes on at ~1.1 Mpx
 and `spectral.resize_periodic` band-limits it back up, which is what keeps the
 felt variants inside twice the cost of the others rather than four times.
 
+`metal/galvanised` is much slower than the other variants. Its tested size
+envelope for ordinary RGB and contact-sheet renders is up to 512 × 384 pixels;
+larger renders are exploratory. See the
+[galvanised performance record](galvanised-performance.md).
+
 ## Notes and limits
 
 - Metal and plastic size fine features such as brush streaks and stipple
@@ -667,12 +703,15 @@ felt variants inside twice the cost of the others rather than four times.
   while ring geometry also uses normalised coordinates. Paper is parameterised
   in millimetres throughout, so raising its resolution resolves more of the
   same sheet. Pass `mm_across=` to choose the wood or paper capture scale.
-- Metal, plastic and wood are **not** seamlessly tileable: their noise fields,
-  scratch scatter, plank splits and highlight bands do not all wrap, so edges
-  will not match up. **Paper does tile** when creases
-  are off (`creases=0.0`) — its spectral fields, fibre splatting, specks and
-  shading derivatives all wrap. The crease network does not, so a creased
-  sheet will show a seam.
+  `metal/galvanised` is the exception among the metals: it is specified in
+  millimetres, with `size_mm` giving the physical tile extent.
+- Metal (other than `galvanised`), plastic and wood are **not** seamlessly
+  tileable: their noise fields, scratch scatter, plank splits and highlight
+  bands do not all wrap, so edges will not match up. **Paper does tile** when
+  creases are off (`creases=0.0`) — its spectral fields, fibre splatting,
+  specks and shading derivatives all wrap. The crease network does not, so a
+  creased sheet will show a seam. `metal/galvanised` also tiles, because its
+  physical fields are periodic over the `size_mm` tile.
 - Seamlessness costs `laid` some pitch accuracy: a periodic feature must fit a
   whole number of periods into the tile, so the realised pitch is the requested
   one rounded to the nearest integer count. Laid lines quantise finely (15–21

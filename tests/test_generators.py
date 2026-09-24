@@ -112,6 +112,34 @@ def test_sample_sheet() -> None:
     assert sheet.width > 48 and sheet.height > 48
 
 
+def test_sample_sheet_keeps_default_tile_seeds_and_params() -> None:
+    """Opt-in variants draw last, so default tiles keep their pre-0.7 seeds.
+
+    Legacy material params still reach the default tiles instead of being
+    rejected by an opt-in tile that does not accept them.
+    """
+    size, pad, label_h, cols = 8, 6, 14, 4
+    pairs = all_pairs()
+    defaults = [
+        (m, v)
+        for m, v in pairs
+        if v in getattr(MATERIALS[m], "DEFAULT_VARIANTS", MATERIALS[m].VARIANTS)
+    ]
+    rng = np.random.default_rng(1)
+    expected = {pair: int(rng.integers(0, 2**31 - 1)) for pair in defaults}
+    sheet = sample_sheet(size=size, seed=1, iridescence=0.3)
+    for pair in [("metal", "brushed"), ("plastic", "glossy"), ("paper", "coated")]:
+        i = pairs.index(pair)
+        x = pad + (i % cols) * (size + pad)
+        y = pad + (i // cols) * (size + label_h + pad)
+        tile = sheet.crop((x, y, x + size, y + size))
+        material, variant = pair
+        want = generate(
+            material, size, seed=expected[pair], variant=variant, iridescence=0.3
+        )
+        assert tile.tobytes() == want.tobytes(), pair
+
+
 def test_noise_does_not_band_repeat_on_tall_canvas() -> None:
     """Gradient noise must not repeat every width pixels on a tall canvas.
 
