@@ -389,13 +389,17 @@ def _material_command(material: str) -> click.Command:
                 from .materials.galvanised import GENERATOR_VERSION
 
                 dimensions = (size, size) if isinstance(size, int) else size
-                resolved_recipe = recipe.resolve(size=dimensions)
+                try:
+                    material_key = material_key_from_rng(make_rng(seed_i))
+                    resolved_recipe = recipe.resolve(size=dimensions)
+                except (TypeError, ValueError) as exc:
+                    raise click.UsageError(str(exc)) from exc
                 extra["galvanised"] = {
                     "size_mm": list(resolved_recipe.size_mm or ()),
                     "preset": recipe.preset,
                     "preset_version": recipe.preset_version,
                     "generator_version": GENERATOR_VERSION,
-                    "material_key": material_key_from_rng(make_rng(seed_i)),
+                    "material_key": material_key,
                     "preview_rig": "studio",
                 }
             try:

@@ -141,6 +141,21 @@ def test_explicit_overwrite_replaces_bundle(tmp_path: Path) -> None:
     assert not list(tmp_path.glob(".bundle.old-*"))
 
 
+def test_overwrite_refuses_directory_that_is_not_a_bundle(tmp_path: Path) -> None:
+    path = tmp_path / "notes"
+    path.mkdir()
+    (path / "notes.txt").write_text("keep me")
+    with pytest.raises(FileExistsError, match="not a material bundle"):
+        export_material(_fixture(), path, overwrite=True)
+    assert (path / "notes.txt").read_text() == "keep me"
+    assert not list(tmp_path.glob(".notes.staging-*"))
+
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    export_material(_fixture(), empty, overwrite=True)
+    assert (empty / "material.json").is_file()
+
+
 def test_checksum_and_path_escape_are_rejected(tmp_path: Path) -> None:
     path = tmp_path / "bundle"
     manifest_path = export_material(_fixture(), path)

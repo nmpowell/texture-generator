@@ -158,6 +158,13 @@ def _write_manifest(root: Path, manifest: Mapping[str, Any]) -> None:
     temporary.rename(root / "material.json")
 
 
+def _replaceable(destination: Path) -> bool:
+    """Whether ``overwrite=True`` may replace ``destination``: a bundle or empty dir."""
+    if destination.is_symlink() or not destination.is_dir():
+        return False
+    return (destination / "material.json").is_file() or not any(destination.iterdir())
+
+
 def _publish(stage: Path, destination: Path, overwrite: bool) -> None:
     if destination.exists() or destination.is_symlink():
         if not overwrite:
@@ -197,6 +204,12 @@ def export_material(
     destination = Path(path)
     if destination.exists() and not overwrite:
         raise FileExistsError(f"material bundle already exists: {destination}")
+    if (destination.exists() or destination.is_symlink()) and not _replaceable(
+        destination
+    ):
+        raise FileExistsError(
+            f"refusing to overwrite {destination}: not a material bundle or empty directory"
+        )
     if not destination.parent.is_dir():
         raise FileNotFoundError(f"bundle parent does not exist: {destination.parent}")
     stage = Path(

@@ -489,3 +489,25 @@ def test_shell_completion() -> None:
     assert "#compdef texture-gen" in result.stdout
     assert "_texture_gen_completion" in result.stdout
     assert "compdef _texture_gen_completion texture-gen" in result.stdout
+
+
+@pytest.mark.parametrize("seed", ["-1", str(2**64)])
+def test_galvanised_out_of_range_seed_is_a_usage_error(
+    runner: CliRunner, tmp_path: Path, seed: str
+) -> None:
+    result = runner.invoke(
+        main,
+        [
+            "metal",
+            "--variant",
+            "galvanised",
+            "--size",
+            "8",
+            "--seed",
+            seed,
+            "-o",
+            str(tmp_path / "out.png"),
+        ],
+    )
+    assert result.exit_code == 2, result.output
+    assert "Traceback" not in result.output

@@ -64,6 +64,12 @@ def all_pairs() -> list[tuple[str, str]]:
     return [(m, v) for m, mod in MATERIALS.items() for v in mod.VARIANTS]
 
 
+def _default_variants(material: str) -> tuple[str, ...]:
+    """Variants a seeded ``variant=None`` call can choose for ``material``."""
+    mod = MATERIALS[material]
+    return tuple(getattr(mod, "DEFAULT_VARIANTS", mod.VARIANTS))
+
+
 def _module(material: str):
     """Look up a material module, raising a helpful ValueError."""
     try:
@@ -284,10 +290,20 @@ def sample_sheet(
     """Contact sheet with one labelled tile per material x variant.
 
     ``size`` is the per-tile size: ``N`` for square tiles or
-    ``(width, height)``.
+    ``(width, height)``. ``params`` apply to the variants seeded selection can
+    choose; opt-in variants such as ``metal/galvanised`` render with their
+    defaults.
     """
     pairs = all_pairs()
     rng = np.random.default_rng(seed)
+    # Opt-in variants draw their tile seeds after every default variant, so
+    # the default tiles keep the seeds they had before those variants existed.
+    opt_in = {(m, v) for m, v in pairs if v not in _default_variants(m)}
+    tile_seeds = {
+        pair: int(rng.integers(0, 2**31 - 1))
+        for pair in [p for p in pairs if p not in opt_in]
+        + [p for p in pairs if p in opt_in]
+    }
     cols = columns or min(4, len(pairs))
     rows = (len(pairs) + cols - 1) // cols
 
@@ -300,8 +316,9 @@ def sample_sheet(
     draw = ImageDraw.Draw(sheet)
 
     for i, (material, variant) in enumerate(pairs):
-        tile_seed = int(rng.integers(0, 2**31 - 1))
-        tile = generate(material, size, seed=tile_seed, variant=variant, **params)
+        tile_seed = tile_seeds[(material, variant)]
+        tile_params = {} if (material, variant) in opt_in else params
+        tile = generate(material, size, seed=tile_seed, variant=variant, **tile_params)
         cx = pad + (i % cols) * cell_w
         cy = pad + (i // cols) * cell_h
         sheet.paste(tile, (cx, cy))
