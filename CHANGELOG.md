@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- CI uses fewer runner minutes. It runs on pushes to `main`, on pull requests
+  and on demand rather than on every branch and tag push, ignores changes to
+  documentation alone, cancels superseded runs, and runs the test suite in
+  parallel with pytest-xdist. Outside a release, macOS and Windows run one
+  professional export combination each.
+
 ## [0.7.0] - 2026-09-24
 
 ### Added

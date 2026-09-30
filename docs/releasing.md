@@ -162,6 +162,12 @@ publishing job waits for the complete reusable workflow and downloads the
 validated `dist` artifact; only that job can request the identity credential
 used by PyPI. GitHub Actions are pinned to reviewed commits.
 
+Outside a release the test workflow is trimmed to save runner minutes: it runs
+on pushes to `main`, on pull requests and on demand, skips changes that touch
+only `docs/` or the changelog, cancels superseded runs on other refs, and runs
+the professional export tests on macOS and Windows for Python 3.14 with locked
+dependencies only. A published release always runs every combination.
+
 Watch the [Actions run](https://github.com/nmpowell/texture-generator/actions),
 then check the [PyPI project page](https://pypi.org/project/texture-generator/).
 Install the exact released version from PyPI in a fresh environment and rerun
